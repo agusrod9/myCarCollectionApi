@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, {Schema} from "mongoose";
 
 mongoose.pluralize(null);
 
@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     img_url : {type : String, required : true },
     series : {type : String, required : true },
     series_num : {type : Number, required : true },
-    user : {type : String, required : true },
+    userId : {type: Schema.Types.ObjectId, ref: 'users', required: true},
     year : {type : Number, required : true }
 });
 
