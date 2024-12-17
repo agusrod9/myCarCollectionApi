@@ -37,4 +37,41 @@ router.post('/', async(req, res, next)=>{
     }
 })
 
+router.put('/:id', async(req,res,next)=>{
+    let {id} = req.params;
+    let modifiedCar = req.body;
+
+    if(modifiedCar.model && modifiedCar.img_url && modifiedCar.series && modifiedCar.series_num && modifiedCar.year){
+        const car = await manager.readCarById(id);
+        if(car){
+            car.model = modifiedCar.model;
+            car.img_url = modifiedCar.img_url;
+            car.series = modifiedCar.series;
+            car.series_num = modifiedCar.series_num;
+            car.year = modifiedCar.year;
+            let process = await manager.updateCar(id, car);
+            if(process){
+                res.status(200).send({error: null, data: process});
+            }else{
+                res.status(500).send({error: "CAR NOT UPDATED", data: []});
+            }
+        }else{
+            res.status(400).send({error: "CAR NOT FOUND", data: []});
+        }
+    }else{
+        res.status(400).send({error: "MISSING MANDATORY FIELDS", data: []});
+    }
+    
+})
+
+router.delete('/:id', async(req,res,next)=>{
+    let {id} = req.params;
+    const process = await manager.deleteById(id);
+    if(process){
+        res.status(200).send({error: null, data: process});
+    }else{
+        res.status(400).send({error: "CAR NOT DELETED", data: []});
+    }
+})
+
 export default router
