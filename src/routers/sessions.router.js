@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { userManager } from "../dao/managers/userManager.js";
+import passport from "../middlewares/passport.mid.js";
 
 const router = Router();
 
@@ -9,5 +10,25 @@ router.get('/', async(req,res,next)=>{
     const users = await manager.readAllUsers();
     res.status(200).send({users})
 })
+
+router.post('/register', passport.authenticate("register",{session:false}), register)
+/*router.post('/login',)
+router.post('/online', )
+router.post('/logout', )
+router.post('/isadmin',)
+router.get('/google', )
+router.get('/google/cb',) 
+*/
+
+function register(req,res,next){
+    try {
+        const message = "USER REGISTERED";
+        const newUser = req.user;
+        return res.status(201).json({message, newUser});
+    } catch (error) {
+        return next(error);
+    }
+}
+
 
 export default router

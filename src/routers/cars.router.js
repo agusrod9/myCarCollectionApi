@@ -23,7 +23,7 @@ router.get('/:id?:mod?', async(req,res,next)=>{
 });
 
 router.post('/', async(req, res, next)=>{
-    if(req.body.model && req.body.img_url && req.body.series && req.body.series_num && req.body.userId && req.body.year){
+    if(req.body.model && req.body.img_urls && req.body.series && req.body.series_num && req.body.userId && req.body.year){
         let newCar = req.body;
         newCar.user = {_id : newCar.user};
         let process = await manager.createNewCar(newCar);
@@ -41,11 +41,11 @@ router.put('/:id', async(req,res,next)=>{
     let {id} = req.params;
     let modifiedCar = req.body;
 
-    if(modifiedCar.model && modifiedCar.img_url && modifiedCar.series && modifiedCar.series_num && modifiedCar.year){
+    if(modifiedCar.model && modifiedCar.img_urls && modifiedCar.series && modifiedCar.series_num && modifiedCar.year){
         const car = await manager.readCarById(id);
         if(car){
             car.model = modifiedCar.model;
-            car.img_url = modifiedCar.img_url;
+            car.img_urls = modifiedCar.img_urls;
             car.series = modifiedCar.series;
             car.series_num = modifiedCar.series_num;
             car.year = modifiedCar.year;
