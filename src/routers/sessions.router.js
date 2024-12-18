@@ -1,6 +1,8 @@
 import { Router } from "express";
 import { userManager } from "../dao/managers/userManager.js";
 import passport from "../middlewares/passport.mid.js";
+import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
+import { createLogoutToken } from "../utils/token.util.js";
 
 const router = Router();
 
@@ -11,11 +13,13 @@ router.get('/', async(req,res,next)=>{
     res.status(200).send({users})
 })
 
-router.post('/register', passport.authenticate("register",{session:false}), register)
-router.post('/login', passport.authenticate("login", {session: false}), login)
-/*router.post('/online', )
-router.post('/logout', )
-router.post('/isadmin',)
+router.post('/register', passport.authenticate("register",{session:false}), register);
+router.post('/login', passport.authenticate("login", {session: false}), login);
+router.post('/online', isOnlineVerifier, online);
+router.post('/logout', passport.authenticate("logout", {session:false}), logout);
+router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
+router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
+/*
 router.get('/google', )
 router.get('/google/cb',) 
 */
@@ -40,6 +44,40 @@ function login(req,res,next){
     } catch (error) {
         return next(error);
     }
+}
+
+function online(req, res, next) {
+    try {
+        const message = 'USER ONLINE';
+        return res.status(200).json({message});
+        
+    } catch (error) {
+        return next(error);
+    }
+}
+
+async function logout(req, res, next){
+    try {
+        const userId = req.user;
+        const user = await manager.readById(userId);
+        const cookieOpts = {httpOnly: true, signed: true};
+        const message = 'USER LOGGED OUT';
+        req.token = createLogoutToken({user_id: user._id, role: user.role});
+        req.user = null;
+        return res.status(200).clearCookie("token", cookieOpts).json({message});
+    } catch (error) {
+        return next(error);
+    }
+}
+
+function isPremium(req,res,next){
+    const message = 'USER IS PREMIUM';
+    return res.status(200).json({message});
+}
+
+function isSuper(req,res,next){
+    const message = 'USER IS SUPER USER';
+    return res.status(200).json({message});
 }
 
 

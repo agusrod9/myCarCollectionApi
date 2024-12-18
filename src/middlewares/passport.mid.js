@@ -1,11 +1,12 @@
 import passport from "passport";
 import { Strategy as localStrategy } from "passport-local";
-import { Strategy as JwtStrategy } from "passport-jwt";
+import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
 import { userManager } from "../dao/managers/userManager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 
 const manager = new userManager;
+const {SECRET} = process.env;
 
 passport.use("register", new localStrategy(
     {passReqToCallback: true, usernameField:"email"},
@@ -44,6 +45,40 @@ passport.use("login", new localStrategy(
                 return done(error);
             }
         }
+    }
+));
+
+passport.use("logout", new jwtStrategy(
+    {jwtFromRequest: ExtractJwt.fromExtractors([req=>req?.signedCookies?.token]), secretOrKey: SECRET},
+    (data, done)=>{
+        const userId = data.user_id;
+        return done(null, {_id: userId});
+    }
+));
+
+passport.use("isPremium", new jwtStrategy(
+    {jwtFromRequest: ExtractJwt.fromExtractors([req=>req?.signedCookies?.token]), secretOrKey: SECRET},
+    (data, done)=>{
+        const userId = data.user_id;
+        if(data.role != "PREMIUM" && data.role != "SUPER"){
+            const error = new Error('UNAUTHORIZED');
+            error.statusCode = 403;
+            return done(error);
+        }
+        return done(null, userId);
+    }
+));
+
+passport.use("isSuper", new jwtStrategy(
+    {jwtFromRequest: ExtractJwt.fromExtractors([req=>req?.signedCookies?.token]), secretOrKey: SECRET},
+    (data, done)=>{
+        const userId = data.user_id;
+        if(data.role != "SUPER"){
+            const error = new Error('UNAUTHORIZED');
+            error.statusCode = 403;
+            return done(error);
+        }
+        return done(null, userId);
     }
 ));
 

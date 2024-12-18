@@ -23,6 +23,15 @@ export class userManager{
         }
     }
 
+    async readById(id){
+        try {
+            const user = await this.model.findOne({_id:id}).lean();
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createUser(data){
         try {
             const user = await this.model.create(data);
