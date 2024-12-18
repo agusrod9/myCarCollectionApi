@@ -1,12 +1,13 @@
 import passport from "passport";
 import { Strategy as localStrategy } from "passport-local";
 import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
+import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { userManager } from "../dao/managers/userManager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 
 const manager = new userManager;
-const {SECRET} = process.env;
+const {SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL} = process.env;
 
 passport.use("register", new localStrategy(
     {passReqToCallback: true, usernameField:"email"},
@@ -79,6 +80,23 @@ passport.use("isSuper", new jwtStrategy(
             return done(error);
         }
         return done(null, userId);
+    }
+));
+
+passport.use("google", new GoogleStrategy(
+    {clientID: GOOGLE_CLIENT_ID, clientSecret: GOOGLE_CLIENT_SECRET, passReqToCallback: true, callbackURL: `${API_BASE_URL}sessions/google/cb`},
+    async(req, accessToken, refreshToken, profile, done)=>{
+        try {
+            const { id, given_name, family_name } = profile;
+            let user = await manager.readByEmail(id);
+            if(!user){
+                user = await manager.createUser({email : id, password : createHash(id), firstName : given_name, lastName : family_name});
+            }
+            req.token = createToken({user_id : user._id, role: user.role});
+            return done(null, user);
+        } catch (error) {
+            return done(error);
+        }
     }
 ));
 

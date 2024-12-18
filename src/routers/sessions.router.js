@@ -19,14 +19,13 @@ router.post('/online', isOnlineVerifier, online);
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
 router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
 router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
-/*
-router.get('/google', )
-router.get('/google/cb',) 
-*/
+router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
+router.get('/google/cb', passport.authenticate("google", {session: false}), google); 
+
 
 function register(req,res,next){
     try {
-        const message = "USER REGISTERED";
+        const message = 'USER REGISTERED';
         const newUser = req.user;
         return res.status(201).json({message, newUser});
     } catch (error) {
@@ -36,7 +35,7 @@ function register(req,res,next){
 
 function login(req,res,next){
     try {
-        const message = "USER LOGGED";
+        const message = 'USER LOGGED';
         const user = req.user;
         const {token} = req;
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true};
@@ -80,5 +79,15 @@ function isSuper(req,res,next){
     return res.status(200).json({message});
 }
 
+function google(req, res, next){
+    try {
+        const message = 'USER LOGGED';
+        const {token} = req;
+        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true};
+        return res.status(200).cookie('token', token, cookieOpts).json({message})
+    } catch (error) {
+        return next(error);
+    }
+}
 
 export default router
