@@ -23,9 +23,9 @@ router.get('/:id?:mod?', async(req,res,next)=>{
 });
 
 router.post('/', async(req, res, next)=>{
-    if(req.body.model && req.body.img_urls && req.body.series && req.body.series_num && req.body.userId && req.body.year){
+    if(req.body.carMake && req.body.carModel && req.body.carYear && req.body.scale && req.body.userId){
         let newCar = req.body;
-        newCar.user = {_id : newCar.user};
+        newCar.userId = {_id : newCar.userId};
         let process = await manager.createNewCar(newCar);
         if(process){
             res.status(201).send({error: null, data: process});
@@ -41,14 +41,20 @@ router.put('/:id', async(req,res,next)=>{
     let {id} = req.params;
     let modifiedCar = req.body;
 
-    if(modifiedCar.model && modifiedCar.img_urls && modifiedCar.series && modifiedCar.series_num && modifiedCar.year){
+    if(modifiedCar.carColor && modifiedCar.carMake && modifiedCar.carModel && modifiedCar.carYear && modifiedCar.img_urls && modifiedCar.manufacturer && modifiedCar.notes && modifiedCar.opened && modifiedCar.scale && modifiedCar.series && modifiedCar.series_num){
         const car = await manager.readCarById(id);
         if(car){
-            car.model = modifiedCar.model;
+            car.carColor = modifiedCar.carColor;
+            car.carMake = modifiedCar.carMake;
+            car.carModel = modifiedCar.carModel;
+            car.carYear = modifiedCar.carYear;
             car.img_urls = modifiedCar.img_urls;
+            car.manufacturer = modifiedCar.manufacturer;
+            car.notes = modifiedCar.notes;
+            car.opened = modifiedCar.opened;
+            car.scale = modifiedCar.scale;
             car.series = modifiedCar.series;
             car.series_num = modifiedCar.series_num;
-            car.year = modifiedCar.year;
             let process = await manager.updateCar(id, car);
             if(process){
                 res.status(200).send({error: null, data: process});

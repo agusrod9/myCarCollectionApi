@@ -25,7 +25,7 @@ export class carManager{
 
     async readCarsByModel(model){
         try {
-            const cars = await this.model.find({model: {$regex: '.*' + model + '.*', $options : 'i'}})
+            const cars = await this.model.find({carModel: {$regex: '.*' + model + '.*', $options : 'i'}})
             return cars;
         } catch (error) {
             throw error;
