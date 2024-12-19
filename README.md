@@ -1,1 +1,2 @@
-Backend express.js Mongo para hwproj
+# My Car Collection
+>App para coleccionistas de autos a escala.
