@@ -32,6 +32,24 @@ export class carManager{
         }
     }
 
+    async readCarsByMake(make){
+        try {
+            const cars = await this.model.find({carMake: {$regex: '.*' + make + '.*', $options : 'i'}})
+            return cars;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async readCarsByMakeAndModel(make, model){
+        try {
+            const cars = await this.model.find({carMake: {$regex: '.*' + make + '.*', $options : 'i'}, carModel : {$regex: '.*' + model + '.*', $options : 'i'}})
+            return cars;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createNewCar(newCar){
         try {
             const one = await this.model.create(newCar);

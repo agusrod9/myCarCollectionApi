@@ -4,12 +4,19 @@ import { carManager } from "../dao/managers/carsManager.js";
 const router = Router();
 const manager = new carManager();
 
-router.get('/:id?:mod?', async(req,res,next)=>{
-    let {mod} = req.query;
-    let {id} = req.query;
+router.get('/', async(req,res,next)=>{
+    let {id, make, model} = req.query;
 
-    if(mod){
-        const cars = await manager.readCarsByModel(mod);
+    if(make){
+        if(model){
+            let carsByModel = await manager.readCarsByMakeAndModel(make, model);
+            res.status(200).send({error: null, data : carsByModel});
+        }else{
+            let cars = await manager.readCarsByMake(make);
+            res.status(200).send({error: null, data : cars});
+        }
+    }else if(model){
+        const cars = await manager.readCarsByModel(model);
         res.status(200).send({error: null, data : cars})
     }else{
         if(id){
