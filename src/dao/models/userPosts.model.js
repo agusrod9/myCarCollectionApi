@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { paginate } from "mongoose-paginate-v2";
 
 mongoose.pluralize(null);
 
@@ -11,6 +12,8 @@ const schema = new mongoose.Schema({
     likedBy : [{type: mongoose.Schema.Types.ObjectId, ref : 'users', default : []}],
     comments : [{type : mongoose.Schema.Types.ObjectId, ref : 'comments', default : []}]
 });
+
+schema.plugin(paginate);
 
 const model = mongoose.model(collection, schema);
 

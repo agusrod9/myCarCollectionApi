@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { userManager } from "../dao/managers/userManager.js";
+import { usersManager } from "../dao/managers/usersManager.js";
 import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
 
 const router = Router();
 
-const manager = new userManager();
+const manager = new usersManager();
 
 router.get('/', async(req,res,next)=>{
     const users = await manager.readAllUsers();

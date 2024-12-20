@@ -2,11 +2,11 @@ import passport from "passport";
 import { Strategy as localStrategy } from "passport-local";
 import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
-import { userManager } from "../dao/managers/userManager.js";
+import { usersManager } from "../dao/managers/usersManager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 
-const manager = new userManager;
+const manager = new usersManager;
 const {SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL} = process.env;
 
 passport.use("register", new localStrategy(

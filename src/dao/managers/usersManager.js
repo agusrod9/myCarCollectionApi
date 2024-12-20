@@ -1,6 +1,6 @@
 import usersModel from '../models/users.model.js';
 
-export class userManager{
+export class usersManager{
     constructor(){
         this.model = usersModel;
     }
