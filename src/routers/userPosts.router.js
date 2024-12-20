@@ -7,5 +7,5 @@ const manager = new userPostsManager();
 router.get('/', async(req, res, next)=>{
     let {userId} = req.query;
     let posts = manager.readAllPostsByUserId(userId);
-    return posts;
+    return res.status(200).json({error: null, data: posts});
 });

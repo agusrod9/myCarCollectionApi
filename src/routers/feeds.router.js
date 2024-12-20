@@ -7,5 +7,6 @@ const manager = new feedsManager();
 router.get('/', async(req, res, next)=>{
     let {userId} = req.query;
     let userFeed = await manager.readFeedByUserId(userId);
+    res.status(200).json({error: null, data: userFeed});
 });
 

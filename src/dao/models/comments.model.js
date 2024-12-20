@@ -6,6 +6,7 @@ const collection = 'comments';
 
 const schema = new mongoose.Schema({
     userId : {type : mongoose.Schema.Types.ObjectId, ref : 'users', required : true},
+    postId : {type : mongoose.Schema.Types.ObjectId, ref : 'userPosts', required : true},
     content : {type : String, required : true},
     likedBy : [{type: mongoose.Schema.Types.ObjectId, ref : 'users', default : []}]
 });

@@ -10,21 +10,21 @@ router.get('/', async(req,res,next)=>{
     if(make){
         if(model){
             let carsByModel = await manager.readCarsByMakeAndModel(make, model);
-            res.status(200).send({error: null, data : carsByModel});
+            res.status(200).json({error: null, data : carsByModel});
         }else{
             let cars = await manager.readCarsByMake(make);
-            res.status(200).send({error: null, data : cars});
+            res.status(200).json({error: null, data : cars});
         }
     }else if(model){
         const cars = await manager.readCarsByModel(model);
-        res.status(200).send({error: null, data : cars})
+        res.status(200).json({error: null, data : cars})
     }else{
         if(id){
             const car = await manager.readCarById(id);
-            res.status(200).send({error: null, data : car})
+            res.status(200).json({error: null, data : car})
         }else{
             const cars = await manager.readAllCars();
-            res.status(200).send({error: null, data : cars})
+            res.status(200).json({error: null, data : cars})
         }
     }
 });
@@ -35,12 +35,12 @@ router.post('/', async(req, res, next)=>{
         newCar.userId = {_id : newCar.userId};
         let process = await manager.createNewCar(newCar);
         if(process){
-            res.status(201).send({error: null, data: process});
+            res.status(201).json({error: null, data: process});
         }else{
-            res.status(500).send({error: "CAR NOT ADDED", data: []});
+            res.status(500).json({error: "CAR NOT ADDED", data: []});
         }
     }else{
-        res.status(400).send({error: "MISSING MANDATORY FIELDS", data: []});
+        res.status(400).json({error: "MISSING MANDATORY FIELDS", data: []});
     }
 })
 
@@ -64,15 +64,15 @@ router.put('/:id', async(req,res,next)=>{
             car.series_num = modifiedCar.series_num;
             let process = await manager.updateCar(id, car);
             if(process){
-                res.status(200).send({error: null, data: process});
+                res.status(200).json({error: null, data: process});
             }else{
-                res.status(500).send({error: "CAR NOT UPDATED", data: []});
+                res.status(500).json({error: "CAR NOT UPDATED", data: []});
             }
         }else{
-            res.status(400).send({error: "CAR NOT FOUND", data: []});
+            res.status(400).json({error: "CAR NOT FOUND", data: []});
         }
     }else{
-        res.status(400).send({error: "MISSING MANDATORY FIELDS", data: []});
+        res.status(400).json({error: "MISSING MANDATORY FIELDS", data: []});
     }
     
 })
@@ -81,9 +81,9 @@ router.delete('/:id', async(req,res,next)=>{
     let {id} = req.params;
     const process = await manager.deleteById(id);
     if(process){
-        res.status(200).send({error: null, data: process});
+        res.status(200).json({error: null, data: process});
     }else{
-        res.status(400).send({error: "CAR NOT DELETED", data: []});
+        res.status(400).json({error: "CAR NOT DELETED", data: []});
     }
 })
 
