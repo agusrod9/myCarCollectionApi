@@ -38,7 +38,14 @@ export class usersManager{
             return user;
         } catch (error) {
             throw error;
-        }
-        
+        }   
+    }
+
+    async addCollectionsToUser(userId, collection){
+            try {
+                let one = await this.model.findOneAndUpdate()
+            } catch (error) {
+                throw error;
+            }
     }
 }

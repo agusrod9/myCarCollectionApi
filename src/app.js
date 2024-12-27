@@ -6,6 +6,7 @@ import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import pathHandler from './middlewares/pathHandler.mid.js';
 import errorHandler from './middlewares/errorHandler.mid.js';
+import carCollectionsRouter from './routers/carCollections.router.js';
 
 const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
@@ -17,6 +18,7 @@ app.use(cookieParser(SECRET));
 
 app.use('/api/cars', carsRouter);
 app.use('/api/sessions', sessionsRouter);
+app.use('/api/carcollections', carCollectionsRouter);
 
 //Handlers
 app.use(pathHandler);
