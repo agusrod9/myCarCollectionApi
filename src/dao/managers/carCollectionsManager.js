@@ -12,6 +12,24 @@ export class carCollectionsManager{
         } catch (error) {
             throw error;
         }
+    }
 
+    async updateCarList(carList, collectionId){
+        try {
+            let opts = {new : true};
+            let process = this.model.findOneAndUpdate({_id : collectionId}, {cars:carList}, opts);
+            return process;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getCollection(id){
+        try {
+            let collection = this.model.find({_id:id}).lean();
+            return collection;
+        } catch (error) {
+            throw error;
+        }
     }
 }
