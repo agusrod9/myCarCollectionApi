@@ -8,7 +8,7 @@ const collection = 'userPosts';
 const schema = new mongoose.Schema({
     userId : {type : mongoose.Schema.Types.ObjectId, ref : 'users', required : true},
     postTitle : {type : String, required : true},
-    postDescription : {type : String, default : ""},
+    postDescription : {type : String, default : null},
     postPictures : [{type : String, required : true}],
     likedBy : [{type: mongoose.Schema.Types.ObjectId, ref : 'users', default : []}],
     comments : [{type : mongoose.Schema.Types.ObjectId, ref : 'comments', default : []}]

@@ -13,11 +13,11 @@ const schema = new mongoose.Schema({
     password: { type: String, required: true },
     role : {type: String, default: 'REGULAR', enum:['REGULAR','PREMIUM','SUPER']},
     verifiedUser: {type: Boolean, default: false},
-    verificationCode: {type: String, default:''},
+    verificationCode: {type: String, required : true},
     following : [{type : mongoose.Schema.Types.ObjectId, ref : 'users', default: []}],
     followers : [{type : mongoose.Schema.Types.ObjectId, ref : 'users', default: []}],
-    userCollections : [{type: mongoose.Schema.Types.ObjectId, ref : 'carCollections', default : {}}],
-    userFeed : {type : mongoose.Schema.Types.ObjectId, ref : 'userFeeds'}
+    userCollections : [{type: mongoose.Schema.Types.ObjectId, ref : 'carCollections', default : null}],
+    userFeed : {type : mongoose.Schema.Types.ObjectId, ref : 'userFeeds', default : null}
 });
 
 const model = new mongoose.model(collection, schema);
