@@ -50,6 +50,15 @@ export class carManager{
         }
     }
 
+    async readCarsByFilters(filters){
+        try {
+            const cars = await this.model.find(filters).lean();
+            return cars;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async createNewCar(newCar){
         try {
             const one = await this.model.create(newCar);

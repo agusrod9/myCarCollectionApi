@@ -5,28 +5,30 @@ const router = Router();
 const manager = new carManager();
 
 router.get('/', async(req,res,next)=>{
-    let {id, make, model} = req.query;
+    let filters = {};
+    let {id, make, model, manuf} = req.query;
 
-    if(make){
-        if(model){
-            let carsByModel = await manager.readCarsByMakeAndModel(make, model);
-            res.status(200).json({error: null, data : carsByModel});
-        }else{
-            let cars = await manager.readCarsByMake(make);
+    if (manuf) filters.manufacturer = {$regex: '.*' + manuf + '.*', $options : 'i'};
+    if (make) filters.carMake = {$regex: '.*' + make + '.*', $options : 'i'};
+    if (model) filters.carModel = {$regex: '.*' + model + '.*', $options : 'i'};
+    if (id) filters._id = id;
+    
+    if(Object.keys(filters).length>0){
+        let cars = await manager.readCarsByFilters(filters);
+        if(cars){
             res.status(200).json({error: null, data : cars});
-        }
-    }else if(model){
-        const cars = await manager.readCarsByModel(model);
-        res.status(200).json({error: null, data : cars})
-    }else{
-        if(id){
-            const car = await manager.readCarById(id);
-            res.status(200).json({error: null, data : car})
         }else{
-            const cars = await manager.readAllCars();
-            res.status(200).json({error: null, data : cars})
+            res.status(400).json({error: "NO CAR MATCHES GIVEN PARAMETERS", data: []});
+        }
+    }else{
+        let cars = await manager.readAllCars();
+        if(cars){
+            res.status(200).json({error: null, data : cars});
+        }else{
+            res.status(400).json({error: "NO CAR FOUND", data: []});
         }
     }
+    
 });
 
 router.post('/', async(req, res, next)=>{
@@ -48,7 +50,7 @@ router.put('/:id', async(req,res,next)=>{
     let {id} = req.params;
     let modifiedCar = req.body;
 
-    if(modifiedCar.carColor && modifiedCar.carMake && modifiedCar.carModel && modifiedCar.carYear && modifiedCar.img_urls && modifiedCar.manufacturer && modifiedCar.notes && modifiedCar.opened && modifiedCar.scale && modifiedCar.series && modifiedCar.series_num){
+    if(modifiedCar.carColor && modifiedCar.carMake && modifiedCar.carModel && modifiedCar.carYear && modifiedCar.img_urls && modifiedCar.manufacturer && modifiedCar.notes!=null && modifiedCar.opened && modifiedCar.scale && modifiedCar.series && modifiedCar.series_num){
         const car = await manager.readCarById(id);
         if(car){
             car.carColor = modifiedCar.carColor;
