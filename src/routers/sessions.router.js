@@ -3,6 +3,7 @@ import { usersManager } from "../dao/managers/usersManager.js";
 import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
+import verifyCode from "../middlewares/usersVerifier.mid.js";
 
 const router = Router();
 
@@ -17,6 +18,7 @@ router.post('/register', passport.authenticate("register",{session:false}), regi
 router.post('/login', passport.authenticate("login", {session: false}), login);
 router.post('/online', isOnlineVerifier, online);
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
+router.post('/verify', verifyCode, verifiCodeResponse)
 router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
 router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
 router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
@@ -39,7 +41,7 @@ function login(req,res,next){
         const user = req.user;
         const {token} = req;
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true};
-        return res.status(200).cookie('token', token, cookieOpts).json({message, user});
+        return res.status(200).cookie('token', token, cookieOpts).json({message, user : user.email});
     } catch (error) {
         return next(error);
     }
@@ -85,6 +87,15 @@ function google(req, res, next){
         const {token} = req;
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true};
         return res.status(200).cookie('token', token, cookieOpts).json({message})
+    } catch (error) {
+        return next(error);
+    }
+}
+
+function verifiCodeResponse(req,res,next){
+    try {
+        const message = 'USER VERIFIED';
+        return res.status(200).json({message});
     } catch (error) {
         return next(error);
     }

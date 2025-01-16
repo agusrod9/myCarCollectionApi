@@ -41,6 +41,16 @@ export class usersManager{
         }   
     }
 
+    update = async (id, data) => {
+        try {
+            const opt = { new: true };
+            const one = await this.model.findByIdAndUpdate(id, data, opt);
+            return one;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async addCollectionsToUser(userId, collection){
             try {
                 let one = await this.model.findOneAndUpdate()
