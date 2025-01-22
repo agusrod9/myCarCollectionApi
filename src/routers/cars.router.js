@@ -6,11 +6,12 @@ const manager = new carManager();
 
 router.get('/', async(req,res,next)=>{
     let filters = {};
-    let {id, make, model, manuf} = req.query;
+    let {id, make, model, manuf, userId} = req.query;
 
     if (manuf) filters.manufacturer = {$regex: '.*' + manuf + '.*', $options : 'i'};
     if (make) filters.carMake = {$regex: '.*' + make + '.*', $options : 'i'};
     if (model) filters.carModel = {$regex: '.*' + model + '.*', $options : 'i'};
+    if(userId) filters.userId = userId;
     if (id) filters._id = id;
     
     if(Object.keys(filters).length>0){

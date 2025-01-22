@@ -13,7 +13,7 @@ import carCollectionsRouter from './routers/carCollections.router.js';
 const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
 
-app.use(morgan('combined'))
+app.use(morgan('tiny'))
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
