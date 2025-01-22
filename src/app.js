@@ -1,4 +1,6 @@
 import express from 'express';
+import morgan from 'morgan';
+import cors from 'cors';
 import 'dotenv/config';
 import carsRouter from './routers/cars.router.js';
 import sessionsRouter from './routers/sessions.router.js';
@@ -11,7 +13,8 @@ import carCollectionsRouter from './routers/carCollections.router.js';
 const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
 
-
+app.use(morgan('combined'))
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser(SECRET));
