@@ -32,4 +32,13 @@ export class carCollectionsManager{
             throw error;
         }
     }
+
+    async getCollectionsByUserId(userId){
+        try {
+            let collections = this.model.find({userId}).lean();
+            return collections;
+        } catch (error) {
+            throw error
+        }
+    }
 }

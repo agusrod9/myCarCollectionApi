@@ -27,7 +27,18 @@ router.put('/', async(req,res,next)=>{
             return res.status(500).json({error: 'COULDNT ADD CAR TO COLLECTION', data : null});
         }
     }else{
-        return res.status(500).json({error: 'COLLECTION DOES N0T EXIST', data : null})
+        return res.status(400).json({error: 'COLLECTION DOES N0T EXIST', data : null})
+    }
+})
+
+router.get('/', async(req,res,next)=>{
+    let {userId} = req.query;
+    let userCollections = await manager.getCollectionsByUserId(userId);
+    
+    if(userCollections.length>0){
+        return res.status(200).json({error: null, data : userCollections});
+    }else{
+        return res.status(400).json({error: "NO COLLECTIONS FOUND", data: []});
     }
 })
 
