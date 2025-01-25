@@ -6,9 +6,9 @@ const{AWS_ACCESSKEY_ID, AWS_ACCESS_SECRET_KEY} = process.env;
 
 const region = 'us-east-2';
 const bucketName = 'user-collected-cars-images-bucket';
+const signatureVersion = 'v4'
 const accessKeyId = AWS_ACCESSKEY_ID;
 const secretAccessKey = AWS_ACCESS_SECRET_KEY;
-const signatureVersion = 'v4'
 
 const s3 = new aws.S3({
     region,

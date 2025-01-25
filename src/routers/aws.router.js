@@ -6,18 +6,16 @@ const router = Router();
 
 router.get('/',async(req,res)=>{
     try {
-        let url = await generateUploadURL();
+        const url = await generateUploadURL();
         if(url){
-            url = url.split('?')[0]
-            res.status(200).send({error : null, data : url}).json()
+            res.status(200).json({error : null, data : url})
         }else{
-            res.status(404).send({error : "No URL found.", data : null}).json()
+            res.status(404).json({error : "No URL found.", data : null})
         }
     } catch (error) {
         throw error
     }
     
 })
-
 
 export default router

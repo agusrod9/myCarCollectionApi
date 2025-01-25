@@ -23,7 +23,7 @@ app.use(cookieParser(SECRET));
 app.use('/api/cars', carsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/carcollections', carCollectionsRouter);
-app.use('/api/aws', awsRouter)
+app.use('/api/aws', awsRouter);
 
 //Handlers
 app.use(pathHandler);
