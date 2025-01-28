@@ -65,6 +65,14 @@ passport.use("logout", new jwtStrategy(
     }
 ));
 
+passport.use("whoIsOnline", new jwtStrategy(
+    {jwtFromRequest: ExtractJwt.fromExtractors([req=>req?.signedCookies?.token]), secretOrKey: SECRET},
+    (data, done)=>{
+        const userId = data.user_id;
+        return done(null, userId);
+    }
+))
+
 passport.use("isPremium", new jwtStrategy(
     {jwtFromRequest: ExtractJwt.fromExtractors([req=>req?.signedCookies?.token]), secretOrKey: SECRET},
     (data, done)=>{

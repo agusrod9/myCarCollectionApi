@@ -17,6 +17,7 @@ router.get('/', async(req,res,next)=>{
 router.post('/register', passport.authenticate("register",{session:false}), register);
 router.post('/login', passport.authenticate("login", {session: false}), login);
 router.post('/online', isOnlineVerifier, online);
+router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}), whoIsOnline)
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
 router.post('/verify', verifyCode, verifiCodeResponse)
 router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
@@ -51,6 +52,17 @@ function online(req, res, next) {
     try {
         const message = 'USER ONLINE';
         return res.status(200).json({message});
+        
+    } catch (error) {
+        return next(error);
+    }
+}
+
+function whoIsOnline(req, res, next) {
+    try {
+        const message = 'USER ONLINE';
+        const userId = req.user;
+        return res.status(200).json({message, userId });
         
     } catch (error) {
         return next(error);
