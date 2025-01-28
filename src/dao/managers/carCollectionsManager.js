@@ -24,10 +24,19 @@ export class carCollectionsManager{
         }
     }
 
-    async getCollection(id){
+    async getCollectionById(id){
         try {
             let collection = this.model.find({_id:id}).lean();
             return collection;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async getAllCollections(){
+        try {
+            let collections = this.model.find().lean();
+            return collections;
         } catch (error) {
             throw error;
         }
@@ -39,6 +48,15 @@ export class carCollectionsManager{
             return collections;
         } catch (error) {
             throw error
+        }
+    }
+
+    async deleteCollectionById(collectionId){
+        try {
+            let deleted = this.model.findByIdAndDelete(collectionId);
+            return deleted;
+        } catch (error) {
+            throw error;
         }
     }
 }
