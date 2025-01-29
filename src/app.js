@@ -15,7 +15,10 @@ const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
 
 app.use(morgan('tiny'))
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}));
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser(SECRET));
