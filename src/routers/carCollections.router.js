@@ -32,9 +32,7 @@ router.get('/', async(req,res,next)=>{
 
 router.post('/', async(req, res, next)=>{
     let  data = req.body;
-    console.log(data)
     let process = await manager.createCollection(data);
-    console.log(process)
     if(process){
         return res.status(201).json({error: null, data : process});
     }

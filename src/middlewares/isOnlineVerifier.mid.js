@@ -1,6 +1,5 @@
 
 export default function isOnlineVerifier(req,res,next){
-    console.log(req.signedCookies.token)
     if(req.signedCookies.token){        
         return next();
     }

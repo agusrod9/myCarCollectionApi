@@ -43,7 +43,6 @@ async function mongoConnect(){
         mongoose.connect(MONGO_REMOTE_URI)
         console.log("MONGO DB CONNECTION : SUCCESS");
     } catch (error) {
-        console.log(error);
         process.exit;
     }
 }
