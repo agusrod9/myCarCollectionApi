@@ -13,7 +13,7 @@ router.get('/', async(req,res,next)=>{
         if (collection){
             return res.status(200).json({error: null, data : collection});
         }else{
-            return res.status(400).json({error: "COLLECTION NOT FOUND", data: null});
+            return res.status(404).json({error: "COLLECTION NOT FOUND", data: null});
         }
     }
     let collections = []
@@ -26,7 +26,7 @@ router.get('/', async(req,res,next)=>{
     if(collections.length>0){
         return res.status(200).json({error: null, data : collections});
     }else{
-        return res.status(400).json({error: "NO COLLECTIONS FOUND", data: null});
+        return res.status(404).json({error: "NO COLLECTIONS FOUND", data: null});
     }
 })
 
@@ -34,7 +34,7 @@ router.post('/', async(req, res, next)=>{
     let  data = req.body;
     let process = await manager.createCollection(data);
     if(process){
-        return res.status(200).json({error: null, data : process});
+        return res.status(204).json({error: null, data : process});
     }
 })
 
@@ -53,7 +53,7 @@ router.put('/', async(req,res,next)=>{
             return res.status(500).json({error: 'COULDNT ADD CAR TO COLLECTION', data : null});
         }
     }else{
-        return res.status(400).json({error: 'COLLECTION DOES N0T EXIST', data : null})
+        return res.status(404).json({error: 'COLLECTION DOES N0T EXIST', data : null})
     }
 })
 
@@ -74,7 +74,7 @@ router.delete('/', async(req, res, next)=>{
             return res.status(500).json({error: 'COULDNT DELETE COLLECTION', data : null});
         }
     }else{
-        return res.status(400).json({error: 'COLLECTION DOES N0T EXIST', data : null})
+        return res.status(404).json({error: 'COLLECTION DOES N0T EXIST', data : null})
     }
     
 })

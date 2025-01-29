@@ -41,7 +41,7 @@ function login(req,res,next){
         const message = 'USER LOGGED';
         const user = req.user;
         const {token} = req;
-        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, sameSite:"None", secure: true, path:'/'};
+        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
         return res.status(200).cookie('token', token, cookieOpts).json({message, user : user.email});
     } catch (error) {
         return next(error);
