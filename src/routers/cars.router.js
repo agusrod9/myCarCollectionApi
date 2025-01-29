@@ -1,8 +1,10 @@
-import { Router } from "express";
-import { carManager } from "../dao/managers/carsManager.js";
+import { Router } from 'express';
+import { carManager } from '../dao/managers/carsManager.js';
+import {carCollectionsManager} from '../dao/managers/carCollectionsManager.js'
 
 const router = Router();
 const manager = new carManager();
+const collectionsManager = new carCollectionsManager();
 
 router.get('/', async(req,res,next)=>{
     let filters = {};
@@ -38,6 +40,15 @@ router.post('/', async(req, res, next)=>{
         newCar.userId = {_id : newCar.userId};
         let process = await manager.createNewCar(newCar);
         if(process){
+            if(process.collectionId){
+                const collectionId= process.collectionId.toString();
+                const collection = await collectionsManager.getCollectionById(collectionId);
+                collection.push(process._id);
+                const updateCollection = await collectionsManager.updateCarList(collection,collectionId)
+                if(updateCollection){
+                    res.status(201).json({error: null, data: process});
+                }
+            }
             res.status(201).json({error: null, data: process});
         }else{
             res.status(500).json({error: "CAR NOT ADDED", data: []});
@@ -84,6 +95,21 @@ router.delete('/:id', async(req,res,next)=>{
     let {id} = req.params;
     const process = await manager.deleteById(id);
     if(process){
+        if(process.collectionId){
+            const collectionId= process.collectionId.toString();
+            const collection = await collectionsManager.getCollectionById(collectionId);
+            const carsInCollection = collection[0].cars
+            let indexOfCarInCollection = -1;
+            for(let i=0; i< carsInCollection.length;i++){
+                if(collection[0].cars[i] == id){
+                    indexOfCarInCollection = i;
+                }
+            }
+            if(indexOfCarInCollection!=-1){
+                carsInCollection.splice(indexOfCarInCollection, 1)
+                await collectionsManager.updateCarList(carsInCollection,collectionId)
+            }
+        }
         res.status(200).json({error: null, data: process});
     }else{
         res.status(400).json({error: "CAR NOT DELETED", data: []});
