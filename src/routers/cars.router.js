@@ -110,9 +110,9 @@ router.delete('/:id', async(req,res,next)=>{
                 await collectionsManager.updateCarList(carsInCollection,collectionId)
             }
         }
-        res.status(200).json({error: null, data: process});
+        return res.status(200).json({error: null, data: process});
     }else{
-        res.status(400).json({error: "CAR NOT DELETED", data: []});
+        return res.status(400).json({error: "CAR NOT DELETED", data: []});
     }
 })
 

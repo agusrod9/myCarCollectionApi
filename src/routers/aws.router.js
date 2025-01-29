@@ -8,9 +8,9 @@ router.get('/',async(req,res)=>{
     try {
         const url = await generateUploadURL();
         if(url){
-            res.status(200).json({error : null, data : url})
+            return res.status(200).json({error : null, data : url})
         }else{
-            res.status(404).json({error : "No URL found.", data : null})
+            return res.status(404).json({error : "No URL found.", data : null})
         }
     } catch (error) {
         throw error
