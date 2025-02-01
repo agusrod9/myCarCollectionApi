@@ -19,16 +19,16 @@ router.get('/', async(req,res,next)=>{
     if(Object.keys(filters).length>0){
         let cars = await manager.readCarsByFilters(filters);
         if(cars){
-            res.status(200).json({error: null, data : cars});
+            return res.status(200).json({error: null, data : cars});
         }else{
-            res.status(400).json({error: "NO CAR MATCHES GIVEN PARAMETERS", data: []});
+            return res.status(400).json({error: "NO CAR MATCHES GIVEN PARAMETERS", data: []});
         }
     }else{
         let cars = await manager.readAllCars();
         if(cars){
-            res.status(200).json({error: null, data : cars});
+            return res.status(200).json({error: null, data : cars});
         }else{
-            res.status(400).json({error: "NO CAR FOUND", data: []});
+            return res.status(400).json({error: "NO CAR FOUND", data: []});
         }
     }
     
@@ -46,15 +46,15 @@ router.post('/', async(req, res, next)=>{
                 collection.push(process._id);
                 const updateCollection = await collectionsManager.updateCarList(collection,collectionId)
                 if(updateCollection){
-                    res.status(201).json({error: null, data: process});
+                    return res.status(201).json({error: null, data: process});
                 }
             }
-            res.status(201).json({error: null, data: process});
+            return res.status(201).json({error: null, data: process});
         }else{
-            res.status(500).json({error: "CAR NOT ADDED", data: []});
+            return res.status(500).json({error: "CAR NOT ADDED", data: []});
         }
     }else{
-        res.status(400).json({error: "MISSING MANDATORY FIELDS", data: []});
+        return res.status(400).json({error: "MISSING MANDATORY FIELDS", data: []});
     }
 })
 
@@ -78,15 +78,15 @@ router.put('/:id', async(req,res,next)=>{
             car.series_num = modifiedCar.series_num;
             let process = await manager.updateCar(id, car);
             if(process){
-                res.status(200).json({error: null, data: process});
+                return res.status(200).json({error: null, data: process});
             }else{
-                res.status(500).json({error: "CAR NOT UPDATED", data: []});
+                return res.status(500).json({error: "CAR NOT UPDATED", data: []});
             }
         }else{
-            res.status(400).json({error: "CAR NOT FOUND", data: []});
+            return res.status(400).json({error: "CAR NOT FOUND", data: []});
         }
     }else{
-        res.status(400).json({error: "MISSING MANDATORY FIELDS", data: []});
+        return res.status(400).json({error: "MISSING MANDATORY FIELDS", data: []});
     }
     
 })
