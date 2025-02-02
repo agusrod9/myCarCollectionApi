@@ -16,7 +16,7 @@ const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
 
 app.use(morgan('tiny'))
 app.use(cors({
-    origin:"*", //['http://localhost:5173','https://jovial-medovik-6efedb.netlify.app/'],
+    origin:['http://localhost:5173','https://jovial-medovik-6efedb.netlify.app/'],
     credentials: true
 }));
 app.use(express.json({limit: '50mb'}));
