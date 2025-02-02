@@ -4,12 +4,12 @@ import cors from 'cors';
 import 'dotenv/config';
 import carsRouter from './routers/cars.router.js';
 import sessionsRouter from './routers/sessions.router.js';
+import carCollectionsRouter from './routers/carCollections.router.js';
+import awsRouter from './routers/aws.router.js';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import pathHandler from './middlewares/pathHandler.mid.js';
 import errorHandler from './middlewares/errorHandler.mid.js';
-import carCollectionsRouter from './routers/carCollections.router.js';
-import awsRouter from './routers/aws.router.js';
 
 const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;

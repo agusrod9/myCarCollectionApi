@@ -35,7 +35,7 @@ router.get('/', async(req,res,next)=>{
 });
 
 router.post('/', async(req, res, next)=>{
-    if(req.body.carMake && req.body.carModel && req.body.carYear && req.body.scale && req.body.userId){
+    if(req.body.carMake && req.body.carModel && req.body.scale && req.body.userId){
         let newCar = req.body;
         newCar.userId = {_id : newCar.userId};
         let process = await manager.createNewCar(newCar);
