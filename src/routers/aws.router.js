@@ -41,7 +41,8 @@ router.post('/', upload.single('image'), async(req,res)=>{
         Key : imageName
     }
     const getCommand = new GetObjectCommand(getParams);
-    const url = await getSignedUrl(s3, getCommand, { expiresIn: 3600 });
+    let url = await getSignedUrl(s3, getCommand, { expiresIn: 3600 });
+    url = url.split('?')[0]
 
 
     return res.status(200).json({url})
