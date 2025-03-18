@@ -12,11 +12,11 @@ import pathHandler from './middlewares/pathHandler.mid.js';
 import errorHandler from './middlewares/errorHandler.mid.js';
 
 const app = express();
-const {PORT, MONGO_REMOTE_URI, SECRET, FRONT_URL} = process.env;
+const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
 
 app.use(morgan('tiny'))
 app.use(cors({
-    origin:['http://localhost:5173',FRONT_URL],
+    origin:['http://localhost:5173','https://jovial-medovik-6efedb.netlify.app'],
     credentials: true
 }));
 app.use(express.json({limit: '50mb'}));
