@@ -106,7 +106,7 @@ passport.use("google", new GoogleStrategy(
             const { id, given_name, family_name, picture, email } = profile;
             let user = await manager.readByEmail(id);            
             if(!user){
-                user = await manager.createUser({email : id, password : createHash(id), firstName : given_name, lastName : family_name, profilePicture: picture, contactEmail : email });
+                user = await manager.createUser({email : id, password : createHash(id), firstName : given_name, lastName : family_name, profilePicture: picture, contactEmail : email, verifiedUser : true });
             }
             req.token = createToken({user_id : user._id, role: user.role});
             return done(null, user);
