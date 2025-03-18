@@ -73,7 +73,7 @@ async function logout(req, res, next){
     try {
         const userId = req.user;
         const user = await manager.readById(userId);
-        const cookieOpts = {httpOnly: true, signed: true};
+        const cookieOpts = {httpOnly: true, signed: true, secure: true, sameSite: "None"};
         const message = 'USER LOGGED OUT';
         req.token = createLogoutToken({user_id: user._id, role: user.role});
         req.user = null;
@@ -97,7 +97,7 @@ function google(req, res, next){
     try {
         const message = 'USER LOGGED';
         const {token} = req;
-        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true};
+        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
         return res.status(200).cookie('token', token, cookieOpts).json({message})
     } catch (error) {
         return next(error);
