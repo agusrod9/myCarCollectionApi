@@ -4,12 +4,10 @@ import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
 import verifyCode from "../middlewares/usersVerifier.mid.js";
-import 'dotenv/config';
 
 
 
 const router = Router();
-const {FRONT_URL} = process.env;
 const manager = new usersManager();
 
 router.get('/', async(req,res,next)=>{
@@ -103,7 +101,7 @@ function google(req, res, next){
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
 
         res.cookie('token', token, cookieOpts);
-        return res.redirect(FRONT_URL);
+        return res.redirect("https://jovial-medovik-6efedb.netlify.app");
     } catch (error) {
         return next(error);
     }
