@@ -4,6 +4,9 @@ import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
 import verifyCode from "../middlewares/usersVerifier.mid.js";
+import 'dotenv/config';
+
+
 
 const router = Router();
 const {FRONT_URL} = process.env;
