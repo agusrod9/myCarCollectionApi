@@ -6,7 +6,7 @@ import { createLogoutToken } from "../utils/token.util.js";
 import verifyCode from "../middlewares/usersVerifier.mid.js";
 
 const router = Router();
-
+const {FRONT_URL} = process.env;
 const manager = new usersManager();
 
 router.get('/', async(req,res,next)=>{
@@ -98,7 +98,9 @@ function google(req, res, next){
         const message = 'USER LOGGED';
         const {token} = req;
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
-        return res.status(200).cookie('token', token, cookieOpts).json({message})
+
+        res.cookie('token', token, cookieOpts);
+        return res.redirect(FRONT_URL);
     } catch (error) {
         return next(error);
     }
