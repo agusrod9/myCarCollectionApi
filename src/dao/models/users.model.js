@@ -7,10 +7,12 @@ const collection = 'users';
 const schema = new mongoose.Schema({
     firstName :  {type: String, required: true},
     lastName : {type: String, required: true},
+    nickName : { type: String, required : true},
     email : {type: String, required: true, index: true, unique: true},
     contactEmail : {type: String, required: true, unique: true},
     profilePicture : {type : String, required : true},
     password: { type: String, required: true },
+    mustResetPass : { type: Boolean, default : false},
     role : {type: String, default: 'REGULAR', enum:['REGULAR','PREMIUM','SUPER']},
     verifiedUser: {type: Boolean, default: false},
     verificationCode: {type: String, default : null},

@@ -7,6 +7,7 @@ import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 import crypto from 'crypto';
 import { sendVerificationEmail } from "../utils/nodemailer.util.js";
+import { generateNickName } from "../utils/nicknames.util.js";
 
 const manager = new usersManager;
 const {SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL} = process.env;
@@ -23,7 +24,8 @@ passport.use("register", new localStrategy(
             req.body.password = createHash(password);
             let userData = req.body;
             const verificationCode = crypto.randomBytes(12).toString('hex');
-            userData = {...userData, verificationCode};
+            const nickName = generateNickName();
+            userData = {...userData, verificationCode, nickName};
             const newUsr = await manager.createUser(userData);
             await sendVerificationEmail(newUsr.contactEmail, verificationCode);
             return done(null, newUsr);
@@ -106,7 +108,8 @@ passport.use("google", new GoogleStrategy(
             const { id, given_name, family_name, picture, email } = profile;
             let user = await manager.readByEmail(id);            
             if(!user){
-                user = await manager.createUser({email : id, password : createHash(id), firstName : given_name, lastName : family_name, profilePicture: picture, contactEmail : email, verifiedUser : true, });
+                const nickName = generateNickName();
+                user = await manager.createUser({email : id, password : createHash(id), firstName : given_name, lastName : family_name, profilePicture: picture, contactEmail : email, verifiedUser : true, nickName });
             }
             req.token = createToken({user_id : user._id, role: user.role});
             return done(null, user);
