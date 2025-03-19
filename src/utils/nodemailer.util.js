@@ -3,8 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const {GOOGLE_MAIL, GOOGLE_PASS} = process.env;
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(require.main.filename || process.mainModule.filename);
 
 const transport = createTransport({
     host : 'smtp.gmail.com',
