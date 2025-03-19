@@ -1,6 +1,10 @@
 import {createTransport} from 'nodemailer';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const {GOOGLE_MAIL, GOOGLE_PASS} = process.env;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const transport = createTransport({
     host : 'smtp.gmail.com',
@@ -67,8 +71,8 @@ const sendVerificationEmail = async(to, verificationCode)=>{
             `,
             attachments:[{
                 filename : 'wecollect.png',
-                path : 'img/wc.png',
-                cid: 'WeCollectLogo'
+                path : path.resolve(__dirname, 'public/img/wc.png'),
+                cid: 'wecollectlogo'
             }]
         })
     } catch (error) {
