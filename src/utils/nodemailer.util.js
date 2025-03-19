@@ -17,17 +17,53 @@ const sendVerificationEmail = async(to, verificationCode)=>{
             to,
             subject : 'My Car Collection - Please verify your e-mail',
             html : `
-                <html>
-                    <body>
-                        <h2>Welcome to My Car Collection!</h2>
-                        <p>Thank you for signing up. Please verify your email address to complete your registration.</p>
-                        <p>Your verification code is: <strong>${verificationCode}</strong></p>
-                        <p>If you did not request this, please ignore this email.</p>
-                        <br>
-                        <p>Best regards,</p>
-                        <p>The My Car Collection Team</p>
-                    </body>
-                </html>
+                    <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                            <title>We Collect - Verify Your Email</title>
+                            <style>
+                                body {
+                                    font-family: Arial, sans-serif;
+                                    text-align: center;
+                                    background-color: #f4f4f4;
+                                    padding: 20px;
+                                }
+                                .email-container {
+                                    background: white;
+                                    padding: 20px;
+                                    border-radius: 10px;
+                                    max-width: 500px;
+                                    margin: auto;
+                                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                                }
+                                .logo {
+                                    max-width: 200px;
+                                }
+                                .code {
+                                    font-size: 20px;
+                                    font-weight: bold;
+                                    color: #007bff;
+                                }
+                                .footer {
+                                    margin-top: 20px;
+                                    font-size: 12px;
+                                    color: #666;
+                                }
+                            </style>
+                        </head>
+                        <body>
+                            <div class="email-container">
+                                <img src="cid:wecollectlogo" alt="We Collect Logo" class="logo">
+                                <h2>Welcome to We Collect!</h2>
+                                <p>We're thrilled to have you on board. Let's get your account set up!</p>
+                                <p>Use the verification code below to confirm your email and start your collecting journey:</p>
+                                <p class="code">{{verificationCode}}</p>
+                                <p>If you didn't sign up for We Collect, just ignore this email.</p>
+                                <p class="footer">Happy collecting! 🚗✨<br>The We Collect Team</p>
+                            </div>
+                        </body>
+                    </html>
             `
         })
     } catch (error) {
