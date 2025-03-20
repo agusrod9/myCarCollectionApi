@@ -59,11 +59,12 @@ function online(req, res, next) {
     }
 }
 
-function whoIsOnline(req, res, next) {
+async function whoIsOnline(req, res, next) {
     try {
         const message = 'USER ONLINE';
         const userId = req.user;
-        return res.status(200).json({message, userId });
+        const user = await manager.readById(userId);
+        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass });
         
     } catch (error) {
         return next(error);
