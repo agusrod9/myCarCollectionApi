@@ -1,6 +1,5 @@
 import {createTransport} from 'nodemailer';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 const {GOOGLE_MAIL, GOOGLE_PASS} = process.env;
 const __dirname = path.dirname(process.cwd());
