@@ -4,6 +4,8 @@ import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
 import verifyCode from "../middlewares/usersVerifier.mid.js";
+import crypto from 'crypto';
+import { sendNewPasswordEmail } from "../utils/nodemailer.util.js";
 
 
 
@@ -20,7 +22,9 @@ router.post('/login', passport.authenticate("login", {session: false}), login);
 router.post('/online', isOnlineVerifier, online);
 router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}), whoIsOnline)
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
-router.post('/verify', verifyCode, verifiCodeResponse)
+router.post('/verify', verifyCode, verifiCodeResponse);
+router.post('/resetPass', resetPass, resetPassResponse);
+//router.post('/changePass', changePass, changePassResponse);
 router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
 router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
 router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
@@ -83,6 +87,24 @@ async function logout(req, res, next){
     } catch (error) {
         return next(error);
     }
+}
+
+async function resetPass (req,res,next){
+    try {
+        const {email} = req.body;
+        const user = await manager.readByEmail(email);
+        const newPass = crypto.randomBytes(4).toString('hex');
+        await manager.update(user._id, {password: newPass, mustResetPass:true})
+        await sendNewPasswordEmail(user.contactEmail, newPass)
+        return next();
+    } catch (error) {
+        return next(error);
+    }
+}
+
+function resetPassResponse(req, res, next){
+    const message = 'NEW PASSWORD SENT BY MAIL';
+    return res.status(200).json({message});
 }
 
 function isPremium(req,res,next){

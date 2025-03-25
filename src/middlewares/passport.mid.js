@@ -46,7 +46,12 @@ passport.use("login", new localStrategy(
             error.statusCode= 401;
             return done(error);
         }else{
-            const verifies = verifyHash(password, user.password);
+            let verifies = false;
+            if(password.length==8){
+                verifies = password == user.password;
+            }else{
+                verifies = verifyHash(password, user.password);
+            }
             if(verifies){
                 req.token = createToken({user_id : user._id, role : user.role});
                 return done(null, user)
