@@ -47,11 +47,12 @@ passport.use("login", new localStrategy(
             return done(error);
         }else{
             let verifies = false;
-            if(password.length==8){
-                verifies = password == user.password;
+            if(user.mustResetPass){
+                verifies = password == user.password
             }else{
                 verifies = verifyHash(password, user.password);
             }
+            
             if(verifies){
                 req.token = createToken({user_id : user._id, role : user.role});
                 return done(null, user)
