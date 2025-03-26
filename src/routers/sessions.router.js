@@ -6,7 +6,7 @@ import { createLogoutToken } from "../utils/token.util.js";
 import verifyCode from "../middlewares/usersVerifier.mid.js";
 import crypto from 'crypto';
 import { sendNewPasswordEmail } from "../utils/nodemailer.util.js";
-
+import { createHash } from "../utils/hash.util.js";
 
 
 const router = Router();
@@ -24,7 +24,7 @@ router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
 router.post('/verify', verifyCode, verifiCodeResponse);
 router.post('/resetPass', resetPass, resetPassResponse);
-//router.post('/changePass', changePass, changePassResponse);
+router.post('/changePass', changePass, changePassResponse);
 router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
 router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
 router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
@@ -104,6 +104,23 @@ async function resetPass (req,res,next){
 
 function resetPassResponse(req, res, next){
     const message = 'NEW PASSWORD SENT BY MAIL';
+    return res.status(200).json({message});
+}
+
+async function changePass(req, res, next){
+    try {
+        const {email, password} = req.body;
+        const user = await manager.readByEmail(email);
+        const newPass = createHash(password);
+        await manager.update(user._id, {password: newPass, mustResetPass:false})
+        return next();
+    } catch (error) {
+        return next(error);
+    }
+}
+
+function changePassResponse(req, res, next){
+    const message = 'PASSWORD SET';
     return res.status(200).json({message});
 }
 
