@@ -14,7 +14,8 @@ import errorHandler from './middlewares/errorHandler.mid.js';
 const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
 
-app.use(morgan('tiny'))
+app.disable('x-powered-by');
+app.use(morgan('tiny'));
 app.use(cors({
     origin:['http://localhost:5173','https://jovial-medovik-6efedb.netlify.app'],
     credentials: true
