@@ -15,6 +15,7 @@ const schema = new mongoose.Schema({
     mustResetPass : { type: Boolean, default : false},
     role : {type: String, default: 'REGULAR', enum:['REGULAR','PREMIUM','SUPER']},
     verifiedUser: {type: Boolean, default: false},
+    active: {type: Boolean, default: false},
     verificationCode: {type: String, default : null},
     following : [{type : mongoose.Schema.Types.ObjectId, ref : 'users', default: []}],
     followers : [{type : mongoose.Schema.Types.ObjectId, ref : 'users', default: []}],

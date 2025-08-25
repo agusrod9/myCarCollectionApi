@@ -45,6 +45,10 @@ passport.use("login", new localStrategy(
             const error = new Error('USER MUST VERIFY MAIL FIRST');
             error.statusCode= 401;
             return done(error);
+        }else if (!user.active){
+            const error = new Error('USER NO LONGER ACTIVE');
+            error.statusCode = 401;
+            return done(error);
         }else{
             let verifies = false;
             if(user.mustResetPass){
