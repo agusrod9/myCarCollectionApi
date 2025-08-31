@@ -68,7 +68,7 @@ async function whoIsOnline(req, res, next) {
         const message = 'USER ONLINE';
         const userId = req.user;
         const user = await manager.readById(userId);
-        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass });
+        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass, userName : user.nickName });
         
     } catch (error) {
         return next(error);
