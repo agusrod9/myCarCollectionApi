@@ -8,6 +8,7 @@ import { createToken } from "../utils/token.util.js";
 import crypto from 'crypto';
 import { sendVerificationEmail } from "../utils/nodemailer.util.js";
 import { generateNickName } from "../utils/nicknames.util.js";
+import { verifyEmail } from "../utils/mailValidator.js";
 
 const manager = new usersManager;
 const {SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL} = process.env;
@@ -18,6 +19,10 @@ passport.use("register", new localStrategy(
         const one = await manager.readByEmail(email);
         if(one){
             const error = new Error('USER ALREADY REGISTERED');
+            error.statusCode = 401;
+            return done(error);
+        }else if(!verifyEmail(req.body.email)){
+            const error = new Error('INVALID E-MAIL ADDRESS');
             error.statusCode = 401;
             return done(error);
         }else{
