@@ -10,7 +10,7 @@ const schema = new mongoose.Schema({
     nickName : { type: String, required : true},
     email : {type: String, required: true, index: true, unique: true},
     contactEmail : {type: String, required: true, unique: true},
-    profilePicture : {type : String, required : true},
+    profilePicture : {type : String, default : "https://avatar.iran.liara.run/public"},
     password: { type: String, required: true },
     mustResetPass : { type: Boolean, default : false},
     role : {type: String, default: 'REGULAR', enum:['REGULAR','PREMIUM','SUPER']},
