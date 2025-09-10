@@ -8,7 +8,6 @@ import crypto from 'crypto';
 import { sendNewPasswordEmail } from "../utils/nodemailer.util.js";
 import { createHash } from "../utils/hash.util.js";
 
-
 const router = Router();
 const manager = new usersManager();
 
@@ -20,7 +19,8 @@ router.get('/', async(req,res,next)=>{
 router.post('/register', passport.authenticate("register",{session:false}), register);
 router.post('/login', passport.authenticate("login", {session: false}), login);
 router.post('/online', isOnlineVerifier, online);
-router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}), whoIsOnline)
+router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}), whoIsOnline);
+router.post('/onlineUserData', passport.authenticate("whoIsOnline", {session: false}), onlineUserData);
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
 router.post('/verify', verifyCode, verifiCodeResponse);
 router.post('/resetPass', resetPass, resetPassResponse);
@@ -72,6 +72,26 @@ async function whoIsOnline(req, res, next) {
         
     } catch (error) {
         return next(error);
+    }
+}
+
+async function onlineUserData(req, res, next){
+    try {
+        const message = 'USER INFO';
+        const userId = req.user;
+        const user = await manager.readById(userId);
+        const safeUser = {
+            id: user.id,
+            firstName : user.firstName,
+            lastName : user.lastName,
+            nickName : user.nickName,
+            contactEmail : user.contactEmail,
+            profilePicture : user.profilePicture,
+            role : user.role
+        }
+        return res.status(200).json({message, userData : safeUser})
+    } catch (error) {
+        return next(error)
     }
 }
 
