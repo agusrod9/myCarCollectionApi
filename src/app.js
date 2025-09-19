@@ -29,6 +29,7 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/api/carcollections', carCollectionsRouter);
 app.use('/api/aws', awsRouter);
 
+
 //Handlers
 app.use(pathHandler);
 app.use(errorHandler);

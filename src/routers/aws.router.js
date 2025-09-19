@@ -25,8 +25,9 @@ const s3 = new S3Client({
 })
 
 router.post('/', upload.single('image'), async(req,res)=>{
-    const imageName = crypto.randomBytes(16).toString('hex');
-    const newImg = await sharp(req.file.buffer).webp({quality: 80}).toBuffer()
+    const {userId} = req.query;
+    const imageName = userId+crypto.randomBytes(16).toString('hex');
+    const newImg = await sharp(req.file.buffer).webp({quality: 80}).toBuffer();
     const putParams = {
         Bucket : bucketName,
         Key : imageName,
