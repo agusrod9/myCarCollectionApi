@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { usersManager } from "../dao/managers/usersManager.js";
+import { carManager } from "../dao/managers/carsManager.js";
 import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
@@ -10,6 +11,7 @@ import { createHash } from "../utils/hash.util.js";
 
 const router = Router();
 const manager = new usersManager();
+const cManager = new carManager();
 
 router.get('/', async(req,res,next)=>{
     const users = await manager.readAllUsers();
@@ -68,7 +70,9 @@ async function whoIsOnline(req, res, next) {
         const message = 'USER ONLINE';
         const userId = req.user;
         const user = await manager.readById(userId);
-        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass, userName : user.nickName, userProfilePicture : user.profilePicture });
+        const userCarCount = await cManager.readUserCarCount(userId)
+
+        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass, userName : user.nickName, userProfilePicture : user.profilePicture, userCarCount });
         
     } catch (error) {
         return next(error);

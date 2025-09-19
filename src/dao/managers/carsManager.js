@@ -14,6 +14,15 @@ export class carManager{
         }
     }
 
+    async readUserCarCount(userId){
+        try {
+            const carsCount = await this.model.countDocuments({userId})
+            return carsCount
+        } catch (error) {
+            
+        }
+    }
+
     async readCarById(id){
         try {
             const one = await this.model.findOne({_id:id}).lean();
