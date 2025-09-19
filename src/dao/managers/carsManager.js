@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import carsModel from '../models/cars.model.js';
 
 export class carManager{
@@ -19,7 +20,20 @@ export class carManager{
             const carsCount = await this.model.countDocuments({userId})
             return carsCount
         } catch (error) {
-            
+            throw error;
+        }
+    }
+
+    async readUserCarsTotalAmount(userId){
+        const matchUserId = new mongoose.Types.ObjectId(userId)
+        try {
+            const totalAmount = await this.model.aggregate([
+                {$match : {userId: matchUserId}},
+                {$group: {_id: null, total: {$sum: '$price'}}}
+            ]);
+            return totalAmount[0].total
+        } catch (error) {
+            throw error;
         }
     }
 
