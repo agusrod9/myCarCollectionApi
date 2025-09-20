@@ -36,7 +36,10 @@ router.get('/', async(req,res,next)=>{
 
 router.post('/', async(req, res, next)=>{
     if(req.body.carMake && req.body.carModel && req.body.scale && req.body.userId){
-        let newCar = req.body;
+        let newCar = {
+            ...req.body,
+            dateAdded : Date.now() //--> ignore if date is tried to set from outside.
+        };
         newCar.userId = {_id : newCar.userId};
         let process = await manager.createNewCar(newCar);
         if(process){
