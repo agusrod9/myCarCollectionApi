@@ -18,7 +18,8 @@ const schema = new mongoose.Schema({
     series : {type : String, default : null },
     series_num : {type : String, default : null },
     userId : {type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true},
-    collectionId : {type: mongoose.Schema.Types.ObjectId, ref: 'carCollections', default: null}
+    collectionId : {type: mongoose.Schema.Types.ObjectId, ref: 'carCollections', default: null},
+    dateAdded : {type: Date, required: true}
 });
 
 const model = new mongoose.model(collection,schema);
