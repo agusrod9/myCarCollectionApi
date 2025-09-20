@@ -31,7 +31,7 @@ export class carManager{
                 {$match : {userId: matchUserId}},
                 {$group: {_id: null, total: {$sum: '$price'}}}
             ]);
-            return totalAmount[0].total
+            return totalAmount.length>0 ? totalAmount[0].total : 0
         } catch (error) {
             throw error;
         }
