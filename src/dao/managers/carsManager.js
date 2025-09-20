@@ -37,6 +37,15 @@ export class carManager{
         }
     }
 
+    async readUserRecentlyAddedCars(userId){
+        try {
+            const recentlyAddedCars = await this.model.find({userId}).sort({dateAdded: -1}).limit(3);
+            return recentlyAddedCars;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async readCarById(id){
         try {
             const one = await this.model.findOne({_id:id}).lean();

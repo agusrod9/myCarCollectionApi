@@ -8,7 +8,16 @@ const collectionsManager = new carCollectionsManager();
 
 router.get('/', async(req,res,next)=>{
     let filters = {};
-    let {id, make, model, manuf, userId} = req.query;
+    let {id, make, model, manuf, userId, onlyRecent} = req.query;
+    
+    if(onlyRecent=="t" && userId){
+        let cars = await manager.readUserRecentlyAddedCars(userId);
+        if(cars){
+            return res.status(200).json({error: null, data: cars});
+        }else{
+            return res.status(400).json({error: "NO CAR FOUND"})
+        }
+    }
 
     if (manuf) filters.manufacturer = {$regex: '.*' + manuf + '.*', $options : 'i'};
     if (make) filters.carMake = {$regex: '.*' + make + '.*', $options : 'i'};
