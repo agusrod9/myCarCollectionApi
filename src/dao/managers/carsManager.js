@@ -38,9 +38,8 @@ export class carManager{
     }
 
     async readUserRecentlyAddedCars(userId){
-        const objUserId = new mongoose.Types.ObjectId(userId)
         try {
-            const recentlyAddedCars = await this.model.find({objUserId}).sort({dateAdded: -1}).limit(3);
+            const recentlyAddedCars = await this.model.find({userId}).sort({dateAdded: -1}).limit(3);
             return recentlyAddedCars;
         } catch (error) {
             throw error;
