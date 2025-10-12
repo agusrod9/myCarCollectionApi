@@ -6,9 +6,15 @@ const carsManager = new carManager();
 
 router.get("/",async(req, res, next)=>{
     let {userId} = req.query;
-    let userCars = await carsManager.readCarsByFilters({userId})
-    let brands = await carsManager.readUserAvailableFilters({userId})
-    return res.json(brands)
+    if(!userId){
+        return res.status(400).json({error:'BAD REQUEST'})
+    }
+    let filters = await carsManager.readUserAvailableFilters({userId})
+    let notEmpty = false;
+    if(filters.availableCarMakes.length!=0 && filters.availableManufacturers.length!=0 && filters.availablePrices.length!=0 && filters.availableScales.length!=0){
+        return res.status(200).json({error: null, data: filters});
+    }
+    return res.status(200).json({error:null, data:[]});
 })
 
 export default router

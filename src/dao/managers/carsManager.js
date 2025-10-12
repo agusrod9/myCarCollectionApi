@@ -48,13 +48,11 @@ export class carManager{
 
     async readUserAvailableFilters(userId){
         try {
-            let availableFilters = [];
-            const availableManufacturers = await this.model.distinct("manufacturer", userId);
-            const availableCarMakes = await this.model.distinct("carMake", userId);
-            const availableScales = await this.model.distinct("scale", userId);
-            const availablePrices = await this.model.distinct("price", userId);
-
-            availableFilters.push({availableManufacturers, availableCarMakes, availableScales, availablePrices})
+            let availableFilters = {};
+            availableFilters.availableManufacturers = await this.model.distinct("manufacturer", userId);
+            availableFilters.availableCarMakes = await this.model.distinct("carMake", userId);
+            availableFilters.availableScales = await this.model.distinct("scale", userId);
+            availableFilters.availablePrices = await this.model.distinct("price", userId);
             return availableFilters;
         } catch (error) {
             throw error
