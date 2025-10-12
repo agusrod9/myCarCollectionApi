@@ -6,6 +6,7 @@ import carsRouter from './routers/cars.router.js';
 import sessionsRouter from './routers/sessions.router.js';
 import carCollectionsRouter from './routers/carCollections.router.js';
 import awsRouter from './routers/aws.router.js';
+import filtersRouter from './routers/filters.router.js';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import pathHandler from './middlewares/pathHandler.mid.js';
@@ -28,6 +29,7 @@ app.use('/api/cars', carsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/carcollections', carCollectionsRouter);
 app.use('/api/aws', awsRouter);
+app.use('/api/filters', filtersRouter)
 
 
 //Handlers
