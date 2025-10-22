@@ -91,37 +91,15 @@ router.post("/", async (req, res, next) => {
 });
 
 router.put("/:id", async (req, res, next) => {
-  let { id } = req.params;
-  let modifiedCar = req.body;
-
-  if (
-    modifiedCar.carColor &&
-    modifiedCar.carMake &&
-    modifiedCar.carModel &&
-    modifiedCar.carYear &&
-    modifiedCar.img_urls &&
-    modifiedCar.manufacturer &&
-    modifiedCar.notes != null &&
-    modifiedCar.opened &&
-    modifiedCar.scale &&
-    modifiedCar.series &&
-    modifiedCar.series_num &&
-    modifiedCar.price
-  ) {
+  try {
+    let { id } = req.params;
+    const {_id, dateAdded, userId,  ...newData} = req.body;
+    
     const car = await manager.readCarById(id);
     if (car) {
-      car.carColor = modifiedCar.carColor;
-      car.carMake = modifiedCar.carMake;
-      car.carModel = modifiedCar.carModel;
-      car.carYear = modifiedCar.carYear;
-      car.img_urls = modifiedCar.img_urls;
-      car.manufacturer = modifiedCar.manufacturer;
-      car.notes = modifiedCar.notes;
-      car.opened = modifiedCar.opened;
-      car.scale = modifiedCar.scale;
-      car.series = modifiedCar.series;
-      car.series_num = modifiedCar.series_num;
-      car.price = modifiedCar.price
+      Object.entries(newData).forEach(([key, value])=>{
+        car[key] = newData[key]
+      })
       let process = await manager.updateCar(id, car);
       if (process) {
         return res.status(200).json({ error: null, data: process });
@@ -131,12 +109,11 @@ router.put("/:id", async (req, res, next) => {
     } else {
       return res.status(400).json({ error: "CAR NOT FOUND", data: [] });
     }
-  } else {
-    return res
-      .status(400)
-      .json({ error: "MISSING MANDATORY FIELDS", data: [] });
+  } catch (error) {
+    throw error;
   }
-});
+}
+);
 
 router.delete("/:id", async (req, res, next) => {
   let { id } = req.params;
