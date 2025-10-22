@@ -105,7 +105,8 @@ router.put("/:id", async (req, res, next) => {
     modifiedCar.opened &&
     modifiedCar.scale &&
     modifiedCar.series &&
-    modifiedCar.series_num
+    modifiedCar.series_num &&
+    modifiedCar.price
   ) {
     const car = await manager.readCarById(id);
     if (car) {
@@ -120,6 +121,7 @@ router.put("/:id", async (req, res, next) => {
       car.scale = modifiedCar.scale;
       car.series = modifiedCar.series;
       car.series_num = modifiedCar.series_num;
+      car.price = modifiedCar.price
       let process = await manager.updateCar(id, car);
       if (process) {
         return res.status(200).json({ error: null, data: process });
