@@ -19,7 +19,7 @@ const schema = new mongoose.Schema({
     series_num : {type : String, default : null },
     userId : {type: mongoose.Schema.Types.ObjectId, ref: 'users', required: true},
     collectionId : {type: mongoose.Schema.Types.ObjectId, ref: 'carCollections', default: null},
-    dateAdded : {type: Date, default: Date.now, immutable : true} // immutable: true --> avoid this value to be reset.
+    dateAdded : {type: Date, default: Date.now, immutable : true}
 });
 
 const model = new mongoose.model(collection,schema);

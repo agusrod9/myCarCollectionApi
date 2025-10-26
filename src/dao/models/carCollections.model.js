@@ -6,9 +6,11 @@ const collection = 'carCollections';
 
 const schema = new mongoose.Schema({
     collectionName: {type : String, required : true},
+    description : {type: String, default: ""},
+    coverImg : {type: String, default : ""},
     userId : {type : mongoose.Schema.Types.ObjectId, ref : 'users', required : true},
-    cars : [{type : mongoose.Schema.Types.ObjectId, ref : 'cars', default : []}],
-    visibility : {type : String, enum : ['private', 'public', 'friendsOnly'], required : true}
+    visibility : {type : String, enum : ['private', 'public', 'friendsOnly'], required : true},
+    dateAdded : {type: Date, default: Date.now, immutable : true}
 });
 
 const model = new mongoose.model(collection, schema);

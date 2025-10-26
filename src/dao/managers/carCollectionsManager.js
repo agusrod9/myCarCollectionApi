@@ -14,20 +14,10 @@ export class carCollectionsManager{
         }
     }
 
-    async updateCarList(carList, collectionId){
-        try {
-            let opts = {new : true};
-            let process = this.model.findOneAndUpdate({_id : collectionId}, {cars:carList}, opts);
-            return process;
-        } catch (error) {
-            throw error;
-        }
-    }
-
     async getCollectionById(id){
         try {
-            let collection = this.model.find({_id:id}).lean();
-            return collection;
+            const one = this.model.findOne({_id:id}).lean();
+            return one;
         } catch (error) {
             throw error;
         }
@@ -46,6 +36,16 @@ export class carCollectionsManager{
         try {
             let collections = this.model.find({userId}).lean();
             return collections;
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async updateCollectionById(id, data){
+        try {
+            const opt = {new: true};
+            const one = this.model.findByIdAndUpdate(id,data,opt);
+            return one;
         } catch (error) {
             throw error
         }

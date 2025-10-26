@@ -40,20 +40,20 @@ router.post('/', async(req, res, next)=>{
 
 router.put('/', async(req,res,next)=>{
     let {cid} = req.query;
-    let newCarId = req.body;
+    const {_id, userId, dateAdded, ...newData} = req.body;
     let collection = await manager.getCollectionById(cid);
-    if(collection.length>0){
-        let carsInCollection = collection[0].cars;
-        carsInCollection.push(newCarId);
-        let process = await manager.updateCarList(carsInCollection,cid);
-        if(process){
-            let car = await carsManager.updateCar(newCarId, {collectionId : cid})
-            return res.status(200).json({error: null, data : process});
-        }else{
-            return res.status(500).json({error: 'COULDNT ADD CAR TO COLLECTION', data : null});
+    if(collection){
+        Object.entries(newData).forEach(([key, value])=>{
+            collection[key] = newData[key]
+        })
+        let process = await manager.updateCollectionById(cid, collection);
+        if (process){
+            return res.status(200).json({ error: null, data: process });
+        } else {
+            return res.status(500).json({ error: "COLLECTION NOT UPDATED", data: [] });
         }
     }else{
-        return res.status(404).json({error: 'COLLECTION DOES N0T EXIST', data : null})
+        return res.status(404).json({error: 'COLLECTION DOES NOT EXIST', data : null})
     }
 })
 
