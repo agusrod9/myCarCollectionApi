@@ -13,11 +13,6 @@ const router = Router();
 const manager = new usersManager();
 const cManager = new carManager();
 
-router.get('/', async(req,res,next)=>{
-    const users = await manager.readAllUsers();
-    res.status(200).send({users})
-})
-
 router.post('/register', passport.authenticate("register",{session:false}), register);
 router.post('/login', passport.authenticate("login", {session: false}), login);
 router.post('/online', isOnlineVerifier, online);

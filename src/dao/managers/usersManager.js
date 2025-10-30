@@ -41,9 +41,9 @@ export class usersManager{
         }   
     }
 
-    update = async (id, data) => {
+    async updateUser(id, data){
         try {
-            const opt = { new: true };
+            const opt = { new: true, runValidators: true };
             const one = await this.model.findByIdAndUpdate(id, data, opt);
             return one;
         } catch (error) {

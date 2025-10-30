@@ -88,7 +88,7 @@ router.put("/:id", async (req, res, next) => {
       if (process) {
         return res.status(200).json({ error: null, data: process });
       } else {
-        return res.status(500).json({ error: "CAR NOT UPDATED", data: [] });
+        return res.status(500).json({ error: "CAR NOT UPDATED", data: null });
       }
     } else {
       return res.status(400).json({ error: "CAR NOT FOUND", data: [] });

@@ -6,6 +6,7 @@ import sessionsRouter from './routers/sessions.router.js';
 import carCollectionsRouter from './routers/carCollections.router.js';
 import awsRouter from './routers/aws.router.js';
 import filtersRouter from './routers/filters.router.js';
+import usersRouter from './routers/users.router.js';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import pathHandler from './middlewares/pathHandler.mid.js';
@@ -26,11 +27,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(requestLogger)
 app.use(cookieParser(SECRET));
 
-app.use('/api/cars', carsRouter);
-app.use('/api/sessions', sessionsRouter);
-app.use('/api/carcollections', carCollectionsRouter);
 app.use('/api/aws', awsRouter);
+app.use('/api/carcollections', carCollectionsRouter);
+app.use('/api/cars', carsRouter);
 app.use('/api/filters', filtersRouter)
+app.use('/api/sessions', sessionsRouter);
+app.use('/api/users', usersRouter);
 
 
 //Handlers
