@@ -43,9 +43,20 @@ router.put('/:id', async(req,res,next)=>{
             }
         }
         return res.status(400).json({ error: "USER NOT FOUND", data: null });
+    } catch (error) {
+        next(error)
+    }
+})
 
-            
-        
+router.get('/checkNick', async(req,res,next)=>{
+    try {
+        const {nick} = req.query
+        if(!nick){
+            return res.status(400).json({error: "MISSING MANDATORY FIELDS", data: null})
+        }
+        const available = await manager.checkNickAvailability(nick);
+        return res.status(200).json({error: null, available})
+
     } catch (error) {
         next(error)
     }

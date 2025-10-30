@@ -53,9 +53,18 @@ export class usersManager{
 
     async addCollectionsToUser(userId, collection){
             try {
-                let one = await this.model.findOneAndUpdate()
+                let one = await this.model.findOneAndUpdate();
             } catch (error) {
                 throw error;
             }
+    }
+
+    async checkNickAvailability(nick){
+        try {
+            const user = await this.model.findOne({nickName: nick});
+            return !user;
+        } catch (error) {
+            throw error
+        }
     }
 }
