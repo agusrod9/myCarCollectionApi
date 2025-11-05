@@ -20,7 +20,7 @@ router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}
 router.post('/onlineUserData', passport.authenticate("whoIsOnline", {session: false}), onlineUserData);
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
 router.post('/verify', verifyCode, verifiCodeResponse);
-router.post('/resetPass', resetPass, resetPassResponse);
+router.post('/resetPass', resetPass);
 router.post('/changePass', changePass, changePassResponse);
 router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
 router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
@@ -113,18 +113,18 @@ async function resetPass (req,res,next){
     try {
         const {email} = req.body;
         const user = await manager.readByEmail(email);
-        const newPass = crypto.randomBytes(4).toString('hex');
-        await manager.updateUser(user._id, {password: newPass, mustResetPass:true})
-        await sendNewPasswordEmail(user.contactEmail, newPass)
-        return next();
+        if(user){
+            const newPass = crypto.randomBytes(4).toString('hex');
+            await manager.updateUser(user._id, {password: newPass, mustResetPass:true})
+            await sendNewPasswordEmail(user.contactEmail, newPass)
+            const message = 'NEW PASSWORD SENT BY MAIL';
+            return res.status(200).json({message});
+        }
+        const message = 'USER NOT FOUND';
+        return res.status(404).json({message})
     } catch (error) {
         return next(error);
     }
-}
-
-function resetPassResponse(req, res, next){
-    const message = 'NEW PASSWORD SENT BY MAIL';
-    return res.status(200).json({message});
 }
 
 async function changePass(req, res, next){
