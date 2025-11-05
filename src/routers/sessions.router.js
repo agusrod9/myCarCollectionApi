@@ -114,7 +114,7 @@ async function resetPass (req,res,next){
         const {email} = req.body;
         const user = await manager.readByEmail(email);
         const newPass = crypto.randomBytes(4).toString('hex');
-        await manager.update(user._id, {password: newPass, mustResetPass:true})
+        await manager.updateUser(user._id, {password: newPass, mustResetPass:true})
         await sendNewPasswordEmail(user.contactEmail, newPass)
         return next();
     } catch (error) {
@@ -132,7 +132,7 @@ async function changePass(req, res, next){
         const {email, password} = req.body;
         const user = await manager.readByEmail(email);
         const newPass = createHash(password);
-        await manager.update(user._id, {password: newPass, mustResetPass:false})
+        await manager.updateUser(user._id, {password: newPass, mustResetPass:false})
         return next();
     } catch (error) {
         return next(error);
