@@ -11,9 +11,10 @@ const transport = createTransport({
     auth : { user: GOOGLE_MAIL, pass: GOOGLE_PASS}
 });
 
+await transport.verify();
+
 const sendVerificationEmail = async(to, verificationCode)=>{
     try {
-        await transport.verify();
         await transport.sendMail({
             from : GOOGLE_MAIL,
             to,
@@ -80,7 +81,6 @@ const sendVerificationEmail = async(to, verificationCode)=>{
 
 const sendNewPasswordEmail = async(to, newPassword)=>{
     try {
-        await transport.verify();
         await transport.sendMail({
             from : GOOGLE_MAIL,
             to,
@@ -141,7 +141,7 @@ const sendNewPasswordEmail = async(to, newPassword)=>{
             `,
             attachments:[{
                 filename : 'wecollect.png',
-                path : path.resolve(__dirname, 'public/img/wc.png'),
+                path : path.resolve(process.cwd(), 'public/img/wc.png'),
                 cid: 'wecollectlogo'
             }]
             
