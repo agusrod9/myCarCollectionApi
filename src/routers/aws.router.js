@@ -73,15 +73,7 @@ router.post('/', upload.single('image'), async(req,res, next)=>{
         }
         const putCommand = new PutObjectCommand(putParams)
         await s3.send(putCommand)
-
-        const getParams = {
-            Bucket : bucketName,
-            Key : key
-        }
-        const getCommand = new GetObjectCommand(getParams);
-        const url = `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
-
-
+        const url = `https://${bucketName}.s3.${region}.amazonaws.com/${key}`;
         return res.status(200).json({url});
     } catch (error) {
         next(error);
