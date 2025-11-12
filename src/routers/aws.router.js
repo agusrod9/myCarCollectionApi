@@ -54,13 +54,16 @@ router.post('/', upload.single('image'), async(req,res)=>{
 router.post('/', upload.single('image'), async(req,res, next)=>{
     try {
         const {userId, folder} = req.query;
-
+        
         if (!req.file){
             return res.status(400).json({ error: 'NO FILE PROVIDED' });
         }
+        if (!userId || !folder) {
+            return res.status(400).json({ error: 'MISSING MANDATORY PARAMETERS' });
+        }
         const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, '');
         const imageName = `${userId.slice(-6)}_${crypto.randomBytes(4).toString('hex')}`;
-        const newImg = await sharp(req.file.buffer).webp({quality: 80}).toBuffer();
+        const newImg = await sharp(req.file.buffer).webp({quality: 70}).toBuffer();
         const key = `${userId}/${safeFolder}/${imageName}`
         const putParams = {
             Bucket : bucketName,
@@ -76,8 +79,7 @@ router.post('/', upload.single('image'), async(req,res, next)=>{
             Key : key
         }
         const getCommand = new GetObjectCommand(getParams);
-        let url = await getSignedUrl(s3, getCommand, { expiresIn: 3600 });
-        url = url.split('?')[0];
+        const url = `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
 
 
         return res.status(200).json({url});
