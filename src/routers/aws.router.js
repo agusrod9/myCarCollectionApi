@@ -12,8 +12,8 @@ const memoryStorage = multer.memoryStorage();
 const upload = multer({storage : memoryStorage})
 
 const region = 'us-east-2';
-//const bucketName = 'user-collected-cars-images-bucket';
-const bucketName = 'weCollectBucket';
+const bucketName = 'user-collected-cars-images-bucket';
+//const bucketName = 'weCollectBucket';
 const accessKeyId = AWS_ACCESSKEY_ID;
 const secretAccessKey = AWS_ACCESS_SECRET_KEY;
 
