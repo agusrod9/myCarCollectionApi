@@ -12,7 +12,8 @@ const memoryStorage = multer.memoryStorage();
 const upload = multer({storage : memoryStorage})
 
 const region = 'us-east-2';
-const bucketName = 'user-collected-cars-images-bucket';
+//const bucketName = 'user-collected-cars-images-bucket';
+const bucketName = 'weCollectBucket';
 const accessKeyId = AWS_ACCESSKEY_ID;
 const secretAccessKey = AWS_ACCESS_SECRET_KEY;
 
@@ -48,6 +49,41 @@ router.post('/', upload.single('image'), async(req,res)=>{
 
     return res.status(200).json({url});
     
+});
+
+router.post('/new', upload.single('image'), async(req,res, next)=>{
+    try {
+        const {userId, folder} = req.query;
+
+        if (!req.file){
+            return res.status(400).json({ error: 'NO FILE PROVIDED' });
+        }
+        const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, '');
+        const imageName = `${userId.slice(-6)}_${crypto.randomBytes(4).toString('hex')}`;
+        const newImg = await sharp(req.file.buffer).webp({quality: 80}).toBuffer();
+        const key = `${userId}/${safeFolder}/${imageName}`
+        const putParams = {
+            Bucket : bucketName,
+            Key : key,
+            Body : newImg,
+            ContentType : 'image/webp',
+        }
+        const putCommand = new PutObjectCommand(putParams)
+        await s3.send(putCommand)
+
+        const getParams = {
+            Bucket : bucketName,
+            Key : key
+        }
+        const getCommand = new GetObjectCommand(getParams);
+        let url = await getSignedUrl(s3, getCommand, { expiresIn: 3600 });
+        url = url.split('?')[0];
+
+
+        return res.status(200).json({url});
+    } catch (error) {
+        next(error);
+    }
 });
 
 router.delete('/', async(req,res)=>{

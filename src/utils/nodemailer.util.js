@@ -13,7 +13,6 @@ const transport = createTransport({
 
 const sendVerificationEmail = async(to, verificationCode)=>{
     try {
-        await transport.verify();
         await transport.sendMail({
             from : GOOGLE_MAIL,
             to,
@@ -80,7 +79,6 @@ const sendVerificationEmail = async(to, verificationCode)=>{
 
 const sendNewPasswordEmail = async(to, newPassword)=>{
     try {
-        await transport.verify();
         await transport.sendMail({
             from : GOOGLE_MAIL,
             to,
@@ -151,4 +149,4 @@ const sendNewPasswordEmail = async(to, newPassword)=>{
     }
 }
 
-export {sendVerificationEmail, sendNewPasswordEmail}
+export {sendVerificationEmail, sendNewPasswordEmail, transport}
