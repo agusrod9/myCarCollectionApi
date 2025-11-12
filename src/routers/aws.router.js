@@ -13,7 +13,7 @@ const upload = multer({storage : memoryStorage})
 
 const region = 'us-east-2';
 const bucketName = 'user-collected-cars-images-bucket';
-//const bucketName = 'weCollectBucket';
+//const bucketName = 'we-collect';
 const accessKeyId = AWS_ACCESSKEY_ID;
 const secretAccessKey = AWS_ACCESS_SECRET_KEY;
 
@@ -24,7 +24,7 @@ const s3 = new S3Client({
     },
     region
 })
-
+/*
 router.post('/', upload.single('image'), async(req,res)=>{
     const {userId} = req.query;
     const imageName = userId+crypto.randomBytes(16).toString('hex');
@@ -50,8 +50,8 @@ router.post('/', upload.single('image'), async(req,res)=>{
     return res.status(200).json({url});
     
 });
-
-router.post('/new', upload.single('image'), async(req,res, next)=>{
+*/
+router.post('/', upload.single('image'), async(req,res, next)=>{
     try {
         const {userId, folder} = req.query;
 
