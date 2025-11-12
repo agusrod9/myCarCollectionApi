@@ -63,7 +63,7 @@ router.post('/', upload.single('image'), async(req,res, next)=>{
         }
         const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, '');
         const imageName = `${userId.slice(-6)}_${crypto.randomBytes(4).toString('hex')}`;
-        const newImg = await sharp(req.file.buffer).webp({quality: 70}).toBuffer();
+        const newImg = await sharp(req.file.buffer).resize({width: 1280}).webp({quality: 70}).toBuffer();
         const key = `${userId}/${safeFolder}/${imageName}`
         const putParams = {
             Bucket : bucketName,
