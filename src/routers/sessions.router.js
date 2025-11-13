@@ -6,7 +6,7 @@ import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";
 import verifyCode from "../middlewares/usersVerifier.mid.js";
 import crypto from 'crypto';
-import { sendNewPasswordEmail } from "../utils/nodemailer.util.js";
+import { sendNewPasswordEmail } from "../utils/resend.mailer.js";
 import { createHash } from "../utils/hash.util.js";
 
 const router = Router();

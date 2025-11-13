@@ -6,7 +6,7 @@ import { usersManager } from "../dao/managers/usersManager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 import crypto from "crypto";
-import { sendVerificationEmail } from "../utils/nodemailer.util.js";
+import { sendVerificationEmail } from "../utils/resend.mailer.js";
 import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
 

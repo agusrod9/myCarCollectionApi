@@ -13,7 +13,7 @@ import pathHandler from './middlewares/pathHandler.mid.js';
 import errorHandler from './middlewares/errorHandler.mid.js';
 import { logger } from './utils/logger.util.js';
 import { requestLogger } from './middlewares/requestLogger.mid.js';
-import { transport } from './utils/nodemailer.util.js';
+
 
 const app = express();
 const {PORT, MONGO_REMOTE_URI, SECRET} = process.env;
@@ -43,11 +43,6 @@ app.use(errorHandler);
 app.listen(PORT,async()=>{
     logger.info("server activo");
     await mongoConnect();
-    /*
-    transport.verify()
-        .then(() => logger.info("SMTP ready to send emails"))
-        .catch(err => logger.error("SMTP verification failed:", err.message))
-    */
 });
 
 
