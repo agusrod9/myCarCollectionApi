@@ -43,9 +43,11 @@ app.use(errorHandler);
 app.listen(PORT,async()=>{
     logger.info("server activo");
     await mongoConnect();
+    /*
     transport.verify()
         .then(() => logger.info("SMTP ready to send emails"))
         .catch(err => logger.error("SMTP verification failed:", err.message))
+    */
 });
 
 
