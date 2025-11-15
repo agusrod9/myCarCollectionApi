@@ -66,9 +66,9 @@ async function whoIsOnline(req, res, next) {
         const userId = req.user;
         const user = await manager.readById(userId);
         const userCarCount = await cManager.readUserCarCount(userId)
-        const userCarsTotalAmount = await cManager.readUserCarsTotalAmount(userId)
+        const amountByCurrency = await cManager.readUserCarsTotalAmount(userId)
 
-        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass, userName : user.nickName, userProfilePicture : user.profilePicture, userCarCount, userCarsTotalAmount, role: user.role });
+        return res.status(200).json({message, userId, mustResetPass: user.mustResetPass, userName : user.nickName, userProfilePicture : user.profilePicture, userCarCount, amountByCurrency, role: user.role });
         
     } catch (error) {
         return next(error);

@@ -27,11 +27,31 @@ export class carManager{
     async readUserCarsTotalAmount(userId){
         const matchUserId = new mongoose.Types.ObjectId(userId)
         try {
-            const totalAmount = await this.model.aggregate([
+            const totals = await this.model.aggregate([
                 {$match : {userId: matchUserId}},
-                {$group: {_id: null, total: {$sum: '$price'}}}
+                {$group: {
+                    _id: "$price.currency", 
+                    totalAmount: {$sum: '$price.amount'}
+                }},
+                {$lookup: {
+                    from: "currencies",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "currencyData"
+                }},
+                {$unwind: "$currencyData"},
+                {$project:{
+                    _id:0,
+                    totalAmount: 1,
+                    currencyId: "$_id",
+                    currencyCode: "$currencyData.code",
+                    currencyName: "$currencyData.name",
+                    currencySymbol: "$currencyData.symbol",
+                    currencyFlag: "$currencyData.flag",
+                    currencyCountry: "$currencyData.country"
+                }}
             ]);
-            return totalAmount.length>0 ? totalAmount[0].total : 0
+            return totals
         } catch (error) {
             throw error;
         }
