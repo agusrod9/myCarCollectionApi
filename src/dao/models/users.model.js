@@ -13,7 +13,7 @@ const schema = new mongoose.Schema({
     profilePicture : {type : String, default : "https://avatar.iran.liara.run/public"},
     password: { type: String, required: true },
     mustResetPass : { type: Boolean, default : false},
-    role : {type: String, default: 'REGULAR', enum:['REGULAR','PREMIUM','SUPER']},
+    role : {type: String, default: 'REGULAR', enum:['FREE','BASIC','PREMIUM','PRO']},
     verifiedUser: {type: Boolean, default: false},
     active: {type: Boolean, default: false},
     verificationCode: {type: String, default : null},
