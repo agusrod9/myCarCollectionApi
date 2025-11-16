@@ -63,7 +63,41 @@ router.post("/", async (req, res, next) => {
     newCar.userId = { _id: newCar.userId };
     let process = await manager.createNewCar(newCar);
     if (process) {
-      return res.status(201).json({ error: null, data: process });
+      const addedCarWithCurrencyInfo = await manager.model.aggregate([
+        {$match: {_id: process._id}},
+        {
+          $lookup:{
+            from: "currencies",
+            localField: "price.currency",
+            foreignField: "_id",
+            as: "currencyInfo"
+          }
+        },
+        {$unwind: "$currencyInfo"},
+        {
+          $project: {
+            make: 1,
+            model: 1,
+            scale: 1,
+            carMake: 1,
+            carModel: 1,
+            carColor: 1,
+            img_urls: 1,
+            userId: 1,
+            price: 1,
+            dateAdded: 1,
+            currencyInfo: {
+              id: "$currencyInfo._id",
+              code: "$currencyInfo.code",
+              name: "$currencyInfo.name",
+              symbol: "$currencyInfo.symbol",
+              flag: "$currencyInfo.flag",
+              country: "$currencyInfo.country"
+            }
+          }
+        }
+      ])
+      return res.status(201).json({ error: null, data: addedCarWithCurrencyInfo[0] });
     } else {
       return res.status(500).json({ error: "CAR NOT ADDED", data: [] });
     }
