@@ -76,9 +76,14 @@ router.post("/", async (req, res, next) => {
         {$unwind: "$currencyInfo"},
         {
           $project: {
-            make: 1,
-            model: 1,
+            carYear:1,
+            manufacturer: 1,
             scale: 1,
+            notes: 1,
+            opened: 1,
+            series: 1,
+            series_num: 1,
+            collectionId: 1,
             carMake: 1,
             carModel: 1,
             carColor: 1,
