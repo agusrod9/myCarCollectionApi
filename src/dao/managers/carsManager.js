@@ -72,7 +72,6 @@ export class carManager{
             availableFilters.availableManufacturers = await this.model.distinct("manufacturer", userId);
             availableFilters.availableCarMakes = await this.model.distinct("carMake", userId);
             availableFilters.availableScales = await this.model.distinct("scale", userId);
-            availableFilters.availablePrices = await this.model.distinct("price", userId);
             return availableFilters;
         } catch (error) {
             throw error
