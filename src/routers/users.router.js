@@ -1,9 +1,11 @@
 import { Router } from "express";
 import { usersManager } from "../dao/managers/usersManager.js";
+import { carManager } from "../dao/managers/carsManager.js";
 
 
 const router = Router();
 const manager = new usersManager()
+const carsManager = new carManager()
 
 router.get('/', async(req,res,next)=>{
     try {
@@ -18,6 +20,30 @@ router.get('/', async(req,res,next)=>{
             return res.status(200).json({data:usr});
         }
         return res.status(400).json({ error: "NO USER FOUND", data: [] });
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get('/:userId/carsValue',async(req,res,next)=>{
+    try {
+        const{userId} = req.params;
+        const amountByCurrency = await carsManager.readUserCarsTotalAmount(userId);
+        return res.status(200).json({error:null, data: amountByCurrency})
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.get('/checkNick', async(req,res,next)=>{
+    try {
+        const {nick} = req.query
+        if(!nick){
+            return res.status(400).json({error: "MISSING MANDATORY FIELDS", data: null})
+        }
+        const available = await manager.checkNickAvailability(nick);
+        return res.status(200).json({error: null, available})
+
     } catch (error) {
         next(error)
     }
@@ -48,18 +74,5 @@ router.put('/:id', async(req,res,next)=>{
     }
 })
 
-router.get('/checkNick', async(req,res,next)=>{
-    try {
-        const {nick} = req.query
-        if(!nick){
-            return res.status(400).json({error: "MISSING MANDATORY FIELDS", data: null})
-        }
-        const available = await manager.checkNickAvailability(nick);
-        return res.status(200).json({error: null, available})
-
-    } catch (error) {
-        next(error)
-    }
-})
 
 export default router
