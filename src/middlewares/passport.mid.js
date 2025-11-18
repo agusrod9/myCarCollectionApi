@@ -169,16 +169,15 @@ passport.use(
             nickName,
             registrationNumber
           });
-          if(user){
-            globalStatManager.updateStats({
-              ...globalStats,
-              totalUsers : registrationNumber, 
-              totalActiveUsers : globalStats.totalActiveUsers+1, 
-              monthlyOnlineUsers : globalStats.monthlyOnlineUsers+1, 
-              newUsersThisMonth: globalStats.newUsersThisMonth+1, 
-              lastUpdated : Date.now
-            })
-          }
+          await globalStatManager.updateStats({
+            ...globalStats,
+            totalUsers : registrationNumber, 
+            totalActiveUsers : globalStats.totalActiveUsers+1, 
+            monthlyOnlineUsers : globalStats.monthlyOnlineUsers+1, 
+            newUsersThisMonth: globalStats.newUsersThisMonth+1, 
+            lastUpdated : Date.now
+          })
+          
         }
         req.token = createToken({ user_id: user._id, role: user.role });
         return done(null, user);
