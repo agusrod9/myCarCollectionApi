@@ -22,8 +22,6 @@ router.post('/logout', passport.authenticate("logout", {session:false}), logout)
 router.post('/verify', verifyCode, verifiCodeResponse);
 router.post('/resetPass', resetPass);
 router.post('/changePass', changePass, changePassResponse);
-router.post('/isPremium', passport.authenticate("isPremium", {session: false}), isPremium);
-router.post('/isSuper', passport.authenticate("isSuper", {session: false}), isSuper);
 router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
 router.get('/google/cb', passport.authenticate("google", {session: false}), google); 
 
@@ -141,16 +139,6 @@ async function changePass(req, res, next){
 
 function changePassResponse(req, res, next){
     const message = 'PASSWORD SET';
-    return res.status(200).json({message});
-}
-
-function isPremium(req,res,next){
-    const message = 'USER IS PREMIUM';
-    return res.status(200).json({message});
-}
-
-function isSuper(req,res,next){
-    const message = 'USER IS SUPER USER';
     return res.status(200).json({message});
 }
 

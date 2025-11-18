@@ -11,8 +11,33 @@ import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
 
 const manager = new usersManager();
-const { SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL } =
-  process.env;
+const { SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL } = process.env;
+
+passport.use("jwt", new jwtStrategy({jwtFromRequest: ExtractJwt.fromExtractors([
+      (req) => req?.signedCookies?.token,
+    ]),
+    secretOrKey: SECRET,
+    },
+    async(data, done)=>{
+      try {
+        if(!data?.user_id){
+          return done(null, false);
+        }
+        const userId = data.user_id;
+        const user = await manager.readById(userId);
+        if (!user) {
+          return done(null,false);
+        }
+        if(!user.active){
+          return done(null,false)
+        }
+        const userBasicInfo = {userId : user._id, role: user.role}
+        return done(null, userBasicInfo)
+      } catch (error) {
+        return done(error)
+      }
+    } 
+))
 
 passport.use(
   "register",
@@ -67,7 +92,6 @@ passport.use(
         } else {
           verifies = verifyHash(password, user.password);
         }
-
         if (verifies) {
           req.token = createToken({ user_id: user._id, role: user.role });
           return done(null, user);
@@ -108,48 +132,6 @@ passport.use(
     },
     (data, done) => {
       const userId = data.user_id;
-      return done(null, userId);
-    }
-  )
-);
-
-passport.use(
-  "isPremium",
-  new jwtStrategy(
-    {
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (req) => req?.signedCookies?.token,
-      ]),
-      secretOrKey: SECRET,
-    },
-    (data, done) => {
-      const userId = data.user_id;
-      if (data.role != "PREMIUM" && data.role != "SUPER") {
-        const error = new Error("UNAUTHORIZED");
-        error.statusCode = 403;
-        return done(error);
-      }
-      return done(null, userId);
-    }
-  )
-);
-
-passport.use(
-  "isSuper",
-  new jwtStrategy(
-    {
-      jwtFromRequest: ExtractJwt.fromExtractors([
-        (req) => req?.signedCookies?.token,
-      ]),
-      secretOrKey: SECRET,
-    },
-    (data, done) => {
-      const userId = data.user_id;
-      if (data.role != "SUPER") {
-        const error = new Error("UNAUTHORIZED");
-        error.statusCode = 403;
-        return done(error);
-      }
       return done(null, userId);
     }
   )

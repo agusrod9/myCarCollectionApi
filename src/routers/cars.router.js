@@ -5,7 +5,7 @@ import { validateHexColor } from "../utils/validator.util.js";
 const router = Router();
 const manager = new carManager();
 
-router.get("/", async (req, res, next) => {
+router.get("/",async (req, res, next) => {
   let filters = {};
   let { id, make, model, manuf, userId, onlyRecent } = req.query;
 
