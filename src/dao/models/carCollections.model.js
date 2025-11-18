@@ -12,6 +12,10 @@ const schema = new mongoose.Schema({
     visibility : {type : String, enum : ['public', 'friendsOnly', 'private'], required : true},
     dateAdded : {type: Date, default: Date.now, immutable : true},
     lastUpdated : {type: Date, default: Date.now},
+    carCount : {type: Number, default: 0},
+    likedBy : [{type: mongoose.Schema.Types.ObjectId, ref : 'users', default : []}],
+    likesCount: {type: Number, default: 0},
+    viewsCount: {type: Number, default: 0},
 });
 
 const model = new mongoose.model(collection, schema);
