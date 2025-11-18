@@ -3,6 +3,7 @@ import { Strategy as localStrategy } from "passport-local";
 import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { usersManager } from "../dao/managers/usersManager.js";
+import { globalStatsManager } from "../dao/managers/globalStats.manager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 import crypto from "crypto";
@@ -10,7 +11,8 @@ import { sendVerificationEmail } from "../utils/resend.mailer.js";
 import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
 
-const manager = new usersManager();
+const userManager = new usersManager();
+const globalStatManager = new globalStatsManager()
 const { SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL } = process.env;
 
 passport.use("jwt", new jwtStrategy({jwtFromRequest: ExtractJwt.fromExtractors([
@@ -24,7 +26,7 @@ passport.use("jwt", new jwtStrategy({jwtFromRequest: ExtractJwt.fromExtractors([
           return done(null, false);
         }
         const userId = data.user_id;
-        const user = await manager.readById(userId);
+        const user = await userManager.readById(userId);
         if (!user) {
           return done(null,false);
         }
@@ -44,7 +46,7 @@ passport.use(
   new localStrategy(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, password, done) => {
-      const one = await manager.readByEmail(email);
+      const one = await userManager.readByEmail(email);
       if (one) {
         const error = new Error("USER ALREADY REGISTERED");
         error.statusCode = 401;
@@ -58,8 +60,10 @@ passport.use(
         let userData = req.body;
         const verificationCode = crypto.randomBytes(12).toString("hex");
         const nickName = generateNickName();
-        userData = { ...userData, verificationCode, nickName };
-        const newUsr = await manager.createUser(userData);
+        const globalStats = await globalStatManager.getStats();
+        const registrationNumber = globalStats.totalUsers+1;
+        userData = { ...userData, verificationCode, nickName, registrationNumber };
+        const newUsr = await userManager.createUser(userData);
         await sendVerificationEmail(newUsr.contactEmail, verificationCode);
         return done(null, newUsr);
       }
@@ -72,7 +76,7 @@ passport.use(
   new localStrategy(
     { passReqToCallback: true, usernameField: "email" },
     async (req, email, password, done) => {
-      const user = await manager.readByEmail(email);
+      const user = await userManager.readByEmail(email);
       if (!user) {
         const error = new Error("USER NOT FOUND");
         error.statusCode = 401;
@@ -149,10 +153,10 @@ passport.use(
     async (req, accessToken, refreshToken, profile, done) => {
       try {
         const { id, given_name, family_name, picture, email } = profile;
-        let user = await manager.readByEmail(id);
+        let user = await userManager.readByEmail(id);
         if (!user) {
           const nickName = generateNickName();
-          user = await manager.createUser({
+          user = await userManager.createUser({
             email: id,
             password: createHash(id),
             firstName: given_name,

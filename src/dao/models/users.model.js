@@ -41,7 +41,8 @@ const schema = new mongoose.Schema({
         totalCollections: { type: Number, default: 0 },
     },
     banned : {type: Boolean, default: false},
-    banReason : {type: String, default: null}
+    banReason : {type: String, default: null},
+    lastActiveAt: {type: Date, default: Date.now}
 });
 
 const model = new mongoose.model(collection, schema);

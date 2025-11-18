@@ -8,6 +8,7 @@ import awsRouter from './routers/aws.router.js';
 import filtersRouter from './routers/filters.router.js';
 import usersRouter from './routers/users.router.js';
 import currenciesRouter from './routers/currencies.router.js';
+import globalStatsRouter from './routers/globalStats.router.js';
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import pathHandler from './middlewares/pathHandler.mid.js';
@@ -36,6 +37,7 @@ app.use('/api/filters', filtersRouter)
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/currencies', currenciesRouter);
+app.use('/api/globalStats', globalStatsRouter);
 
 
 //Handlers
