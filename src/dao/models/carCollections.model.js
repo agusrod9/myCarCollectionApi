@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     description : {type: String, default: ""},
     coverImg : {type: String, default : ""},
     userId : {type : mongoose.Schema.Types.ObjectId, ref : 'users', required : true},
-    visibility : {type : String, enum : ['private', 'public', 'friendsOnly'], required : true},
+    visibility : {type : String, enum : ['public', 'friendsOnly', 'private'], required : true},
     dateAdded : {type: Date, default: Date.now, immutable : true},
     lastUpdated : {type: Date, default: Date.now},
 });

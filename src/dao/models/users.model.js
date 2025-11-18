@@ -7,10 +7,10 @@ const collection = 'users';
 const schema = new mongoose.Schema({
     firstName :  {type: String, required: true},
     lastName : {type: String, required: true},
-    nickName : { type: String, required : true},
+    nickName : { type: String, required : true, unique: true},
     email : {type: String, required: true, index: true, unique: true},
     contactEmail : {type: String, required: true, unique: true},
-    profilePicture : {type : String, default : "https://avatar.iran.liara.run/public"},
+    profilePicture : {type : String, default : "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/user.webp"},
     password: { type: String, required: true },
     mustResetPass : { type: Boolean, default : false},
     role : {type: String, default: 'FREE', enum:['FREE','BASIC','PREMIUM','PRO']},
@@ -19,8 +19,28 @@ const schema = new mongoose.Schema({
     verificationCode: {type: String, default : null},
     following : [{type : mongoose.Schema.Types.ObjectId, ref : 'users', default: []}],
     followers : [{type : mongoose.Schema.Types.ObjectId, ref : 'users', default: []}],
-    userCollections : [{type: mongoose.Schema.Types.ObjectId, ref : 'carCollections', default : null}],
-    userFeed : {type : mongoose.Schema.Types.ObjectId, ref : 'userFeeds', default : null}
+    userCollections : [{type: mongoose.Schema.Types.ObjectId, ref : 'carCollections', default : []}],
+    userFeed : {type : mongoose.Schema.Types.ObjectId, ref : 'userFeeds', default : null},
+    dateOfRegistration : {type: Date, default: Date.now, immutable : true},
+    registrationNumber : {type: Number, required: true, unique: true},
+    lastLogin : {type: Date, default: null},
+    loginCount : {type: Number, default: 0},
+    country: {type: String, default: null},
+    level: {type: Number, default : 1},
+    badges: [{type: mongoose.Schema.Types.ObjectId, ref: 'badges', default: []}],
+    settings: {
+        darkMode: {type: Boolean, default: false},
+        emailNotifications: {type: Boolean, default: true},
+        language: {type: String, default: null},
+        mainCurrency : {type: mongoose.Schema.Types.ObjectId, ref: 'currencies', default: null},
+        profilePrivacy : {type : String, enum : ['public', 'friendsOnly', 'private'], default: 'public'}
+    },
+    stats: {
+        totalCars: { type: Number, default: 0 },
+        totalCollections: { type: Number, default: 0 },
+    },
+    banned : {type: Boolean, default: false},
+    banReason : {type: String, default: null}
 });
 
 const model = new mongoose.model(collection, schema);
