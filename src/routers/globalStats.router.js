@@ -5,8 +5,13 @@ const router = Router();
 const manager = new globalStatsManager();
 
 router.get("/", async(req, res, next)=>{
+    const {updateCounters} = req.query;
     try {
-        const stats = await manager.getStats();
+        let stats;
+        if(updateCounters){
+            stats = await manager.getStatsAndUpdateCounters();
+        }
+        stats = await manager.getStats();
         return res.status(200).json({error : null, data : stats});
     } catch (error) {
         next(error)

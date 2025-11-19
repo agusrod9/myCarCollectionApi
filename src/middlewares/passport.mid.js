@@ -157,7 +157,7 @@ passport.use(
         if (!user) {
           const nickName = generateNickName();
           const globalStats = await globalStatManager.getStatsAndUpdateCounters();
-          const registrationNumber = globalStats.totalUsers+1;
+          const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
           user = await userManager.createUser({
             email: id,
             password: createHash(id),
