@@ -87,7 +87,7 @@ async function onlineUserData(req, res, next){
             profilePicture : user.profilePicture,
             role : user.role
         }
-        return res.status(200).json({message, userData : safeUser})
+        return res.status(200).json({error : null, data : safeUser})
     } catch (error) {
         return next(error)
     }
