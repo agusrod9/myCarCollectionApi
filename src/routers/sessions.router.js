@@ -80,6 +80,7 @@ async function onlineUserData(req, res, next){
         const user = await manager.readById(userId);
         const safeUser = {
             id: user.id,
+            email: user.email,
             firstName : user.firstName,
             lastName : user.lastName,
             nickName : user.nickName,
