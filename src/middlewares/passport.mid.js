@@ -156,7 +156,7 @@ passport.use(
         let user = await userManager.readByEmail(id);
         if (!user) {
           const nickName = generateNickName();
-          const globalStats = await globalStatManager.getStats();
+          const globalStats = await globalStatManager.getStatsAndUpdateCounters();
           const registrationNumber = globalStats.totalUsers+1;
           user = await userManager.createUser({
             email: id,
@@ -169,15 +169,6 @@ passport.use(
             nickName,
             registrationNumber
           });
-          await globalStatManager.updateStats({
-            ...globalStats,
-            totalUsers : registrationNumber, 
-            totalActiveUsers : globalStats.totalActiveUsers+1, 
-            monthlyOnlineUsers : globalStats.monthlyOnlineUsers+1, 
-            newUsersThisMonth: globalStats.newUsersThisMonth+1, 
-            lastUpdated : Date.now
-          })
-          
         }
         req.token = createToken({ user_id: user._id, role: user.role });
         return done(null, user);

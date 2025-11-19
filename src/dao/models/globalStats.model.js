@@ -10,7 +10,9 @@ const schema = new mongoose.Schema({
     totalUsers : {type: Number, default: 0},
     totalActiveUsers : {type: Number, default: 0},
     totalOnlineUsers : {type: Number, default: 0},
+    uniqueDailyOnlineUsers : [{type: mongoose.Schema.Types.ObjectId, ref: 'users', default: []}],
     dailyOnlineUsers : {type: Number, default: 0},
+    uniqueMonthlyOnlineUsers : [{type: mongoose.Schema.Types.ObjectId, ref: 'users', default: []}],
     monthlyOnlineUsers : {type: Number, default: 0},
     newUsersThisMonth : {type: Number, default: 0},
     totalPaidUsers : {

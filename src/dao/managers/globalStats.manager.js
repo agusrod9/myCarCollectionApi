@@ -23,6 +23,13 @@ export class globalStatsManager{
         return this.model.findById("GLOBAL_STATS");
     }
 
+    async getStatsAndUpdateCounters() {
+        return this.model.findByIdAndUpdate("GLOBAL_STATS",{
+            $inc:{totalUsers: 1, totalActiveUsers: 1, newUsersThisMonth: 1},
+            $set:{lastUpdated: Date.now()}
+        },{new:true});
+    }
+
     async updateStats(updateData) {
         return this.model.findByIdAndUpdate("GLOBAL_STATS", updateData, { new: true });
     }
