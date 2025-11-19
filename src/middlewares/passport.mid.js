@@ -49,7 +49,12 @@ passport.use(
     async (req, email, password, done) => {
       const one = await userManager.readByEmail(email);
       if (one) {
-        const error = new Error("USER ALREADY REGISTERED");
+        let error;
+        if(one.googleId){
+          error = new Error("USER ALREADY REGISTERED WITH GOOGLE");
+        }else{
+          error = new Error("USER ALREADY REGISTERED");
+        }
         error.statusCode = 401;
         return done(error);
       } else if (!validateEmail(req.body.email)) {
@@ -61,8 +66,8 @@ passport.use(
         let userData = req.body;
         const verificationCode = crypto.randomBytes(12).toString("hex");
         const nickName = generateNickName();
-        const globalStats = await globalStatManager.getStats();
-        const registrationNumber = globalStats.totalUsers+1;
+        const globalStats = await globalStatManager.getStatsAndUpdateCounters();
+        const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
         userData = { ...userData, verificationCode, nickName, registrationNumber };
         const newUsr = await userManager.createUser(userData);
         await sendVerificationEmail(newUsr.email, verificationCode);
@@ -88,6 +93,10 @@ passport.use(
         return done(error);
       } else if (!user.active) {
         const error = new Error("USER NO LONGER ACTIVE");
+        error.statusCode = 401;
+        return done(error);
+      } else if(user.googleId){
+        const error = new Error("USER MUST LOGIN USING GOOGLE");
         error.statusCode = 401;
         return done(error);
       } else {
@@ -169,7 +178,8 @@ passport.use(
             profilePicture: highResPicture,
             verifiedUser: true,
             nickName,
-            registrationNumber
+            registrationNumber,
+            active: true
           });
         }
         req.token = createToken({ user_id: user._id, role: user.role });
