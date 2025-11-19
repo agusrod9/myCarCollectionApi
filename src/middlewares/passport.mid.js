@@ -64,7 +64,7 @@ passport.use(
       } else {
         req.body.password = createHash(password);
         let userData = req.body;
-        const verificationCode = crypto.randomBytes(12).toString("hex");
+        const verificationCode = crypto.randomBytes(3).toString("hex");
         const nickName = generateNickName();
         const globalStats = await globalStatManager.getStatsAndUpdateCounters();
         const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)

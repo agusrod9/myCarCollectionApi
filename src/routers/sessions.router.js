@@ -8,6 +8,7 @@ import verifyCode from "../middlewares/usersVerifier.mid.js";
 import crypto from 'crypto';
 import { sendNewPasswordEmail } from "../utils/resend.mailer.js";
 import { createHash } from "../utils/hash.util.js";
+import { verifyLimiter } from "../middlewares/rateLimiter.mid.js";
 
 const router = Router();
 const manager = new usersManager();
@@ -19,7 +20,7 @@ router.post('/online', isOnlineVerifier, online);
 router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}), whoIsOnline);
 router.post('/onlineUserData', passport.authenticate("whoIsOnline", {session: false}), onlineUserData);
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
-router.post('/verify', verifyCode, verifiCodeResponse);
+router.post('/verify', verifyLimiter ,verifyCode, verifiCodeResponse);
 router.post('/resetPass', resetPass);
 router.post('/changePass', changePass, changePassResponse);
 router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
