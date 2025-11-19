@@ -83,7 +83,6 @@ async function onlineUserData(req, res, next){
             firstName : user.firstName,
             lastName : user.lastName,
             nickName : user.nickName,
-            contactEmail : user.contactEmail,
             profilePicture : user.profilePicture,
             role : user.role
         }
@@ -114,7 +113,7 @@ async function resetPass (req,res,next){
         if(user){
             const newPass = crypto.randomBytes(4).toString('hex');
             await manager.updateUser(user._id, {password: newPass, mustResetPass:true})
-            await sendNewPasswordEmail(user.contactEmail, newPass)
+            await sendNewPasswordEmail(user.email, newPass)
             const message = 'NEW PASSWORD SENT BY MAIL';
             return res.status(200).json({message});
         }

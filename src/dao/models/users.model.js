@@ -9,7 +9,7 @@ const schema = new mongoose.Schema({
     lastName : {type: String, required: true},
     nickName : { type: String, required : true, unique: true, index: true },
     email : {type: String, required: true, index: true, unique: true},
-    contactEmail : {type: String, required: true, unique: true},
+    googleId: {type: String, default: null},
     profilePicture : {type : String, default : "https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/user.webp"},
     password: { type: String, required: true },
     mustResetPass : { type: Boolean, default : false},

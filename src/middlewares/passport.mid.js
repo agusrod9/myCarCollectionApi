@@ -10,6 +10,7 @@ import crypto from "crypto";
 import { sendVerificationEmail } from "../utils/resend.mailer.js";
 import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
+import { getHighResGooglePhoto } from "../utils/googlePhotoResChange.util.js";
 
 const userManager = new usersManager();
 const globalStatManager = new globalStatsManager()
@@ -64,7 +65,7 @@ passport.use(
         const registrationNumber = globalStats.totalUsers+1;
         userData = { ...userData, verificationCode, nickName, registrationNumber };
         const newUsr = await userManager.createUser(userData);
-        await sendVerificationEmail(newUsr.contactEmail, verificationCode);
+        await sendVerificationEmail(newUsr.email, verificationCode);
         return done(null, newUsr);
       }
     }
@@ -153,18 +154,19 @@ passport.use(
     async (req, accessToken, refreshToken, profile, done) => {
       try {
         const { id, given_name, family_name, picture, email } = profile;
-        let user = await userManager.readByEmail(id);
+        let user = await userManager.readByEmail(email);
         if (!user) {
           const nickName = generateNickName();
           const globalStats = await globalStatManager.getStatsAndUpdateCounters();
           const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
+          const highResPicture = getHighResGooglePhoto(picture)
           user = await userManager.createUser({
-            email: id,
+            email,
+            googleId: id,
             password: createHash(id),
             firstName: given_name,
             lastName: family_name,
-            profilePicture: picture,
-            contactEmail: email,
+            profilePicture: highResPicture,
             verifiedUser: true,
             nickName,
             registrationNumber
