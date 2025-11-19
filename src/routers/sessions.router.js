@@ -75,7 +75,6 @@ async function whoIsOnline(req, res, next) {
 
 async function onlineUserData(req, res, next){
     try {
-        const message = 'USER INFO';
         const userId = req.user;
         const user = await manager.readById(userId);
         const safeUser = {

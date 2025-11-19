@@ -30,8 +30,4 @@ export class globalStatsManager{
         },{new:true});
     }
 
-    async updateStats(updateData) {
-        return this.model.findByIdAndUpdate("GLOBAL_STATS", updateData, { new: true });
-    }
-
 }
