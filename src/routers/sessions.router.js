@@ -14,6 +14,7 @@ import { getNewVerificationCode } from "../utils/verificationCode.util.js";
 const router = Router();
 const manager = new usersManager();
 const cManager = new carManager();
+const{FRONT_URL} = process.env
 
 router.post('/register', passport.authenticate("register",{session:false}), register);
 router.post('/login', passport.authenticate("login", {session: false}), login);
@@ -151,7 +152,7 @@ function google(req, res, next){
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
 
         res.cookie('token', token, cookieOpts);
-        return res.redirect("https://jovial-medovik-6efedb.netlify.app");
+        return res.redirect(FRONT_URL);
     } catch (error) {
         return next(error);
     }
