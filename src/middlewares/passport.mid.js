@@ -11,6 +11,7 @@ import { sendVerificationEmail } from "../utils/resend.mailer.js";
 import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
 import { getHighResGooglePhoto } from "../utils/googlePhotoResChange.util.js";
+import { getNewVerificationCode } from "../utils/verificationCode.util.js";
 
 const userManager = new usersManager();
 const globalStatManager = new globalStatsManager()
@@ -64,7 +65,7 @@ passport.use(
       } else {
         req.body.password = createHash(password);
         let userData = req.body;
-        const verificationCode = crypto.randomBytes(3).toString("hex");
+        const verificationCode = getNewVerificationCode();
         const nickName = generateNickName();
         const globalStats = await globalStatManager.getStatsAndUpdateCounters();
         const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)

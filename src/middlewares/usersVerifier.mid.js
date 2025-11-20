@@ -8,7 +8,7 @@ async function verifyCode(req, res, next){
     if(user){
         let verifies = user.verificationCode === verificationCode;
         if(verifies){
-            await userManager.updateUser(user._id, {verifiedUser : true, active : true})
+            await userManager.updateUser(user._id, {verifiedUser : true, active : true, verificationCode : null})
             return next();
         }else{
             const error = new Error('CODE DOES NOT VERIFY');

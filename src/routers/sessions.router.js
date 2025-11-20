@@ -9,6 +9,7 @@ import crypto from 'crypto';
 import { sendNewPasswordEmail } from "../utils/resend.mailer.js";
 import { createHash } from "../utils/hash.util.js";
 import { verifyLimiter } from "../middlewares/rateLimiter.mid.js";
+import { getNewVerificationCode } from "../utils/verificationCode.util.js";
 
 const router = Router();
 const manager = new usersManager();
@@ -20,7 +21,8 @@ router.post('/online', isOnlineVerifier, online);
 router.post('/whoIsOnline', passport.authenticate("whoIsOnline", {session:false}), whoIsOnline);
 router.post('/onlineUserData', passport.authenticate("whoIsOnline", {session: false}), onlineUserData);
 router.post('/logout', passport.authenticate("logout", {session:false}), logout);
-router.post('/verify', verifyLimiter ,verifyCode, verifiCodeResponse);
+router.post('/getVerificationCode', verifyLimiter, getVerificationCode);
+router.post('/verify', verifyLimiter ,verifyCode, verifyCodeResponse);
 router.post('/resetPass', resetPass);
 router.post('/changePass', changePass, changePassResponse);
 router.get('/google', passport.authenticate("google", {scope: ['email', 'profile']}));
@@ -155,12 +157,39 @@ function google(req, res, next){
     }
 }
 
-function verifiCodeResponse(req,res,next){
+function verifyCodeResponse(req,res,next){
     try {
         const message = 'USER VERIFIED';
         return res.status(200).json({message});
     } catch (error) {
         return next(error);
+    }
+}
+
+async function getVerificationCode(req,res,next){
+    try {
+        const {userId} = req.query;
+        if(!userId){
+            const message = 'MISSING MANDATORY FIELDS'
+            return res.status(400).json({message})
+        }
+        const one = await manager.readById(userId);
+        if(one){
+            const verificationCode = getNewVerificationCode()
+            const updated = await manager.updateUser(userId, {verificationCode, active: false})
+            if(updated){
+                const message = 'NEW VERIFICATION CODE SUCCESFULLY SET'
+                return res.status(200).json({message, verificationCode})
+            }else{
+                const message = 'VERIFICATION CODE NOT SET. TRY AGAIN.'
+                return res.status(500).json({message})
+            }
+        }else{
+            const message = 'USER NOT FOUND';
+            return res.status(404).json({message})
+        }
+    } catch (error) {
+        return next(error)
     }
 }
 
