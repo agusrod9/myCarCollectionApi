@@ -5,7 +5,7 @@ const adjectives = [
     "Bold", "Crispy", "Unstoppable", "Screeching", "Rowdy", "Massive", "Compact", "Unbreakable",
     "Unhinged", "Wicked", "Monstrous", "Rebellious", "Shadowy", "Illusive", "Radiant", "Daring",
     "Glowing", "Savage", "Overkill", "Chaotic", "Feral", "Untamed", "Beast", "Lowered", "Stanced", 
-    "Stripped", "RaceBuild", "Fanatic", "Lunatic", "Funny", "Stunning", "Focused", "Clean", "Momosh"
+    "Stripped", "RaceBuild", "Fanatic", "Lunatic", "Funny", "Stunning", "Focused", "Clean"
 ];
 
 const carParts = [
