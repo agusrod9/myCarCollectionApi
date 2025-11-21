@@ -63,7 +63,7 @@ router.post('/', upload.single('image'), async(req,res, next)=>{
         }
         const safeFolder = folder.replace(/[^a-zA-Z0-9/_-]/g, '');
         const imageName = `${userId.slice(-6)}_${crypto.randomBytes(4).toString('hex')}`;
-        const newImg = await sharp(req.file.buffer).resize({width: 1280}).webp({quality: 70}).toBuffer();
+        const newImg = await sharp(req.file.buffer).resize({width: 1280, withoutEnlargement: true}).webp({quality: 70}).toBuffer();
         const key = `${userId}/${safeFolder}/${imageName}`
         const putParams = {
             Bucket : bucketName,
@@ -80,17 +80,22 @@ router.post('/', upload.single('image'), async(req,res, next)=>{
     }
 });
 
-router.delete('/', async(req,res)=>{
-    const {id} = req.query; // Example 4a546a8bc374ffc7c5b170fce9ab538d from image url
+router.delete('/', async(req,res, next)=>{
+    try {
+        const {id} = req.query;
 
-    const deleteParams = {
-        Bucket : bucketName,
-        Key : id
+        const deleteParams = {
+            Bucket : bucketName,
+            Key : id
+        }
+
+        const deleteCommand = new DeleteObjectCommand(deleteParams);
+        await s3.send(deleteCommand)
+        return res.status(200).json({error: null, data : id});
+    } catch (error) {
+        return next(error)
     }
-
-    const deleteCommand = new DeleteObjectCommand(deleteParams);
-    await s3.send(deleteCommand)
-    return res.status(200).json({error: null, data : id});
+    
 
 });
 
