@@ -177,7 +177,7 @@ async function getVerificationCode(req,res,next){
         const one = await manager.readById(userId);
         if(one){
             const verificationCode = getNewVerificationCode()
-            const updated = await manager.updateUser(userId, {verificationCode, active: false})
+            const updated = await manager.updateUser(userId, {verificationCode, active: false, verifiedUser : false})
             if(updated){
                 const message = 'NEW VERIFICATION CODE SUCCESFULLY SET'
                 return res.status(200).json({message, verificationCode})
