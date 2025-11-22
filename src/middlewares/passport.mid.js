@@ -63,7 +63,7 @@ passport.use(
         return done(error);
       } else {
         let country = null;
-        const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+        const ip = req.headers["cf-connecting-ip"] || req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress; //neceisto usar proxy de CLOUDFLARE
         const geoRes = await fetch(`https://api.ipinfo.io/lite/${ip}?token=d4153918ec8556`);
         const geo = await geoRes.json();
         if(geoRes.status===200){
@@ -177,7 +177,7 @@ passport.use(
           const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
           const highResPicture = getHighResGooglePhoto(picture)
           let country = null;
-          const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+          const ip = req.headers["cf-connecting-ip"] || req.headers["x-forwarded-for"]?.split(",")[0] || req.socket.remoteAddress; //neceisto usar proxy de CLOUDFLARE
           const geoRes = await fetch(`https://api.ipinfo.io/lite/${ip}?token=d4153918ec8556`);
           const geo = await geoRes.json();
           if(geoRes.status===200){
