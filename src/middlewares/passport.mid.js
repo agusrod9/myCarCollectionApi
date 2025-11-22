@@ -6,7 +6,6 @@ import { usersManager } from "../dao/managers/usersManager.js";
 import { globalStatsManager } from "../dao/managers/globalStats.manager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
-import crypto from "crypto";
 import { sendVerificationEmail } from "../utils/resend.mailer.js";
 import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
@@ -63,13 +62,17 @@ passport.use(
         error.statusCode = 401;
         return done(error);
       } else {
+        const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+        const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+        const geo = await geoRes.json();
+        const country = geo.country_name;
         req.body.password = createHash(password);
         let userData = req.body;
         const verificationCode = getNewVerificationCode();
         const nickName = generateNickName();
         const globalStats = await globalStatManager.getStatsAndUpdateCounters();
         const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
-        userData = { ...userData, verificationCode, nickName, registrationNumber };
+        userData = { ...userData, verificationCode, nickName, registrationNumber, country };
         const newUsr = await userManager.createUser(userData);
         await sendVerificationEmail(newUsr.email, verificationCode);
         return done(null, newUsr);
@@ -170,6 +173,10 @@ passport.use(
           const globalStats = await globalStatManager.getStatsAndUpdateCounters();
           const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
           const highResPicture = getHighResGooglePhoto(picture)
+          const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+          const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+          const geo = await geoRes.json();
+          const country = geo.country_name;
           user = await userManager.createUser({
             email,
             googleId: id,
@@ -180,7 +187,8 @@ passport.use(
             verifiedUser: true,
             nickName,
             registrationNumber,
-            active: true
+            active: true,
+            country
           });
         }
         req.token = createToken({ user_id: user._id, role: user.role });
