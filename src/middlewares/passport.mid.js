@@ -62,10 +62,13 @@ passport.use(
         error.statusCode = 401;
         return done(error);
       } else {
+        let country = null;
         const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-        const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+        const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
         const geo = await geoRes.json();
-        const country = geo.country_name;
+        if(geoRes.status===200 && geo.status==="success"){
+          country = geo.country;
+        }
         req.body.password = createHash(password);
         let userData = req.body;
         const verificationCode = getNewVerificationCode();
@@ -173,10 +176,13 @@ passport.use(
           const globalStats = await globalStatManager.getStatsAndUpdateCounters();
           const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
           const highResPicture = getHighResGooglePhoto(picture)
+          let country = null;
           const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-          const geoRes = await fetch(`https://ipapi.co/${ip}/json/`);
+          const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
           const geo = await geoRes.json();
-          const country = geo.country_name;
+          if(geoRes.status===200 && geo.status==="success"){
+            country = geo.country;
+          }
           user = await userManager.createUser({
             email,
             googleId: id,
