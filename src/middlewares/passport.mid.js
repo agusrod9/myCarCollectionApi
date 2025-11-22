@@ -62,20 +62,13 @@ passport.use(
         error.statusCode = 401;
         return done(error);
       } else {
-        let country = null;
-        const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-        const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
-        const geo = await geoRes.json();
-        if(geoRes.status===200 && geo.status==="success"){
-          country = geo.country;
-        }
         req.body.password = createHash(password);
         let userData = req.body;
         const verificationCode = getNewVerificationCode();
         const nickName = generateNickName();
         const globalStats = await globalStatManager.getStatsAndUpdateCounters();
         const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
-        userData = { ...userData, verificationCode, nickName, registrationNumber, country };
+        userData = { ...userData, verificationCode, nickName, registrationNumber };
         const newUsr = await userManager.createUser(userData);
         await sendVerificationEmail(newUsr.email, verificationCode);
         return done(null, newUsr);
@@ -176,13 +169,6 @@ passport.use(
           const globalStats = await globalStatManager.getStatsAndUpdateCounters();
           const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
           const highResPicture = getHighResGooglePhoto(picture)
-          let country = null;
-          const ip = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
-          const geoRes = await fetch(`http://ip-api.com/json/${ip}`);
-          const geo = await geoRes.json();
-          if(geoRes.status===200 && geo.status==="success"){
-            country = geo.country;
-          }
           user = await userManager.createUser({
             email,
             googleId: id,
@@ -193,8 +179,7 @@ passport.use(
             verifiedUser: true,
             nickName,
             registrationNumber,
-            active: true,
-            country
+            active: true
           });
         }
         req.token = createToken({ user_id: user._id, role: user.role });
