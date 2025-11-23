@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { usersManager } from "../dao/managers/usersManager.js";
-import { carManager } from "../dao/managers/carsManager.js";
+import { carManager } from "../dao/managers/cars.manager.js";
 import passport from "../middlewares/passport.mid.js";
 import isOnlineVerifier from "../middlewares/isOnlineVerifier.mid.js";
 import { createLogoutToken } from "../utils/token.util.js";

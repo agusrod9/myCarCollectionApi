@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { carCollectionsManager } from "../dao/managers/carCollectionsManager.js";
-import { carManager } from "../dao/managers/carsManager.js";
+import { carManager } from "../dao/managers/cars.manager.js";
 
 const router = Router();
 const manager = new carCollectionsManager();

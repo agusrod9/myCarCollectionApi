@@ -1,12 +1,11 @@
 import { Router } from "express";
-import { carManager } from "../dao/managers/carsManager.js";
-import * as carsController from '../controllers/cars.controller.js'
-
+import { carManager } from "../dao/managers/cars.manager.js";
+import * as carsController from "../controllers/cars.controller.js";
 
 const router = Router();
 const manager = new carManager();
 
-router.get("/",async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   let filters = {};
   let { id, make, model, manuf, userId, onlyRecent } = req.query;
 
@@ -47,30 +46,7 @@ router.get("/",async (req, res, next) => {
 
 router.post("/", carsController.createCar);
 
-router.put("/:id", async (req, res, next) => {
-  try {
-    let { id } = req.params;
-    const {_id, dateAdded, userId,  ...newData} = req.body;
-    
-    const car = await manager.readCarById(id);
-    if (car) {
-      Object.entries(newData).forEach(([key, value])=>{
-        car[key] = newData[key]
-      })
-      let process = await manager.updateCar(id, car);
-      if (process) {
-        return res.status(200).json({ error: null, data: process });
-      } else {
-        return res.status(500).json({ error: "CAR NOT UPDATED", data: null });
-      }
-    } else {
-      return res.status(400).json({ error: "CAR NOT FOUND", data: [] });
-    }
-  } catch (error) {
-    throw error;
-  }
-}
-);
+router.put("/:id", carsController.updateCar);
 
 router.delete("/:id", async (req, res, next) => {
   let { id } = req.params;
