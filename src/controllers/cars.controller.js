@@ -11,12 +11,12 @@ export async function createCar(req, res){
 
 export async function readCars(req,res){
     try {
-        let { id, make, model, manuf, userId, onlyRecent } = req.query;
-        const params = {id, make, model, manuf, userId, onlyRecent}
-        const result = await carsService.readCars(params)
-        return res.status(result.statusCode).json({error: result.error, data: result.data})
+        const { id, make, model, manuf, userId, onlyRecent } = req.query;
+        const params = {id, make, model, manuf, userId, onlyRecent};
+        const result = await carsService.readCars(params);
+        return res.status(result.statusCode).json({error: result.error, data: result.data});
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 

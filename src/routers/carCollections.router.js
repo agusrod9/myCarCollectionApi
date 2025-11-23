@@ -1,10 +1,14 @@
 import { Router } from "express";
-import { carCollectionsManager } from "../dao/managers/carCollectionsManager.js";
+import * as carCollectionsController from '../controllers/carCollections.controller.js'
+import { carCollectionsManager } from "../dao/managers/carCollections.manager.js";
 import { carManager } from "../dao/managers/cars.manager.js";
 
 const router = Router();
 const manager = new carCollectionsManager();
 const carsManager = new carManager
+
+
+router.post('/', carCollectionsController.createCarCollection);
 
 router.get('/', async(req,res,next)=>{
     let {userId, cid} = req.query;
@@ -30,13 +34,7 @@ router.get('/', async(req,res,next)=>{
     }
 })
 
-router.post('/', async(req, res, next)=>{
-    let  data = req.body;
-    let process = await manager.createCollection(data);
-    if(process){
-        return res.status(201).json({error: null, data : process});
-    }
-})
+
 
 router.put('/', async(req,res,next)=>{
     let {cid} = req.query;

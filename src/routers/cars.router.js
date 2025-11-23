@@ -3,9 +3,9 @@ import * as carsController from "../controllers/cars.controller.js";
 
 const router = Router();
 
-router.get("/", carsController.readCars);
-
 router.post("/", carsController.createCar);
+
+router.get("/", carsController.readCars);
 
 router.put("/:id", carsController.updateCar);
 
