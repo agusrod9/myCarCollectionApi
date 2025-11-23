@@ -43,7 +43,7 @@ export class carCollectionsManager{
 
     async updateCollectionById(id, data){
         try {
-            const opt = {new: true};
+            const opt = {new: true, runValidators: true };
             const one = this.model.findByIdAndUpdate(id,data,opt);
             return one;
         } catch (error) {

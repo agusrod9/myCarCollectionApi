@@ -12,26 +12,7 @@ router.post('/', carCollectionsController.createCarCollection);
 
 router.get('/', carCollectionsController.readCarCollections);
 
-
-
-router.put('/', async(req,res,next)=>{
-    let {cid} = req.query;
-    const {_id, userId, dateAdded, ...newData} = req.body;
-    let collection = await manager.getCollectionById(cid);
-    if(collection){
-        Object.entries(newData).forEach(([key, value])=>{
-            collection[key] = newData[key]
-        })
-        let process = await manager.updateCollectionById(cid, collection);
-        if (process){
-            return res.status(200).json({ error: null, data: process });
-        } else {
-            return res.status(500).json({ error: "COLLECTION NOT UPDATED", data: [] });
-        }
-    }else{
-        return res.status(404).json({error: 'COLLECTION DOES NOT EXIST', data : null})
-    }
-})
+router.put('/', carCollectionsController.updateCarCollection);
 
 router.delete('/', async(req, res, next)=>{
     let {cid} = req.query;

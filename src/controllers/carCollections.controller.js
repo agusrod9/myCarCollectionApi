@@ -18,3 +18,14 @@ export async function readCarCollections(req,res){
         return res.status(500).json({error: error.message, data : []});
     }
 }
+
+export async function updateCarCollection(req,res) {
+    try {
+        const {cid} = req.query;
+        const {_id, userId, dateAdded, ...newData} = req.body;
+        const result = await carCollectionsService.updateCarCollection(cid, newData);
+        return res.status(result.statusCode).json({error: result.error, data: result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}

@@ -82,3 +82,41 @@ export async function readCarCollections(userId, cid){
         }
     }
 }
+
+export async function updateCarCollection(cid, newData){
+    try {
+        const collection = await manager.getCollectionById(cid);
+        if(collection){
+            Object.entries(newData).forEach(([key, value])=>{
+                collection[key] = newData[key]
+            })
+            const process = await manager.updateCollectionById(cid, collection);
+            if (process){
+                return {
+                    statusCode : 200,
+                    error: null,
+                    data: process
+                }
+            } else {
+                return {
+                    statusCode : 500,
+                    error: "COLLECTION NOT UPDATED",
+                    data: []
+                }
+            }
+        }else{
+            return {
+                statusCode : 404,
+                error: 'COLLECTION DOES NOT EXIST',
+                data : null
+            }
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+    
+}
