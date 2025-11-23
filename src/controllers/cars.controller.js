@@ -19,3 +19,14 @@ export async function updateCar(req, res){
         throw error;
     }
 }
+
+export async function deleteCar(req,res){
+    try{
+        const { id } = req.params;
+        const result = await carsService.deleteCar(id);
+        return res.status(result.statusCode).json({error: result.error, data: result.data})
+    } catch(error){
+        throw error;
+    }
+}
+

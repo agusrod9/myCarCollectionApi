@@ -48,14 +48,6 @@ router.post("/", carsController.createCar);
 
 router.put("/:id", carsController.updateCar);
 
-router.delete("/:id", async (req, res, next) => {
-  let { id } = req.params;
-  const process = await manager.deleteById(id);
-  if (process) {
-    return res.status(200).json({ error: null, data: process });
-  } else {
-    return res.status(400).json({ error: "CAR NOT DELETED", data: [] });
-  }
-});
+router.delete("/:id", carsController.deleteCar);
 
 export default router;

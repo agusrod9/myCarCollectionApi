@@ -45,7 +45,6 @@ export async function createCar(body) {
     }
 }
 
-
 export async function updateCar(id, carData){
     const car = await manager.readCarById(id);
     if(car){
@@ -70,6 +69,23 @@ export async function updateCar(id, carData){
         return {
             statusCode: 400,
             error: "CAR NOT FOUND",
+            data: []
+        }
+    }
+}
+
+export async function deleteCar(id){
+    const process = await manager.deleteById(id);
+    if (process) {
+        return {
+            statusCode: 200,
+            error: null,
+            data: process
+        }
+    } else {
+        return {
+            statusCode: 400,
+            error: "CAR NOT DELETED",
             data: []
         }
     }
