@@ -45,6 +45,81 @@ export async function createCar(body) {
     }
 }
 
+export async function readCars(params){
+    const {id, make, model, manuf, userId, onlyRecent} = params
+    if (id){
+        const car = await manager.readCarById(id)
+        if(car){
+            return {
+                statusCode : 200,
+                error : null,
+                data : car
+            }
+        }else{
+            return {
+                statusCode : 400,
+                error : "CAR NOT FOUND",
+                data : []
+            }
+        }
+    }
+
+    if (onlyRecent === "true" && userId) {
+        let cars = await manager.readUserRecentlyAddedCars(userId);
+        if(cars){
+            return {
+                statusCode : 200,
+                error: null,
+                data: cars
+            }
+        }else{
+            return {
+                statusCode : 400,
+                error : "NO CAR FOUND",
+                data : []
+            }
+        }
+    }
+
+    const filters = {};
+    if (manuf) filters.manufacturer = { $regex: ".*" + manuf + ".*", $options: "i" };
+    if (make) filters.carMake = { $regex: ".*" + make + ".*", $options: "i" };
+    if (model) filters.carModel = { $regex: ".*" + model + ".*", $options: "i" };
+    if (userId) filters.userId = userId;
+
+    if (Object.keys(filters).length > 0) {
+        let cars = await manager.readCarsByFilters(filters);
+        if(cars){
+            return {
+                statusCode : 200,
+                error: null,
+                data: cars
+            }
+        }else{
+            return {
+                statusCode : 400,
+                error : "NO CAR MATCHES GIVEN PARAMETERS",
+                data : []
+            }
+        }
+    }else{
+        let cars = await manager.readAllCars();
+        if(cars){
+            return {
+                statusCode : 200,
+                error : null,
+                data : cars
+            }
+        } else {
+            return {
+                statusCode : 400,
+                error : "NO CAR FOUND",
+                data : []
+            }
+        }
+    }
+}
+
 export async function updateCar(id, carData){
     const car = await manager.readCarById(id);
     if(car){
@@ -90,3 +165,4 @@ export async function deleteCar(id){
         }
     }
 }
+

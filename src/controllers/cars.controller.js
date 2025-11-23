@@ -9,6 +9,17 @@ export async function createCar(req, res){
     }
 }
 
+export async function readCars(req,res){
+    try {
+        let { id, make, model, manuf, userId, onlyRecent } = req.query;
+        const params = {id, make, model, manuf, userId, onlyRecent}
+        const result = await carsService.readCars(params)
+        return res.status(result.statusCode).json({error: result.error, data: result.data})
+    } catch (error) {
+        throw error
+    }
+}
+
 export async function updateCar(req, res){
     try {
         const { id } = req.params;
@@ -29,4 +40,3 @@ export async function deleteCar(req,res){
         throw error;
     }
 }
-

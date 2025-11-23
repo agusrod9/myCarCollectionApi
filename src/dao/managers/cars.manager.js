@@ -6,6 +6,15 @@ export class carManager{
         this.model = carsModel;
     }
 
+    async createNewCar(newCar){
+        try {
+            const one = await this.model.create(newCar);
+            return one;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async readAllCars(){
         try {
             const cars = await this.model.find();
@@ -118,15 +127,6 @@ export class carManager{
         try {
             const cars = await this.model.find(filters).lean();
             return cars;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async createNewCar(newCar){
-        try {
-            const one = await this.model.create(newCar);
-            return one;
         } catch (error) {
             throw error;
         }
