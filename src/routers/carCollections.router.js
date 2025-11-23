@@ -10,29 +10,7 @@ const carsManager = new carManager
 
 router.post('/', carCollectionsController.createCarCollection);
 
-router.get('/', async(req,res,next)=>{
-    let {userId, cid} = req.query;
-    if(cid){
-        const collection = await manager.getCollectionById(cid);
-        if (collection){
-            return res.status(200).json({error: null, data : collection});
-        }else{
-            return res.status(404).json({error: "COLLECTION NOT FOUND", data: null});
-        }
-    }
-    let collections = []
-    if(userId){
-        collections = await manager.getCollectionsByUserId(userId);
-    }else{
-        collections = await manager.getAllCollections();
-    }
-    
-    if(collections.length>0){
-        return res.status(200).json({error: null, data : collections});
-    }else{
-        return res.status(404).json({error: "NO COLLECTIONS FOUND", data: null});
-    }
-})
+router.get('/', carCollectionsController.readCarCollections);
 
 
 

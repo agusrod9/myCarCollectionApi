@@ -35,3 +35,50 @@ export async function createCarCollection(body){
     }
     
 }
+
+export async function readCarCollections(userId, cid){
+    try {
+        if(cid){
+            const collection = await manager.getCollectionById(cid);
+            if(collection){
+                return {
+                    statusCode : 200,
+                    error: null,
+                    data : collection
+                }
+            }else{
+                return {
+                    statusCode : 404,
+                    error: "COLLECTION NOT FOUND",
+                    data: null
+                }
+            }
+        }
+        let collections = []
+        if(userId){
+            collections = await manager.getCollectionsByUserId(userId);
+        }else{
+            collections = await manager.getAllCollections();
+        }
+        
+        if(collections.length>0){
+            return {
+                statusCode : 200,
+                error: null,
+                data : collections
+            }
+        }else{
+            return {
+                statusCode : 404,
+                error: "NO COLLECTIONS FOUND",
+                data: null
+            }
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
