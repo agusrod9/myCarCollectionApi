@@ -132,6 +132,58 @@ export class carManager{
         }
     }
 
+    async readCarWithCurrencyInfo(carId){
+        try {
+            const one = await this.model.findById(carId);
+            if(!one){
+                return null;
+            }
+
+            const result = await this.model.aggregate([
+                {$match: {_id: one._id}},
+                {
+                    $lookup:{
+                    from: "currencies",
+                    localField: "price.currency",
+                    foreignField: "_id",
+                    as: "currencyInfo"
+                    }
+                },
+                {$unwind: "$currencyInfo"},
+                {
+                    $project: {
+                    carYear:1,
+                    manufacturer: 1,
+                    scale: 1,
+                    notes: 1,
+                    opened: 1,
+                    series: 1,
+                    series_num: 1,
+                    collectionId: 1,
+                    carMake: 1,
+                    carModel: 1,
+                    carColor: 1,
+                    img_urls: 1,
+                    userId: 1,
+                    price: 1,
+                    dateAdded: 1,
+                    currencyInfo: {
+                        id: "$currencyInfo._id",
+                        code: "$currencyInfo.code",
+                        name: "$currencyInfo.name",
+                        symbol: "$currencyInfo.symbol",
+                        flag: "$currencyInfo.flag",
+                        country: "$currencyInfo.country"
+                    }
+                    }
+                }
+            ])
+            return result[0]
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async updateCar(id, data){
         try {
             const opt = {new: true};

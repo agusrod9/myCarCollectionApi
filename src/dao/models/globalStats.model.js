@@ -24,7 +24,7 @@ const schema = new mongoose.Schema({
     newCarsThisMonth: {type: Number, default: 0},
     totalCollections : {type: Number, default: 0},
     uniqueCountries : [{type: String, default: []}],
-    totalCountires : {type: Number, default: 0},
+    totalCountries : {type: Number, default: 0},
     uniqueLanguages : [{type: String, default: []}],
     totalLanguages : {type: Number, default: 0},
     lastUpdated : {type: Date, default: Date.now},

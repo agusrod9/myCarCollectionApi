@@ -39,7 +39,7 @@ const schema = new mongoose.Schema({
     collectionId : {type: mongoose.Schema.Types.ObjectId, ref: 'carCollections', default: null},
     dateAdded : {type: Date, default: Date.now, immutable : true},
     lastUpdated : {type: Date, default: Date.now},
-    accesories : [{type: mongoose.Schema.Types.ObjectId, ref: 'accesories', default: []}],
+    accessories : [{type: mongoose.Schema.Types.ObjectId, ref: 'accessories', default: []}],
     forSale : {type: Boolean, default: false},
     listingId : {type: mongoose.Schema.Types.ObjectId, ref: 'listings', default: null},
     tags: [{ type: String, enum: ['JDM', 'Muscle', 'Rally', 'F1', 'Supercar', 'Hypercar', 'Classic', 'Offroad', 'Movies/Tv', 'Pick-up', 'SUV', 'EV', 'Concept', 'Prototype', 'Transport', 'Services', 'Construction' ], default: [] }],

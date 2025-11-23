@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { carManager } from "../dao/managers/carsManager.js";
-import { validateHexColor } from "../utils/validator.util.js";
+import * as carsController from '../controllers/cars.controller.js'
+
 
 const router = Router();
 const manager = new carManager();
@@ -44,79 +45,7 @@ router.get("/",async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
-  if (
-    req.body.carMake &&
-    req.body.carModel &&
-    req.body.scale &&
-    req.body.userId
-  ) {
-    let newCar = {
-      ...req.body,
-      dateAdded: Date.now(), 
-    };
-    if (!validateHexColor(newCar.carColor)) {
-      return res
-        .status(400)
-        .json({ error: "COLOR MUST BE IN HEX FORMAT", data: [] });
-    }
-    newCar.userId = { _id: newCar.userId };
-    let process = await manager.createNewCar(newCar);
-    if (process) {
-      if(process.price===null){
-        return res.status(201).json({ error: null, data: process});
-      }else{
-        const addedCarWithCurrencyInfo = await manager.model.aggregate([
-          {$match: {_id: process._id}},
-          {
-            $lookup:{
-              from: "currencies",
-              localField: "price.currency",
-              foreignField: "_id",
-              as: "currencyInfo"
-            }
-          },
-          {$unwind: "$currencyInfo"},
-          {
-            $project: {
-              carYear:1,
-              manufacturer: 1,
-              scale: 1,
-              notes: 1,
-              opened: 1,
-              series: 1,
-              series_num: 1,
-              collectionId: 1,
-              carMake: 1,
-              carModel: 1,
-              carColor: 1,
-              img_urls: 1,
-              userId: 1,
-              price: 1,
-              dateAdded: 1,
-              currencyInfo: {
-                id: "$currencyInfo._id",
-                code: "$currencyInfo.code",
-                name: "$currencyInfo.name",
-                symbol: "$currencyInfo.symbol",
-                flag: "$currencyInfo.flag",
-                country: "$currencyInfo.country"
-              }
-            }
-          }
-        ])
-        return res.status(201).json({ error: null, data: addedCarWithCurrencyInfo[0] });
-        }
-      
-    } else {
-      return res.status(500).json({ error: "CAR NOT ADDED", data: [] });
-    }
-  } else {
-    return res
-      .status(400)
-      .json({ error: "MISSING MANDATORY FIELDS", data: [] });
-  }
-});
+router.post("/", carsController.createCar);
 
 router.put("/:id", async (req, res, next) => {
   try {
