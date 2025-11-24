@@ -30,3 +30,13 @@ export async function updateCurrency(req,res){
         return res.status(500).json({error: error.message, data : []});
     }
 }
+
+export async function deleteCurrency(req,res){
+    try {
+        const {id} = req.params;
+        const result = await currenciesService.deleteCurrency(id);
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}

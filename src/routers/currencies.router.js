@@ -7,7 +7,9 @@ router.post("/", currenciesController.createCurrency);
 
 router.get("/", currenciesController.readCurrencies);
 
-router.put("/:id", currenciesController.updateCurrency)
+router.put("/:id", currenciesController.updateCurrency);
+
+router.delete("/:id", currenciesController.deleteCurrency);
 
 
 

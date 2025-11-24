@@ -124,3 +124,35 @@ export async function updateCurrency(id, newData){
         }
     }
 }
+
+export async function deleteCurrency(id){
+    try {
+        if(!id){
+            return {
+                statusCode : 400,
+                error : "MISSING MANDATORY FIELDS",
+                data : []
+            }
+        }
+        const process = await manager.deleteById(id);
+        if(process){
+            return{
+                statusCode : 200,
+                error : null,
+                data : process
+            }
+        }else{
+            return{
+                statusCode : 500,
+                error : "CURRENCY NOT DELETED",
+                data : []
+            }
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
