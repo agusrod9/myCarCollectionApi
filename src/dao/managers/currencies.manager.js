@@ -40,4 +40,23 @@ export class currenciesManager{
             throw error;
         }
     }
+
+    async updateCurrency(id, data){
+        try {
+            const opt = {new: true, runValidators: true};
+            const one = await this.model.findByIdAndUpdate(id, data, opt);
+            return one;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async deleteById(id){
+        try {
+            const one = await this.model.findByIdAndDelete(id);
+            return one;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
