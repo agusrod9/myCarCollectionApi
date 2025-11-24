@@ -136,6 +136,31 @@ export async function readCars(params){
     }
 }
 
+export async function readCarsByCollectionId(cid){
+    try {
+        const carsInCollection = await manager.readCarsByFilters({collectionId : cid});
+        if(carsInCollection){
+            return {
+                statusCode : 200,
+                error: null,
+                data : carsInCollection
+            }
+        }else{
+            return {
+                statusCode : 404,
+                error: "NO CARS FOUND",
+                data : []
+            }
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
+
 export async function updateCar(id, carData){
     try {
         const car = await manager.readCarById(id);

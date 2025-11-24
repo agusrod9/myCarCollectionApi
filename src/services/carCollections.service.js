@@ -1,4 +1,5 @@
 import { carCollectionsManager } from "../dao/managers/carCollections.manager.js";
+import * as carsService from '../services/cars.service.js'
 
 const manager = new carCollectionsManager();
 
@@ -119,4 +120,45 @@ export async function updateCarCollection(cid, newData){
         }
     }
     
+}
+
+export async function deleteCarCollection(cid){
+    try {
+        const collection = await manager.getCollectionById(cid);
+        if(collection){
+            const process = await manager.deleteCollectionById(cid);
+            if(process){
+                //
+                const carsInCollection = await carsService.readCarsByCollectionId(cid);
+                if(carsInCollection.data.length>0){
+                    for(let car of carsInCollection.data){
+                        await carsService.updateCar(car._id,{collectionId : null});
+                    }
+                }
+                return {
+                    statusCode : 200,
+                    error: null,
+                    data : process
+                }
+            }else{
+                return {
+                    statusCode : 500,
+                    error: 'COULDNT DELETE COLLECTION',
+                    data : null
+                }
+            }
+        }else{
+            return {
+                statusCode : 404,
+                error: 'COLLECTION DOES N0T EXIST',
+                data : null
+            }
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
 }

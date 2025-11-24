@@ -24,10 +24,11 @@ export class globalStatsManager{
     }
 
     async getStatsAndUpdateCounters() {
+        const opt = {new: true, runValidators: true};
         return this.model.findByIdAndUpdate("GLOBAL_STATS",{
             $inc:{totalUsers: 1, totalActiveUsers: 1, newUsersThisMonth: 1},
             $set:{lastUpdated: Date.now()}
-        },{new:true});
+        },opt);
     }
 
 }
