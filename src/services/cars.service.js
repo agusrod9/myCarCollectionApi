@@ -180,6 +180,13 @@ export async function readUserCarsAmountByCurrency(userId){
 
 export async function updateCar(id, carData){
     try {
+        if (!carData || Object.keys(carData).length === 0) {
+            return{
+                statusCode : 400,
+                error : "MISSING CAR DATA",
+                data : []
+            }
+        }
         const car = await manager.readCarById(id);
         if(car){
             Object.entries(carData).forEach(([key, value]) => {

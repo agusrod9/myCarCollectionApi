@@ -54,7 +54,7 @@ export async function checkUserNick(nick){
 
 export async function updateUser(id, newData){
     try {
-        if(!id){
+        if(!id || !newData || Object.keys(newData).length === 0){
             return {
                 statusCode : 400,
                 error: "MISSING MANDATORY FIELDS",

@@ -86,6 +86,13 @@ export async function readCarCollections(userId, cid){
 
 export async function updateCarCollection(cid, newData){
     try {
+        if (!newData || Object.keys(newData).length === 0) {
+            return{
+                statusCode : 400,
+                error : "MISSING NEW DATA",
+                data : []
+            }
+        }
         const collection = await manager.getCollectionById(cid);
         if(collection){
             Object.entries(newData).forEach(([key, value])=>{

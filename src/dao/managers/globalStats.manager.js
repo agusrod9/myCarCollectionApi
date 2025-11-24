@@ -31,4 +31,9 @@ export class globalStatsManager{
         },opt);
     }
 
+    async updateStats(newData){
+        const opt = {new: true, runValidators: true};
+        return this.model.findByIdAndUpdate("GLOBAL_STATS",{...newData}, opt)
+    }
+
 }

@@ -96,7 +96,7 @@ export async function readCurrencies(params){
 
 export async function updateCurrency(id, newData){
     try {
-        if(!id || !newData){
+        if(!id || !newData || Object.keys(newData).length === 0){
             return {
                 statusCode : 400,
                 error : "MISSING MANDATORY FIELDS",
