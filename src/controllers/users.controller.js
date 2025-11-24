@@ -20,3 +20,24 @@ export async function readUserCarsValue(req,res){
         return res.status(500).json({error: error.message, data : []});
     }
 }
+
+export async function checkUserNick(req,res){
+    try {
+        const {nick} = req.query;
+        const result = await usersService.checkUserNick(nick);
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}
+
+export async function updateUser(req,res){
+    try {
+        const {id} = req.params;
+        const{_id, ...newData} = req.body;
+        const result = await usersService.updateUser(id, newData);
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}
