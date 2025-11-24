@@ -1,4 +1,5 @@
 import { Router } from "express";
+import * as usersController from '../controllers/users.controller.js'
 import { usersManager } from "../dao/managers/usersManager.js";
 import { carManager } from "../dao/managers/cars.manager.js";
 
@@ -6,23 +7,7 @@ const router = Router();
 const manager = new usersManager()
 const carsManager = new carManager()
 
-router.get('/', async(req,res,next)=>{
-    try {
-        const {id} = req.query;
-        let usr = null;
-        if(id){
-            usr = await manager.readById(id);
-        }else{
-            usr = await manager.readAllUsers();
-        }
-        if(usr){
-            return res.status(200).json({data:usr});
-        }
-        return res.status(400).json({ error: "NO USER FOUND", data: [] });
-    } catch (error) {
-        next(error)
-    }
-})
+router.get('/', usersController.readUsers);
 
 router.get('/:userId/carsValue',async(req,res,next)=>{
     try {

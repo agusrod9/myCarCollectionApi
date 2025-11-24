@@ -11,7 +11,4 @@ router.put("/:id", currenciesController.updateCurrency);
 
 router.delete("/:id", currenciesController.deleteCurrency);
 
-
-
-
 export default router;
