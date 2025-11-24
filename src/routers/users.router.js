@@ -1,23 +1,13 @@
 import { Router } from "express";
 import * as usersController from '../controllers/users.controller.js'
 import { usersManager } from "../dao/managers/usersManager.js";
-import { carManager } from "../dao/managers/cars.manager.js";
 
 const router = Router();
 const manager = new usersManager()
-const carsManager = new carManager()
 
 router.get('/', usersController.readUsers);
 
-router.get('/:userId/carsValue',async(req,res,next)=>{
-    try {
-        const{userId} = req.params;
-        const amountByCurrency = await carsManager.readUserCarsTotalAmount(userId);
-        return res.status(200).json({error:null, data: amountByCurrency})
-    } catch (error) {
-        next(error)
-    }
-})
+router.get('/:userId/carsValue', usersController.readUserCarsValue)
 
 router.get('/checkNick', async(req,res,next)=>{
     try {

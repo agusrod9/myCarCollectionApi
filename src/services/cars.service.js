@@ -161,6 +161,23 @@ export async function readCarsByCollectionId(cid){
     }
 }
 
+export async function readUserCarsAmountByCurrency(userId){
+    try {
+        const amountByCurrency = await manager.readUserCarsTotalAmount(userId);
+        return {
+            statusCode : 200,
+            error : null,
+            data : amountByCurrency
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
+
 export async function updateCar(id, carData){
     try {
         const car = await manager.readCarById(id);
