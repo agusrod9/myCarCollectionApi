@@ -96,3 +96,17 @@ export async function updateUser(id, newData){
         }
     }
 }
+
+export async function userStatsOnNewCar(car){
+    try {
+        const usr = await manager.readById(car.userId);
+        const updateData = { "stats.totalCars" : usr.stats.totalCars+1};
+        if (!usr.settings.mainCurrency && car.price){
+            updateData["settings.mainCurrency"] = car.price.currency
+        }
+        const process = await manager.updateUser(car.userId, updateData);
+        return process
+    } catch (error) {
+        throw error;
+    }
+}
