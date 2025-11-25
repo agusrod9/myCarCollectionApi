@@ -51,6 +51,16 @@ export class usersManager{
         }
     }
 
+    async updateUserLanguage(id, language){
+        try {
+            const opt = { new: true, runValidators: true };
+            const one = await this.model.findByIdAndUpdate(id,{$set : {"settings.language" : language}},opt)
+            return one;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async addCollectionsToUser(userId, collection){
             try {
                 let one = await this.model.findOneAndUpdate();

@@ -110,3 +110,35 @@ export async function userStatsOnNewCar(car){
         throw error;
     }
 }
+
+export async function updateUserLanguage(id,language){
+    try {
+        if(!language){
+            return{
+                statusCode : 400,
+                error : "MISSING MANDATORY FIELDS",
+                data : []
+            }
+        }
+        const process = await manager.updateUserLanguage(id, language);
+        if(process){
+            return{
+                statusCode : 200,
+                error: null,
+                data : process
+            }
+        }else{
+            return{
+                statusCode : 404,
+                error: "USER NOT FOUND",
+                data : []
+            }
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}

@@ -41,3 +41,14 @@ export async function updateUser(req,res){
         return res.status(500).json({error: error.message, data : []});
     }
 }
+
+export async function updateUserLanguage(req,res){
+    try {
+        const {id} = req.params;
+        const {language} = req.body;
+        const result = await usersService.updateUserLanguage(id, language)
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}
