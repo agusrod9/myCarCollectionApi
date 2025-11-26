@@ -19,3 +19,13 @@ export async function updateStats(req,res){
         return res.status(500).json({error : error.message, data : []})
     }
 }
+
+export async function updateLanguageStats(req,res){
+    try {
+        const {language} =req.body;
+        const result = await statsService.updateLanguageStats(language);
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error : error.message, data : []})
+    }
+}

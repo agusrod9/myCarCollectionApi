@@ -36,4 +36,12 @@ export class globalStatsManager{
         return this.model.findByIdAndUpdate("GLOBAL_STATS",{...newData}, opt)
     }
 
+    async updateLanguagesStats(filters, update, opt){
+        const updated = await this.model.findOneAndUpdate(filters,update,opt)
+        if(!updated){
+            return this.model.findById("GLOBAL_STATS")
+        }
+        return updated;
+    }
+
 }

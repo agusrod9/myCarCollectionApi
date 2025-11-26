@@ -58,3 +58,29 @@ export async function updateStats(newData){
         }
     }
 }
+
+export async function updateLanguageStats(language){
+    try {
+        const filter = {
+            _id: "GLOBAL_STATS",
+            uniqueLanguages : {$ne: language}
+        }
+        const update = {
+            $addToSet : {uniqueLanguages : language},
+            $inc : {totalLanguages : 1}
+        }
+        const opt = {new: true, runValidators: true};
+        const updated = await manager.updateLanguagesStats(filter, update, opt);
+        return {
+            statusCode : 200,
+            error : null,
+            data: updated
+        }
+    } catch (error) {
+        return{
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
