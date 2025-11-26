@@ -48,6 +48,15 @@ const schema = new mongoose.Schema({
     
 });
 
+const setLastUpdated = function(next) {
+    this.set({ lastUpdated: new Date() });
+    next();
+};
+
+schema.pre('findOneAndUpdate', setLastUpdated);
+schema.pre('findByIdAndUpdate', setLastUpdated);
+schema.pre('updateOne', setLastUpdated);
+
 const model = new mongoose.model(collection,schema);
 
 export default model;
