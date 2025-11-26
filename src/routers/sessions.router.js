@@ -10,6 +10,7 @@ import { sendNewPasswordEmail } from "../utils/resend.mailer.js";
 import { createHash } from "../utils/hash.util.js";
 import { verifyLimiter } from "../middlewares/rateLimiter.mid.js";
 import { getNewVerificationCode } from "../utils/verificationCode.util.js";
+import { updateCountriesStats } from "../services/globalStats.service.js";
 
 const router = Router();
 const manager = new usersManager();
@@ -30,10 +31,13 @@ router.get('/google', passport.authenticate("google", {scope: ['email', 'profile
 router.get('/google/cb', passport.authenticate("google", {session: false}), google); 
 
 
-function register(req,res,next){
+async function register(req,res,next){
     try {
         const message = 'USER REGISTERED';
         const newUser = req.user;
+        if(newUser.country){
+            await updateCountriesStats(newUser.country)
+        }
         return res.status(201).json({message, newUser});
     } catch (error) {
         return next(error);
@@ -146,13 +150,15 @@ function changePassResponse(req, res, next){
     return res.status(200).json({message});
 }
 
-function google(req, res, next){
+async function google(req, res, next){
     try {
-        const message = 'USER LOGGED';
         const {token} = req;
+        const newUser = req.user
         const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
-
         res.cookie('token', token, cookieOpts);
+        if(newUser.country){
+            await updateCountriesStats(newUser.country)
+        }
         return res.redirect(FRONT_URL);
     } catch (error) {
         return next(error);
