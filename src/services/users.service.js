@@ -97,10 +97,17 @@ export async function updateUser(id, newData){
     }
 }
 
-export async function userStatsOnNewCar(car){
+export async function userStatsOnNewCar(car, action){
     try {
         const usr = await manager.readById(car.userId);
-        const updateData = { "stats.totalCars" : usr.stats.totalCars+1};
+        let updateData = {}
+        if(action==="increment"){
+            updateData = { "stats.totalCars" : usr.stats.totalCars+1};
+        }else if(action==="decrease"){
+            updateData = { "stats.totalCars" : usr.stats.totalCars-1};
+        }else{
+            throw new Error("UNSUPPORTED METHOD")
+        }
         if (!usr.settings.mainCurrency && car.price){
             updateData["settings.mainCurrency"] = car.price.currency
         }

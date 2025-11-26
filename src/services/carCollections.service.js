@@ -1,5 +1,6 @@
 import { carCollectionsManager } from "../dao/managers/carCollections.manager.js";
 import * as carsService from '../services/cars.service.js'
+import { incrementTotalCollections } from "./globalStats.service.js";
 
 const manager = new carCollectionsManager();
 
@@ -15,6 +16,7 @@ export async function createCarCollection(body){
         const  data = body;
         const process = await manager.createCollection(data);
         if(process){
+            incrementTotalCollections()
             return {
                 statusCode : 201,
                 error: null,

@@ -124,3 +124,37 @@ export async function updateCountriesStats(country){
         }
     }
 }
+
+export async function incrementTotalCars(){
+    try {
+        const updated = await manager.incrementTotalCars()
+        return {
+            statusCode : 200,
+            error : null,
+            data: updated
+        }
+    } catch (error) {
+        return{
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
+
+export async function incrementTotalCollections(){
+    try {
+        const updated = await manager.incrementTotalCollections()
+        return {
+            statusCode : 200,
+            error : null,
+            data: updated
+        }
+    } catch (error) {
+        return{
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}

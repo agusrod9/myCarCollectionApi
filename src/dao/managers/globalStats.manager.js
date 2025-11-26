@@ -52,4 +52,22 @@ export class globalStatsManager{
         return updated;
     }
 
+    async incrementTotalCars(){
+        const opt = {new: true, runValidators: true};
+        const update = {
+            $inc:{totalCars: 1, newCarsThisMonth: 1},
+            $set:{lastUpdated: Date.now()}
+        }
+        return this.model.findByIdAndUpdate("GLOBAL_STATS", update, opt);
+    }
+
+    async incrementTotalCollections(){
+        const opt = {new: true, runValidators: true};
+        const update = {
+            $inc:{totalCollections: 1},
+            $set:{lastUpdated: Date.now()}
+        }
+        return this.model.findByIdAndUpdate("GLOBAL_STATS", update, opt);
+    }
+
 }

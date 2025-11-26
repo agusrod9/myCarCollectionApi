@@ -1,5 +1,6 @@
 import { carManager } from "../dao/managers/cars.manager.js";
 import { validateHexColor } from "../utils/validator.util.js";
+import { incrementTotalCars } from "./globalStats.service.js";
 import { userStatsOnNewCar } from "./users.service.js";
 
 const manager = new carManager();
@@ -17,7 +18,8 @@ export async function createCar(body) {
             }
             let process = await manager.createNewCar(newCar);
             if (process) {
-                userStatsOnNewCar(process)
+                userStatsOnNewCar(process,"increment");
+                incrementTotalCars();
                 if (process.price === null) {
                     return {
                         statusCode: 201,
@@ -228,6 +230,7 @@ export async function deleteCar(id){
     try {
         const process = await manager.deleteById(id);
         if (process) {
+            userStatsOnNewCar(process,"decrease");
             return {
                 statusCode: 200,
                 error: null,
