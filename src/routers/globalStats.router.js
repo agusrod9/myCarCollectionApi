@@ -7,6 +7,8 @@ router.get("/", statsController.readAllStats);
 
 router.put("/", statsController.updateStats);
 
-router.put("/updateLanguageStats", statsController.updateLanguageStats)
+router.put("/updateLanguageStats", statsController.updateLanguageStats);
+
+router.put("/updateCountriesStats", statsController.updateCountriesStats)
 
 export default router;

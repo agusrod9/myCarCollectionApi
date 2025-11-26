@@ -61,6 +61,13 @@ export async function updateStats(newData){
 
 export async function updateLanguageStats(language){
     try {
+        if (!language) {
+            return{
+                statusCode : 400,
+                error : "MISSING LANGUAGE",
+                data : []
+            }
+        }
         const filter = {
             _id: "GLOBAL_STATS",
             uniqueLanguages : {$ne: language}
@@ -71,6 +78,39 @@ export async function updateLanguageStats(language){
         }
         const opt = {new: true, runValidators: true};
         const updated = await manager.updateLanguagesStats(filter, update, opt);
+        return {
+            statusCode : 200,
+            error : null,
+            data: updated
+        }
+    } catch (error) {
+        return{
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
+
+export async function updateCountriesStats(country){
+    try {
+        if (!country) {
+            return{
+                statusCode : 400,
+                error : "MISSING COUNTRY",
+                data : []
+            }
+        }
+        const filter = {
+            _id: "GLOBAL_STATS",
+            uniqueCountries : {$ne: country}
+        }
+        const update = {
+            $addToSet : {uniqueCountries : country},
+            $inc : {totalCountries : 1}
+        }
+        const opt = {new: true, runValidators: true};
+        const updated = await manager.updateCountriesStats(filter, update, opt);
         return {
             statusCode : 200,
             error : null,

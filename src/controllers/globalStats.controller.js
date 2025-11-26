@@ -29,3 +29,13 @@ export async function updateLanguageStats(req,res){
         return res.status(500).json({error : error.message, data : []})
     }
 }
+
+export async function updateCountriesStats(req,res){
+    try {
+        const {country} =req.body;
+        const result = await statsService.updateCountriesStats(country);
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error : error.message, data : []})
+    }
+}

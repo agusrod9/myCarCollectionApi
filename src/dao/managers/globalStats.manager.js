@@ -44,4 +44,12 @@ export class globalStatsManager{
         return updated;
     }
 
+    async updateCountriesStats(filters, update, opt){
+        const updated = await this.model.findOneAndUpdate(filters,update,opt)
+        if(!updated){
+            return this.model.findById("GLOBAL_STATS")
+        }
+        return updated;
+    }
+
 }
