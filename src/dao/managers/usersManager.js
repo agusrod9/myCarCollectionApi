@@ -78,8 +78,8 @@ export class usersManager{
         }
     }
 
-    async readOnlineUsers(minutes = 2) {
-        const threshold = new Date(Date.now() - minutes * 60 * 1000);
+    async readOnlineUsers() {
+        const threshold = new Date(Date.now() - 2 * 60 * 1000);
         return await this.model.find(
             { lastActiveAt: { $gte: threshold } },
             { nickName: 1, email: 1, lastActiveAt: 1 }

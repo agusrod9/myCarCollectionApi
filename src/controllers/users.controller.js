@@ -65,9 +65,17 @@ export async function userPing(req,res){
 
 export async function readOnlineUsers(req,res){
     try {
-        const {minutes} = req.body;
-        const result = await usersService.readOnlineUsers(minutes);
+        const result = await usersService.readOnlineUsers();
         return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}
+
+export async function readOnlineUsersCount(req,res){
+    try {
+        const result = await usersService.readOnlineUsers();
+        return res.status(result.statusCode).json({error : result.error, data : result.data.length});
     } catch (error) {
         return res.status(500).json({error: error.message, data : []});
     }

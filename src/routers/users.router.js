@@ -10,6 +10,8 @@ router.get('/', usersController.readUsers);
 
 router.get('/onlineUserList', usersController.readOnlineUsers);
 
+router.get('/onlineUserCount', usersController.readOnlineUsersCount);
+
 router.get('/:userId/carsValue', usersController.readUserCarsValue);
 
 router.get('/checkNick', usersController.checkUserNick);
