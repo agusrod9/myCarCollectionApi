@@ -39,7 +39,8 @@ const schema = new mongoose.Schema({
     },
     stats: {
         totalCars: { type: Number, default: 0 },
-        totalCollections: { type: Number, default: 0 },
+        totalCarsThisMonth : {type : Number, default: 0},
+        totalCollections: { type: Number, default: 0 }
     },
     banned : {type: Boolean, default: false},
     banReason : {type: String, default: null},

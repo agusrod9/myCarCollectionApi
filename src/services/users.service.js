@@ -102,9 +102,9 @@ export async function userStatsOnNewCar(car, action){
         const usr = await manager.readById(car.userId);
         let updateData = {}
         if(action==="increment"){
-            updateData = { "stats.totalCars" : usr.stats.totalCars+1};
+            updateData = { "stats.totalCars" : usr.stats.totalCars+1, "stats.totalCarsThisMonth" : usr.stats.totalCarsThisMonth+1};
         }else if(action==="decrease"){
-            updateData = { "stats.totalCars" : usr.stats.totalCars-1};
+            updateData = { "stats.totalCars" : usr.stats.totalCars-1, "stats.totalCarsThisMonth" : usr.stats.totalCarsThisMonth-1};
         }else{
             throw new Error("UNSUPPORTED METHOD")
         }
