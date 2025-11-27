@@ -11,7 +11,6 @@ import { createHash } from "../utils/hash.util.js";
 import { verifyLimiter } from "../middlewares/rateLimiter.mid.js";
 import { getNewVerificationCode } from "../utils/verificationCode.util.js";
 import { updateCountriesStats } from "../services/globalStats.service.js";
-import { userPing } from "../services/users.service.js";
 
 const router = Router();
 const manager = new usersManager();
@@ -160,8 +159,7 @@ async function google(req, res, next){
         if(newUser.country){
             await updateCountriesStats(newUser.country)
         }
-        userPing(req.user._id)
-        return res.redirect(FRONT_URL);
+        return res.redirect(`${FRONT_URL}/?loggedBy=google`);
     } catch (error) {
         return next(error);
     }
