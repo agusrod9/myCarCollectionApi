@@ -1,21 +1,23 @@
 const adjectives = [
-    "Speedy", "Rusty", "Shiny", "Drifty", "Boosted", "Turbo", "Loud", "Slick", "Greasy", "Burnt",
-    "Rapid", "Vibrant", "Fiery", "Electric", "Neon", "Blazing", "Wild", "Zippy", "Smoky", "Revved",
-    "Custom", "Gritty", "Flashy", "Powerful", "Supercharged", "Aggressive", "Thundering", "Lightning",
-    "Bold", "Crispy", "Unstoppable", "Screeching", "Rowdy", "Massive", "Compact", "Unbreakable",
-    "Unhinged", "Wicked", "Monstrous", "Rebellious", "Shadowy", "Illusive", "Radiant", "Daring",
-    "Glowing", "Savage", "Overkill", "Chaotic", "Feral", "Untamed", "Beast", "Lowered", "Stanced", 
-    "Stripped", "RaceBuild", "Fanatic", "Lunatic", "Funny", "Stunning", "Focused", "Clean"
+    "speedy", "rusty", "shiny", "drifty", "boosted", "turbo", "loud", "slick", "greasy", "burnt",
+    "rapid", "vibrant", "fiery", "electric", "neon", "blazing", "wild", "zippy", "smoky", "revved",
+    "custom", "gritty", "flashy", "powerful", "supercharged", "aggressive", "thundering", "lightning",
+    "bold", "crispy", "unstoppable", "screeching", "rowdy", "massive", "compact", "unbreakable",
+    "unhinged", "wicked", "monstrous", "rebellious", "shadowy", "illusive", "radiant", "daring",
+    "glowing", "savage", "overkill", "chaotic", "feral", "untamed", "beast", "lowered", "stanced",
+    "stripped", "racebuild", "fanatic", "lunatic", "funny", "stunning", "focused", "clean"
 ];
 
 const carParts = [
-    "Piston", "Tire", "Engine", "Turbo", "Exhaust", "Bumper", "Spoiler", "Clutch", "Axle", "Gearbox",
-    "Radiator", "Alternator", "Brakes", "Camshaft", "Cylinder", "Differential", "Driveshaft",
-    "Flywheel", "FuelPump", "Gasket", "Grille", "Headlight", "Ignition", "Intercooler", "Muffler",
-    "OilFilter", "Overdrive", "RadiatorFan", "Rearview", "Rim", "Rotor", "ShockAbsorber", "SparkPlug",
-    "Speedometer", "Starter", "Strut", "Supercharger", "Suspension", "Throttle", "TimingBelt",
-    "Transmission", "Valve", "WaterPump", "Windshield", "Wiper", "Chassis", "Frame", "Crankshaft",
-    "AirFilter", "Fender", "Odometer", "BodyKit", "AirFreshener", "Rollcage", "Rollbar", "Buckets", "Injector"
+    "piston", "tire", "engine", "turbo", "exhaust", "bumper", "spoiler", "clutch",
+    "axle", "gearbox", "radiator", "alternator", "brakes", "camshaft", "cylinder",
+    "differential", "driveshaft", "flywheel", "fuelpump", "gasket", "grille",
+    "headlight", "ignition", "intercooler", "muffler", "oilfilter", "overdrive",
+    "radiatorfan", "rearview", "rim", "rotor", "shockabsorber", "sparkplug",
+    "speedometer", "starter", "strut", "supercharger", "suspension", "throttle",
+    "timingbelt", "transmission", "valve", "waterpump", "windshield", "wiper",
+    "chassis", "frame", "crankshaft", "airfilter", "fender", "odometer",
+    "bodykit", "airfreshener", "rollcage", "rollbar", "buckets", "injector"
 ];
 
 function getRandomElement(arr) {
@@ -29,6 +31,8 @@ function generateNickName() {
     ];
     
     return formatOptions[Math.floor(Math.random() * formatOptions.length)]();
+
+    
 }
 
 export {generateNickName}

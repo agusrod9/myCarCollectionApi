@@ -11,6 +11,7 @@ import { generateNickName } from "../utils/nicknames.util.js";
 import { validateEmail } from "../utils/validator.util.js";
 import { getHighResGooglePhoto } from "../utils/googlePhotoResChange.util.js";
 import { getNewVerificationCode } from "../utils/verificationCode.util.js";
+import { checkUserNick } from "../services/users.service.js";
 
 const userManager = new usersManager();
 const globalStatManager = new globalStatsManager()
@@ -72,7 +73,21 @@ passport.use(
         req.body.password = createHash(password);
         let userData = req.body;
         const verificationCode = getNewVerificationCode();
-        const nickName = generateNickName();
+        const MAX_ATTEMPTS = 5;
+        let attemps = 0;
+        let nickNameIsAvailableFlag = false;
+        let nickName = "";
+        while(!nickNameIsAvailableFlag && attemps < MAX_ATTEMPTS){
+          attemps++;
+          nickName = generateNickName();
+          const result = await checkUserNick(nickName);
+          if(result?.data){
+            nickNameIsAvailableFlag = true;
+          }
+        }
+        if(!nickNameIsAvailableFlag){
+          nickName = generateNickName()+"_max"
+        }
         const globalStats = await globalStatManager.getStatsAndUpdateCounters();
         const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
         userData = { ...userData, verificationCode, nickName, registrationNumber, country };
