@@ -52,3 +52,13 @@ export async function updateUserLanguage(req,res){
         return res.status(500).json({error: error.message, data : []});
     }
 }
+
+export async function userPing(req,res){
+    try {
+        const {userId} = req.user;
+        const result = await usersService.userPing(userId)
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}

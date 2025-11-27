@@ -1,7 +1,10 @@
 import { Router } from "express";
-import * as usersController from '../controllers/users.controller.js'
+import * as usersController from '../controllers/users.controller.js';
+import passport from '../middlewares/passport.mid.js';
 
 const router = Router();
+
+router.post('/activity/ping',passport.authenticate("jwt",{session:false}), usersController.userPing);
 
 router.get('/', usersController.readUsers);
 

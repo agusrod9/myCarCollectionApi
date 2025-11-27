@@ -149,3 +149,27 @@ export async function updateUserLanguage(id,language){
         }
     }
 }
+
+export async function userPing(id){
+    try {
+        if(!id){
+            return{
+                statusCode : 400,
+                error : "MISSING MANDATORY FIELDS",
+                data : []
+            }
+        }
+        const process = await manager.updateUser(id,{lastActiveAt : Date.now()});
+        return {
+            statusCode : 200,
+            error : null,
+            data : process.lastActiveAt
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
