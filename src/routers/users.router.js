@@ -8,6 +8,8 @@ router.post('/activity/ping',passport.authenticate("jwt",{session:false}), users
 
 router.get('/', usersController.readUsers);
 
+router.get('/onlineUserList', usersController.readOnlineUsers);
+
 router.get('/:userId/carsValue', usersController.readUserCarsValue);
 
 router.get('/checkNick', usersController.checkUserNick);

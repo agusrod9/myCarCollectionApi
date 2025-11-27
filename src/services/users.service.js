@@ -173,3 +173,29 @@ export async function userPing(id){
         }
     }
 }
+
+export async function readOnlineUsers(minutes){
+    try {
+        let process;
+        if(!minutes || !Number.isInteger(minutes) || !minutes>0){
+            process = await manager.readOnlineUsers();
+            return {
+                statusCode : 200,
+                error : null,
+                data : process
+            }
+        }
+        process = await manager.readOnlineUsers(minutes);
+        return {
+            statusCode : 200,
+            error : null,
+            data : process
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}

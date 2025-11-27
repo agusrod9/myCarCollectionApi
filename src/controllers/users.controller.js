@@ -62,3 +62,13 @@ export async function userPing(req,res){
         return res.status(500).json({error: error.message, data : []});
     }
 }
+
+export async function readOnlineUsers(req,res){
+    try {
+        const {minutes} = req.body;
+        const result = await usersService.readOnlineUsers(minutes);
+        return res.status(result.statusCode).json({error : result.error, data : result.data});
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []});
+    }
+}
