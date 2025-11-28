@@ -62,17 +62,19 @@ async function mongoConnect(){
         process.exit;
     }
 }
+async function getOnlineUserStats() {
+    try {
+        const onlineUsers = await readOnlineUsers();
+        const qty = onlineUsers.data.length;
+        await updateOnlineUserCount(qty);
+        await updateDailyOnlineUsers(onlineUsers.data);
+        await updateMonthlyOnlineUsers(onlineUsers.data);
+    } catch (error) {
+        logger.error(`ERROR UPDATING ONLINE USERS STATS - ${error.message}`)
+    }
+}
 
 function updateOnlineUserStats(intervalMs=60000){
-    setInterval(async() => {
-        try {
-            const onlineUsers = await readOnlineUsers();
-            const qty = onlineUsers.data.length;
-            await updateOnlineUserCount(qty);
-            await updateDailyOnlineUsers(onlineUsers.data);
-            await updateMonthlyOnlineUsers(onlineUsers.data);
-        } catch (error) {
-            logger.error(`ERROR UPDATING ONLINE USERS STATS - ${error.message}`)
-        }
-    }, intervalMs);
+    getOnlineUserStats()
+    setInterval(getOnlineUserStats, intervalMs);
 }
