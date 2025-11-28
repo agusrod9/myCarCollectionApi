@@ -32,8 +32,8 @@ export class globalStatsManager{
     }
 
     async updateStats(newData){
-        const opt = {new: true, runValidators: true};
-        return this.model.findByIdAndUpdate("GLOBAL_STATS",{...newData}, opt)
+        const opt = {runValidators: true};
+        return this.model.updateOne({_id : "GLOBAL_STATS"},newData,opt)
     }
 
     async updateLanguagesStats(filters, update, opt){

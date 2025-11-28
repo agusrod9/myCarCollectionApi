@@ -15,6 +15,8 @@ import pathHandler from './middlewares/pathHandler.mid.js';
 import errorHandler from './middlewares/errorHandler.mid.js';
 import { logger } from './utils/logger.util.js';
 import { requestLogger } from './middlewares/requestLogger.mid.js';
+import { readOnlineUsers } from './services/users.service.js';
+import { updateDailyOnlineUsers, updateMonthlyOnlineUsers, updateOnlineUserCount } from './services/globalStats.service.js';
 
 
 const app = express();
@@ -47,6 +49,7 @@ app.use(errorHandler);
 app.listen(PORT,async()=>{
     logger.info("server activo");
     await mongoConnect();
+    updateOnlineUserStats(1000) //interval 1 minute by def
 });
 
 
@@ -58,4 +61,18 @@ async function mongoConnect(){
         logger.error(`MONGO DB CONNECTION: FAILED - ${error.message}`);
         process.exit;
     }
+}
+
+function updateOnlineUserStats(intervalMs=60000){
+    setInterval(async() => {
+        try {
+            const onlineUsers = await readOnlineUsers();
+            const qty = onlineUsers.data.length;
+            await updateOnlineUserCount(qty);
+            await updateDailyOnlineUsers(onlineUsers.data);
+            await updateMonthlyOnlineUsers(onlineUsers.data);
+        } catch (error) {
+            logger.error(`ERROR UPDATING ONLINE USERS STATS - ${error.message}`)
+        }
+    }, intervalMs);
 }

@@ -158,3 +158,51 @@ export async function incrementTotalCollections(){
         }
     }
 }
+
+export async function updateOnlineUserCount(qty){
+    try {
+        if(!Number.isInteger(qty) || qty<0){
+            return
+        }
+        await manager.updateStats({totalOnlineUsers : qty});
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateDailyOnlineUsers(onlineUsers){
+    try {
+        const emails = onlineUsers.map(usr=>{
+            return usr.email;
+        })
+        await manager.updateStats([
+            {
+                $set : {uniqueDailyOnlineUsers : { $setUnion : ["$uniqueDailyOnlineUsers",emails]}}
+            },
+            {
+                $set : {dailyOnlineUsers : {$size : "$uniqueDailyOnlineUsers"}}
+            }
+        ]);
+    } catch (error) {
+        throw error;
+    }
+}
+
+export async function updateMonthlyOnlineUsers(onlineUsers){
+    try {
+        const emails = onlineUsers.map(usr=>{
+            return usr.email;
+        })
+
+        await manager.updateStats([
+            {
+                $set : {uniqueMonthlyOnlineUsers : { $setUnion : ["$uniqueMonthlyOnlineUsers",emails]}}
+            },
+            {
+                $set : {monthlyOnlineUsers : {$size : "$uniqueMonthlyOnlineUsers"}}
+            }
+        ]);
+    } catch (error) {
+        throw error;
+    }
+}
