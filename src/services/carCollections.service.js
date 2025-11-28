@@ -1,6 +1,7 @@
 import { carCollectionsManager } from "../dao/managers/carCollections.manager.js";
 import * as carsService from '../services/cars.service.js'
 import { incrementTotalCollections } from "./globalStats.service.js";
+import { userStatsOnNewCollection } from "./users.service.js";
 
 const manager = new carCollectionsManager();
 
@@ -16,6 +17,7 @@ export async function createCarCollection(body){
         const  data = body;
         const process = await manager.createCollection(data);
         if(process){
+            userStatsOnNewCollection(process,"increment");
             incrementTotalCollections()
             return {
                 statusCode : 201,
@@ -137,7 +139,7 @@ export async function deleteCarCollection(cid){
         if(collection){
             const process = await manager.deleteCollectionById(cid);
             if(process){
-                //
+                userStatsOnNewCollection(process,"decrease");
                 const carsInCollection = await carsService.readCarsByCollectionId(cid);
                 if(carsInCollection.data.length>0){
                     for(let car of carsInCollection.data){

@@ -118,6 +118,24 @@ export async function userStatsOnNewCar(car, action){
     }
 }
 
+export async function userStatsOnNewCollection(collection, action){
+    try {
+        const usr = await manager.readById(collection.userId);
+        let updateData = {}
+        if(action==="increment"){
+            updateData = { "stats.totalCollections" : usr.stats.totalCollections+1};
+        }else if(action==="decrease"){
+            updateData = { "stats.totalCollections" : usr.stats.totalCollections-1};
+        }else{
+            throw new Error("UNSUPPORTED METHOD")
+        }
+        const process = await manager.updateUser(collection.userId, updateData);
+        return process
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function updateUserLanguage(id,language){
     try {
         if(!language){
