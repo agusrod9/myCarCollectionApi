@@ -5,8 +5,13 @@ const manager = new globalStatsManager()
 export async function readAllStats(updateCounters){
     try {    
         let stats;
-        if(updateCounters){
+        if(updateCounters==="true"){
             stats = await manager.getStatsAndUpdateCounters();
+            return {
+                statusCode : 200,
+                error : null,
+                data : stats
+            }
         }
         stats = await manager.getStats();
         return {

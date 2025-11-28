@@ -49,7 +49,7 @@ app.use(errorHandler);
 app.listen(PORT,async()=>{
     logger.info("server activo");
     await mongoConnect();
-    updateOnlineUserStats(1000) //interval 1 minute by def
+    updateOnlineUserStats() //interval 1 minute by def
 });
 
 
