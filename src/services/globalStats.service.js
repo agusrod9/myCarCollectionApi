@@ -177,12 +177,12 @@ export async function updateOnlineUserCount(qty){
 
 export async function updateDailyOnlineUsers(onlineUsers){
     try {
-        const emails = onlineUsers.map(usr=>{
-            return usr.email;
+        const ids = onlineUsers.map(usr=>{
+            return usr._id;
         })
         await manager.updateStats([
             {
-                $set : {uniqueDailyOnlineUsers : { $setUnion : ["$uniqueDailyOnlineUsers",emails]}}
+                $set : {uniqueDailyOnlineUsers : { $setUnion : ["$uniqueDailyOnlineUsers",ids]}}
             },
             {
                 $set : {dailyOnlineUsers : {$size : "$uniqueDailyOnlineUsers"}}
@@ -195,13 +195,13 @@ export async function updateDailyOnlineUsers(onlineUsers){
 
 export async function updateMonthlyOnlineUsers(onlineUsers){
     try {
-        const emails = onlineUsers.map(usr=>{
-            return usr.email;
+        const ids = onlineUsers.map(usr=>{
+            return usr._id;
         })
 
         await manager.updateStats([
             {
-                $set : {uniqueMonthlyOnlineUsers : { $setUnion : ["$uniqueMonthlyOnlineUsers",emails]}}
+                $set : {uniqueMonthlyOnlineUsers : { $setUnion : ["$uniqueMonthlyOnlineUsers",ids]}}
             },
             {
                 $set : {monthlyOnlineUsers : {$size : "$uniqueMonthlyOnlineUsers"}}
