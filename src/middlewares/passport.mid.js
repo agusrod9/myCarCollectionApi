@@ -3,7 +3,6 @@ import { Strategy as localStrategy } from "passport-local";
 import { ExtractJwt, Strategy as jwtStrategy } from "passport-jwt";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { usersManager } from "../dao/managers/usersManager.js";
-import { globalStatsManager } from "../dao/managers/globalStats.manager.js";
 import { createHash, verifyHash } from "../utils/hash.util.js";
 import { createToken } from "../utils/token.util.js";
 import { sendVerificationEmail } from "../utils/resend.mailer.js";
@@ -12,9 +11,9 @@ import { validateEmail } from "../utils/validator.util.js";
 import { getHighResGooglePhoto } from "../utils/googlePhotoResChange.util.js";
 import { getNewVerificationCode } from "../utils/verificationCode.util.js";
 import { checkUserNick } from "../services/users.service.js";
+import { getStatsAndUpdateCounters } from "../services/globalStats.service.js";
 
 const userManager = new usersManager();
-const globalStatManager = new globalStatsManager()
 const { SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL } = process.env;
 
 passport.use("jwt", new jwtStrategy({jwtFromRequest: ExtractJwt.fromExtractors([
@@ -88,7 +87,7 @@ passport.use(
         if(!nickNameIsAvailableFlag){
           nickName = generateNickName()+"_max"
         }
-        const globalStats = await globalStatManager.getStatsAndUpdateCounters();
+        const globalStats = await getStatsAndUpdateCounters();
         const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
         userData = { ...userData, verificationCode, nickName, registrationNumber, country };
         const newUsr = await userManager.createUser(userData);
@@ -188,7 +187,7 @@ passport.use(
         let user = await userManager.readByEmail(email);
         if (!user) {
           const nickName = generateNickName();
-          const globalStats = await globalStatManager.getStatsAndUpdateCounters();
+          const globalStats = await getStatsAndUpdateCounters();
           const registrationNumber = globalStats.totalUsers; //Ya obtiene el siguiente al último por getStatsAndUpdateCounters ($inc totalUsers)
           const highResPicture = getHighResGooglePhoto(picture)
           let country = null;

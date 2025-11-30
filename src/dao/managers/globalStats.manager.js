@@ -14,6 +14,8 @@ export class globalStatsManager{
                 await this.model.create({_id: "GLOBAL_STATS"})
                 logger.info("GLOBAL_STATS SINGLE INSTANCE CREATED IN DB")
             } catch (error) {
+                console.log(error.message);
+                
                 logger.error("ERROR CREATING SINGLE INSTANCE OF GLOBAL_STATS IN DB")
             }
         }

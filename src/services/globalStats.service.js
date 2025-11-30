@@ -28,6 +28,15 @@ export async function readAllStats(updateCounters){
     }
 }
 
+export async function getStatsAndUpdateCounters(){
+    try {
+        const stats = await manager.getStatsAndUpdateCounters();
+        return stats;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function updateStats(newData){
     try {
         if (!newData || Object.keys(newData).length === 0) {
