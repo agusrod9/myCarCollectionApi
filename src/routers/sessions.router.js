@@ -15,7 +15,7 @@ import { updateCountriesStats } from "../services/globalStats.service.js";
 const router = Router();
 const manager = new usersManager();
 const cManager = new carManager();
-const{FRONT_URL} = process.env
+const{FRONT_URL, NODE_ENV} = process.env
 
 router.post('/register', passport.authenticate("register",{session:false}), register);
 router.post('/login', passport.authenticate("login", {session: false}), login);
@@ -49,7 +49,7 @@ function login(req,res,next){
         const message = 'USER LOGGED';
         const user = req.user;
         const {token} = req;
-        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None", domain : `.${FRONT_URL}`};
+        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure : true, sameSite: "None", domain : '.thediecaster.com', path : '/'};
         return res.status(200).cookie('token', token, cookieOpts).json({message, user : user.email, mustResetPass : user.mustResetPass});
     } catch (error) {
         return next(error);

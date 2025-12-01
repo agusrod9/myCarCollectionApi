@@ -1,4 +1,6 @@
 import express from 'express';
+import fs from 'fs';
+import https from 'https';
 import cors from 'cors';
 import 'dotenv/config';
 import carsRouter from './routers/cars.router.js';
@@ -21,11 +23,11 @@ import { updateDailyOnlineUsers, updateMonthlyOnlineUsers, updateOnlineUserCount
 
 const app = express();
 
-const {PORT, MONGO_REMOTE_URI, SECRET, FRONT_URL} = process.env;
+const {PORT, MONGO_REMOTE_URI, SECRET, FRONT_URL, NODE_ENV} = process.env;
 
 app.disable('x-powered-by');
 app.use(cors({
-    origin:['http://localhost:5173', FRONT_URL],
+    origin:['http://app.dev.thediecaster.com:5173', 'http://dev.thediecaster.com:5173', 'http://localhost:5173'],
     credentials: true
 }));
 app.use(express.json({limit: '50mb'}));
@@ -47,11 +49,28 @@ app.use('/api/globalStats', globalStatsRouter);
 app.use(pathHandler);
 app.use(errorHandler);
 
-app.listen(PORT,async()=>{
-    logger.info("server activo");
-    await mongoConnect();
-    updateOnlineUserStats() //interval 1 minute by def
-});
+if(NODE_ENV==='development'){
+    const options = {
+        key: fs.readFileSync("./certs/dev.thediecaster.com+5-key.pem"),
+        cert: fs.readFileSync("./certs/dev.thediecaster.com+5.pem"),
+    };
+    https.createServer(options, app).listen(PORT, async() => {
+        logger.info("ACTIVE SERVER: ⚠️  DEVELOPMENT MODE  ⚠️");
+        await mongoConnect();
+        updateOnlineUserStats() //interval 1 minute by def
+    });
+
+}else if(NODE_ENV==='production'){
+    app.listen(PORT,async()=>{
+        logger.info("ACTIVE SERVER: ‼️  PRODUCTION MODE  ‼️");
+        await mongoConnect();
+        updateOnlineUserStats() //interval 1 minute by def
+    });
+}else{
+
+}
+
+
 
 
 async function mongoConnect(){
