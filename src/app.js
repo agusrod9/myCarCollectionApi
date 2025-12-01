@@ -27,7 +27,7 @@ const {PORT, MONGO_REMOTE_URI, SECRET, FRONT_URL, NODE_ENV} = process.env;
 
 app.disable('x-powered-by');
 app.use(cors({
-    origin:['http://app.dev.thediecaster.com:5173', 'http://dev.thediecaster.com:5173', 'http://localhost:5173'],
+    origin:['http://app.dev.thediecaster.com:5173', 'http://dev.thediecaster.com:5173', 'http://localhost:5173', 'https://app.thediecaster.com', 'https://thediecaster.com'],
     credentials: true
 }));
 app.use(express.json({limit: '50mb'}));
