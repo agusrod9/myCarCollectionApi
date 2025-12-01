@@ -48,7 +48,11 @@ export async function checkUserNick(nick){
             data : available
         }
     } catch (error) {
-        
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
     }
 }
 
