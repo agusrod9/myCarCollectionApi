@@ -105,7 +105,7 @@ async function logout(req, res, next){
     try {
         const userId = req.user;
         const user = await manager.readById(userId);
-        const cookieOpts = {httpOnly: true, signed: true, secure: true, sameSite: "None"};
+        const cookieOpts = {httpOnly: true, signed: true, secure : true, sameSite: "None", domain : '.thediecaster.com', path : '/'};
         const message = 'USER LOGGED OUT';
         req.token = createLogoutToken({user_id: user._id, role: user.role});
         req.user = null;
