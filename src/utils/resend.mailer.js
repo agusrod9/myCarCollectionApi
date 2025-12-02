@@ -6,15 +6,15 @@ const resend = new Resend(RESEND_API_KEY)
 
 export async function sendVerificationEmail(to, verificationCode) {
     const {data, error} = await resend.emails.send({
-        from : 'Acme <onboarding@resend.dev>',
-        to : 'agusrod9@gmail.com',
-        subject : 'My Car Collection - Please verify your e-mail',
+        from : 'The DieCaster Team <no-reply@thediecaster.com>',
+        to,
+        subject : 'The DieCaster - Please verify your e-mail',
         html : `
                 <html>
                     <head>
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>We Collect - Verify Your Email</title>
+                        <title>The Diecaster - Verify Your Email</title>
                         <style>
                             body {
                                 font-family: Arial, sans-serif;
@@ -47,13 +47,13 @@ export async function sendVerificationEmail(to, verificationCode) {
                     </head>
                     <body>
                         <div class="email-container">
-                            <img src="https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/wc.png" alt="We Collect Logo" class="logo">
-                            <h2>Welcome to We Collect!</h2>
+                            <img src="https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/tdc.png" alt="The DieCaster Logo" class="logo">
+                            <h2>Welcome to The DieCaster!</h2>
                             <p>We're thrilled to have you on board. Let's get your account set up!</p>
                             <p>Use the verification code below to confirm your email and start your collecting journey:</p>
                             <p class="code">${verificationCode}</p>
-                            <p>If you didn't sign up for We Collect, just ignore this email.</p>
-                            <p class="footer">Happy collecting! 🚗✨<br>The We Collect Team</p>
+                            <p>If you didn't sign up for The DieCaster, just ignore this email.</p>
+                            <p class="footer">Happy collecting! 🚗✨<br>The DieCaster Team</p>
                         </div>
                     </body>
                 </html>`,      
@@ -67,14 +67,14 @@ export async function sendVerificationEmail(to, verificationCode) {
 export async function sendNewPasswordEmail(to, newPassword){
     const {data, error} = await resend.emails.send({
         from : 'Acme <onboarding@resend.dev>',
-        to : 'agusrod9@gmail.com',
-        subject : 'My Car Collection - Your single-use new password',
+        to,
+        subject : 'The DieCaster - Your single-use new password',
         html : `
                 <html>
                     <head>
                         <meta charset="UTF-8">
                         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                        <title>We Collect - New Password</title>
+                        <title>The DieCaster - New Password</title>
                         <style>
                             body {
                                 font-family: Arial, sans-serif;
@@ -112,13 +112,13 @@ export async function sendNewPasswordEmail(to, newPassword){
                     </head>
                     <body>
                         <div class="email-container">
-                            <img src="https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/wc.png" alt="We Collect Logo" class="logo">
+                            <img src="https://user-collected-cars-images-bucket.s3.us-east-2.amazonaws.com/public/tdc.png" alt="The DieCaster Logo" class="logo">
                             <h2>Password Reset Request</h2>
                             <p>We've received a request to reset your password. Use the temporary password below to log in:</p>
                             <p class="password-box">${newPassword}</p>
                             <p><strong>Important:</strong> Please change your password immediately after logging in.</p>
                             <p>If you didn't request a password reset, please ignore this email or contact support.</p>
-                            <p class="footer">Stay safe! 🚗<br>The We Collect Team</p>
+                            <p class="footer">Stay safe! 🚗<br>The DieCaster Team</p>
                         </div>
                     </body>
                 </html>`
