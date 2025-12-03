@@ -14,6 +14,8 @@ router.get('/onlineUserCount', usersController.readOnlineUsersCount);
 
 router.get('/:userId/carsValue', usersController.readUserCarsValue);
 
+router.get('/:userId/favoriteCarsCount', usersController.readUsersFavoriteCarsCount)
+
 router.get('/checkNick', usersController.checkUserNick);
 
 router.put('/:id', usersController.updateUser);

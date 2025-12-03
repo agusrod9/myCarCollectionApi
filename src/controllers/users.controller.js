@@ -21,6 +21,16 @@ export async function readUserCarsValue(req,res){
     }
 }
 
+export async function readUsersFavoriteCarsCount(req,res){
+    try {
+        const{userId} = req.params;
+        const result = await carsService.readUsersFavoriteCarsCount(userId);
+        return res.status(200).json({error: null, data : result})
+    } catch (error) {
+        return res.status(500).json({error: error.message, data : []})
+    }
+}
+
 export async function checkUserNick(req,res){
     try {
         const {nick} = req.query;

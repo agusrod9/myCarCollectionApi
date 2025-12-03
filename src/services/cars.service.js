@@ -182,6 +182,15 @@ export async function readUserCarsAmountByCurrency(userId){
     }
 }
 
+export async function readUsersFavoriteCarsCount(userId){
+    try {
+        const count = await manager.readUsersFavoriteCarsCount(userId);
+        return count
+    } catch (error) {
+        throw error;
+    }
+}
+
 export async function updateCar(id, carData){
     try {
         if (!carData || Object.keys(carData).length === 0) {

@@ -66,6 +66,19 @@ export class carManager{
         }
     }
 
+    async readUsersFavoriteCarsCount(userId){
+        const matchUserId = new mongoose.Types.ObjectId(userId)
+        try {
+            const result = await this.model.aggregate([
+                {$match : {userId : matchUserId, isFavorite : true}},
+                {$count : "count"}
+            ])
+            return result[0]?.count || 0
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async readUserRecentlyAddedCars(userId){
         try {
             const recentlyAddedCars = await this.model.find({userId}).sort({dateAdded: -1}).limit(3);

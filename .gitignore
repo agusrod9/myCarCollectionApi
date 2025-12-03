@@ -1,5 +1,6 @@
-/certs/
 node_modules
+/dump/
+/certs/
 
 .env
 .env.*
