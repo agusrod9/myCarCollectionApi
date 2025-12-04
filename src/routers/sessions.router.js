@@ -176,15 +176,15 @@ function verifyCodeResponse(req,res,next){
 
 async function getVerificationCode(req,res,next){
     try {
-        const {userId} = req.query;
-        if(!userId){
+        const {email} = req.query;
+        if(!email){
             const message = 'MISSING MANDATORY FIELDS'
             return res.status(400).json({message})
         }
-        const one = await manager.readById(userId);
+        const one = await manager.readByEmail(email);
         if(one){
             const verificationCode = getNewVerificationCode()
-            const updated = await manager.updateUser(userId, {verificationCode, active: false, verifiedUser : false})
+            const updated = await manager.updateUser(one._id, {verificationCode, active: false, verifiedUser : false})
             if(updated){
                 const message = 'NEW VERIFICATION CODE SUCCESFULLY SET'
                 return res.status(200).json({message, verificationCode})
