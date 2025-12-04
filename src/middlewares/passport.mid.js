@@ -105,37 +105,48 @@ passport.use(
     async (req, email, password, done) => {
       const user = await userManager.readByEmail(email);
       if (!user) {
-        const error = new Error("USER NOT FOUND");
+        const error = new Error("INVALID CREDENTIALS");
         error.statusCode = 401;
         return done(error);
-      } else if (!user.verifiedUser) {
+      } 
+      
+      let verifies = false;
+      if (user.mustResetPass) {
+        verifies = password == user.password;
+      } else {
+        verifies = verifyHash(password, user.password);
+      }
+    
+      if(!verifies){
+        const error = new Error("INVALID CREDENTIALS");
+        error.statusCode = 401;
+        return done(error);
+      }
+
+      //Verifies ⇩
+
+      if (!user.verifiedUser) {
         const error = new Error("USER MUST VERIFY MAIL FIRST");
         error.statusCode = 401;
         return done(error);
-      } else if (!user.active) {
+      }
+
+      if (!user.active) {
         const error = new Error("USER NO LONGER ACTIVE");
         error.statusCode = 401;
         return done(error);
-      } else if(user.googleId){
+      }
+      
+      if(user.googleId){
         const error = new Error("USER MUST LOGIN USING GOOGLE");
         error.statusCode = 401;
         return done(error);
-      } else {
-        let verifies = false;
-        if (user.mustResetPass) {
-          verifies = password == user.password;
-        } else {
-          verifies = verifyHash(password, user.password);
-        }
-        if (verifies) {
-          req.token = createToken({ user_id: user._id, role: user.role });
-          return done(null, user);
-        } else {
-          const error = new Error("INVALID CREDENTIALS");
-          error.statusCode = 401;
-          return done(error);
-        }
       }
+      
+      req.token = createToken({ user_id: user._id, role: user.role });
+      return done(null, user);
+        
+        
     }
   )
 );
