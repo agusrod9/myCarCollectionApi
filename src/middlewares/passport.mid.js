@@ -108,7 +108,13 @@ passport.use(
         const error = new Error("INVALID CREDENTIALS");
         error.statusCode = 401;
         return done(error);
-      } 
+      }
+      
+      if(user.googleId){
+        const error = new Error("USER MUST LOGIN USING GOOGLE");
+        error.statusCode = 401;
+        return done(error);
+      }
       
       let verifies = false;
       if (user.mustResetPass) {
@@ -124,7 +130,6 @@ passport.use(
       }
 
       //Verifies ⇩
-
       if (!user.verifiedUser) {
         const error = new Error("USER MUST VERIFY MAIL FIRST");
         error.statusCode = 401;
@@ -136,17 +141,9 @@ passport.use(
         error.statusCode = 401;
         return done(error);
       }
-      
-      if(user.googleId){
-        const error = new Error("USER MUST LOGIN USING GOOGLE");
-        error.statusCode = 401;
-        return done(error);
-      }
-      
+
       req.token = createToken({ user_id: user._id, role: user.role });
       return done(null, user);
-        
-        
     }
   )
 );
