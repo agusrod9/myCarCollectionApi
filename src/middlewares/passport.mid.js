@@ -14,10 +14,14 @@ import { checkUserNick } from "../services/users.service.js";
 import { getStatsAndUpdateCounters } from "../services/globalStats.service.js";
 
 const userManager = new usersManager();
-const { SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL } = process.env;
+const { SECRET, GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, API_BASE_URL, NODE_ENV } = process.env;
+
+const cookieName = NODE_ENV ==='production'
+    ? "tdc_token"
+    : "tdc_token_dev"
 
 passport.use("jwt", new jwtStrategy({jwtFromRequest: ExtractJwt.fromExtractors([
-      (req) => req?.signedCookies?.token,
+      (req) => req?.signedCookies?.[cookieName],
     ]),
     secretOrKey: SECRET,
     },
@@ -143,6 +147,7 @@ passport.use(
       }
 
       req.token = createToken({ user_id: user._id, role: user.role });
+      console.log("TOKEN QUE GENERA LOGIN:", req.token);
       return done(null, user);
     }
   )
@@ -153,7 +158,7 @@ passport.use(
   new jwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req) => req?.signedCookies?.token,
+        (req) => req?.signedCookies?.[cookieName],
       ]),
       secretOrKey: SECRET,
     },
@@ -169,7 +174,7 @@ passport.use(
   new jwtStrategy(
     {
       jwtFromRequest: ExtractJwt.fromExtractors([
-        (req) => req?.signedCookies?.token,
+        (req) => req?.signedCookies?.[cookieName],
       ]),
       secretOrKey: SECRET,
     },
@@ -220,6 +225,7 @@ passport.use(
           });
         }
         req.token = createToken({ user_id: user._id, role: user.role });
+        console.log("TOKEN QUE GENERA GOOGLE LOGIN:", req.token);
         return done(null, user);
       } catch (error) {
         return done(error);

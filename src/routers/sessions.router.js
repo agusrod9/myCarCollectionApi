@@ -17,6 +17,14 @@ const manager = new usersManager();
 const cManager = new carManager();
 const{FRONT_URL, NODE_ENV} = process.env
 
+const cookieDomain = NODE_ENV === "production" 
+    ? ".thediecaster.com"
+    : ".dev.thediecaster.com";
+
+const cookieName = NODE_ENV ==='production'
+    ? "tdc_token"
+    : "tdc_token_dev"
+
 router.post('/register', passport.authenticate("register",{session:false}), register);
 router.post('/login', passport.authenticate("login", {session: false}), login);
 router.post('/online', isOnlineVerifier, online);
@@ -49,8 +57,8 @@ function login(req,res,next){
         const message = 'USER LOGGED';
         const user = req.user;
         const {token} = req;
-        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure : true, sameSite: "None", domain : '.thediecaster.com', path : '/'};
-        return res.status(200).cookie('token', token, cookieOpts).json({message, user : user.email, mustResetPass : user.mustResetPass});
+        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure : true, sameSite: "None", domain : cookieDomain, path : '/'};
+        return res.status(200).cookie(cookieName, token, cookieOpts).json({message, user : user.email, mustResetPass : user.mustResetPass});
     } catch (error) {
         return next(error);
     }
@@ -105,11 +113,11 @@ async function logout(req, res, next){
     try {
         const userId = req.user;
         const user = await manager.readById(userId);
-        const cookieOpts = {httpOnly: true, signed: true, secure : true, sameSite: "None", domain : '.thediecaster.com', path : '/'};
+        const cookieOpts = {maxAge : 0,  httpOnly: true, signed: true, secure : true, sameSite: "None", domain : cookieDomain, path : '/'};
         const message = 'USER LOGGED OUT';
-        req.token = createLogoutToken({user_id: user._id, role: user.role});
+        //req.token = createLogoutToken({user_id: user._id, role: user.role});
         req.user = null;
-        return res.status(200).clearCookie("token", cookieOpts).json({message});
+        return res.status(200).cookie(cookieName, "", cookieOpts).json({message});
     } catch (error) {
         return next(error);
     }
@@ -154,8 +162,8 @@ async function google(req, res, next){
     try {
         const {token} = req;
         const newUser = req.user
-        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure: true, sameSite: "None"};
-        res.cookie('token', token, cookieOpts);
+        const cookieOpts = {maxAge: 60*60*24*1000, httpOnly: true, signed: true, secure : true, sameSite: "None", domain : cookieDomain, path : '/'};
+        res.cookie(cookieName, token, cookieOpts);
         if(newUser.country){
             await updateCountriesStats(newUser.country)
         }
