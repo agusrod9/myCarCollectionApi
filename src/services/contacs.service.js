@@ -11,9 +11,19 @@ export async function createContact(body){
         if(!validateEmail(body.email)){
             throw new Error("INVALID EMAIL FORMAT");
         }
+
+        if(body.name.length<6){
+            throw new Error("NAME TOO SHORT");
+        }
+
         if(body.message.length<25){
             throw new Error("MESSAGE TOO SHORT");
         }
+
+        if(body.message.length>1000){
+            throw new Error("MESSAGE TOO LONG");
+        }
+
         const process = await manager.createNewContact(body);
         return process;
     } catch (error) {
