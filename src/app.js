@@ -11,6 +11,7 @@ import filtersRouter from './routers/filters.router.js';
 import usersRouter from './routers/users.router.js';
 import currenciesRouter from './routers/currencies.router.js';
 import globalStatsRouter from './routers/globalStats.router.js';
+import contactsRouter from './routers/contacts.router.js'
 import mongoose from 'mongoose';
 import cookieParser from 'cookie-parser';
 import pathHandler from './middlewares/pathHandler.mid.js';
@@ -23,7 +24,7 @@ import { updateDailyOnlineUsers, updateMonthlyOnlineUsers, updateOnlineUserCount
 
 const app = express();
 
-const {PORT, MONGO_REMOTE_URI, SECRET, FRONT_URL, NODE_ENV} = process.env;
+const {PORT, MONGO_REMOTE_URI, SECRET, NODE_ENV} = process.env;
 
 app.disable('x-powered-by');
 app.use(cors({
@@ -43,7 +44,7 @@ app.use('/api/sessions', sessionsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/currencies', currenciesRouter);
 app.use('/api/globalStats', globalStatsRouter);
-
+app.use('/api/contacts', contactsRouter);
 
 //Handlers
 app.use(pathHandler);
