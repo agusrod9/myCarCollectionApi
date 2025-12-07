@@ -145,6 +145,10 @@ async function changePass(req, res, next){
     try {
         const {email, password} = req.body;
         const user = await manager.readByEmail(email);
+        if(user.googleId){
+            const message = 'CANNOT SET PASSWORD - GOOGLE USER'
+            return res.status(500).json({message})
+        }
         const newPass = createHash(password);
         await manager.updateUser(user._id, {password: newPass, mustResetPass:false})
         return next();
