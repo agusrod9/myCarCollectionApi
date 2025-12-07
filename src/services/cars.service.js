@@ -20,7 +20,7 @@ export async function createCar(body) {
             if (process) {
                 userStatsOnNewCar(process,"increment");
                 incrementTotalCars();
-                if (process.price === null) {
+                if (process.purchasePrice === null) {
                     return {
                         statusCode: 201,
                         error: null,

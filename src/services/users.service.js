@@ -112,8 +112,8 @@ export async function userStatsOnNewCar(car, action){
         }else{
             throw new Error("UNSUPPORTED METHOD")
         }
-        if (!usr.settings.mainCurrency && car.price){
-            updateData["settings.mainCurrency"] = car.price.currency
+        if (!usr.settings.mainCurrency && car.purchasePrice){
+            updateData["settings.mainCurrency"] = car.purchasePrice.currency
         }
         const process = await manager.updateUser(car.userId, updateData);
         return process

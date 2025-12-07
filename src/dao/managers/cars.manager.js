@@ -39,8 +39,8 @@ export class carManager{
             const totals = await this.model.aggregate([
                 {$match : {userId: matchUserId}},
                 {$group: {
-                    _id: "$price.currency", 
-                    totalAmount: {$sum: '$price.amount'}
+                    _id: "$purchasePrice.currency", 
+                    totalAmount: {$sum: '$purchasePrice.amount'}
                 }},
                 {$lookup: {
                     from: "currencies",
@@ -157,7 +157,7 @@ export class carManager{
                 {
                     $lookup:{
                     from: "currencies",
-                    localField: "price.currency",
+                    localField: "purchasePrice.currency",
                     foreignField: "_id",
                     as: "currencyInfo"
                     }
@@ -178,7 +178,7 @@ export class carManager{
                     carColor: 1,
                     img_urls: 1,
                     userId: 1,
-                    price: 1,
+                    purchasePrice: 1,
                     dateAdded: 1,
                     currencyInfo: {
                         id: "$currencyInfo._id",
