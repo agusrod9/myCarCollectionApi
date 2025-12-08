@@ -4,6 +4,7 @@ import https from 'https';
 import cors from 'cors';
 import 'dotenv/config';
 import carsRouter from './routers/cars.router.js';
+import collectorsRouter from './routers/collectors.router.js';
 import sessionsRouter from './routers/sessions.router.js';
 import carCollectionsRouter from './routers/carCollections.router.js';
 import awsRouter from './routers/aws.router.js';
@@ -39,12 +40,13 @@ app.use(cookieParser(SECRET));
 app.use('/api/aws', awsRouter);
 app.use('/api/carcollections', carCollectionsRouter);
 app.use('/api/cars', carsRouter);
+app.use('/api/collectors', collectorsRouter)
+app.use('/api/contacts', contactsRouter);
+app.use('/api/currencies', currenciesRouter);
 app.use('/api/filters', filtersRouter)
+app.use('/api/globalStats', globalStatsRouter);
 app.use('/api/sessions', sessionsRouter);
 app.use('/api/users', usersRouter);
-app.use('/api/currencies', currenciesRouter);
-app.use('/api/globalStats', globalStatsRouter);
-app.use('/api/contacts', contactsRouter);
 
 //Handlers
 app.use(pathHandler);

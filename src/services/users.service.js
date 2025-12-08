@@ -32,6 +32,30 @@ export async function readUsers(id){
     }
 }
 
+export async function readCollector(userName){
+    try {
+        const collector = await manager.readByUserName(userName);
+        if(collector){
+            return{
+                statusCode : 200,
+                error : null,
+                data : collector
+            }
+        }
+        return {
+            statusCode : 404,
+            error : "COLLECTOR NOT FOUND",
+            data : []
+        }
+    } catch (error) {
+        return {
+            statusCode : 500,
+            error : error.message,
+            data : []
+        }
+    }
+}
+
 export async function checkUserNick(nick){
     try {
         if(!nick){

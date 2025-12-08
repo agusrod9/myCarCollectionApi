@@ -44,7 +44,8 @@ const schema = new mongoose.Schema({
     },
     banned : {type: Boolean, default: false},
     banReason : {type: String, default: null},
-    lastActiveAt: {type: Date, default: Date.now}
+    lastActiveAt: {type: Date, default: Date.now},
+    bio : {type: String, default: null}
 });
 
 const model = new mongoose.model(collection, schema);

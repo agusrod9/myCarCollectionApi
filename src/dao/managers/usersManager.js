@@ -23,6 +23,15 @@ export class usersManager{
         }
     }
 
+    async readByUserName(userName){
+        try {
+            const user = await this.model.findOne({nickName: userName}).lean();
+            return user;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async readById(id){
         try {
             const user = await this.model.findOne({_id:id}).lean();
