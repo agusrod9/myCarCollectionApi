@@ -88,6 +88,15 @@ export class carManager{
         }
     }
 
+    async readUserFavoriteCars(userId){
+        try {
+            const favorites = await this.model.find({userId, isFavorite : true})
+            return favorites
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async readUserAvailableFilters(userId){
         try {
             let availableFilters = {};

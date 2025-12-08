@@ -59,7 +59,7 @@ export async function createCar(body) {
 
 export async function readCars(params){
     try {
-        const {id, make, model, manuf, userId, onlyRecent} = params
+        const {id, make, model, manuf, userId, onlyRecent, favorite} = params
         if (id){
             const car = await manager.readCarById(id)
             if(car){
@@ -79,6 +79,23 @@ export async function readCars(params){
 
         if (onlyRecent === "true" && userId) {
             let cars = await manager.readUserRecentlyAddedCars(userId);
+            if(cars){
+                return {
+                    statusCode : 200,
+                    error: null,
+                    data: cars
+                }
+            }else{
+                return {
+                    statusCode : 400,
+                    error : "NO CAR FOUND",
+                    data : []
+                }
+            }
+        }
+
+        if (favorite === "true" && userId) {
+            let cars = await manager.readUserFavoriteCars(userId);
             if(cars){
                 return {
                     statusCode : 200,
