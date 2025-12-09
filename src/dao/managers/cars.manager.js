@@ -97,13 +97,18 @@ export class carManager{
         }
     }
 
-    async readUserAvailableFilters(userId){
+    async readUserAvailableFilters(userId, favorites){
         try {
-            let availableFilters = {};
-            availableFilters.availableManufacturers = await this.model.distinct("manufacturer", userId);
-            availableFilters.availableCarMakes = await this.model.distinct("carMake", userId);
-            availableFilters.availableScales = await this.model.distinct("scale", userId);
-            return availableFilters;
+
+            const filters = favorites 
+                ? {userId, isFavorite : true}
+                : {userId}
+
+            return{
+                availableManufacturers : await this.model.distinct("manufacturer", filters),
+                availableCarMakes : await this.model.distinct("carMake", filters),
+                availableScales : await this.model.distinct("scale", filters),
+            }
         } catch (error) {
             throw error
         }
