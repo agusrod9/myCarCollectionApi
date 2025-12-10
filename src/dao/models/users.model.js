@@ -11,6 +11,7 @@ const schema = new mongoose.Schema({
     banReason : {type: String, default: null},
     bio : {type: String, default: null},
     country: {type: String, default: null},
+    collectorSince : {type: String, default: null},
     dateOfRegistration : {type: Date, default: Date.now, immutable : true},
     email : {type: String, required: true, index: true, unique: true},
     firstName :  {type: String, required: true},
