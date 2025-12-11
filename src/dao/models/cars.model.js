@@ -30,10 +30,19 @@ const schema = new mongoose.Schema({
         }, {_id: false}),
         default:null   
     },
+    customizedBy: {type: new mongoose.Schema({
+        name: { type: String, required: true },
+        sourceType: {type: String, enum: ['store', 'person', 'user', 'myself'], required: true},
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'users', default: null },
+        contact: { type: String, default: null },
+        country: { type: String, default: null }
+    }, { _id: false }), default: null},
+    customizationNotes : {type: String, default: null},
     dateAdded : {type: Date, default: Date.now, immutable : true},
     forSale : {type: Boolean, default: false},
     img_urls : [{type : String, default:[]}],
     isFavorite : {type: Boolean, default: false},
+    isCustomized : {type : Boolean, default: false},
     lastUpdated : {type: Date, default: Date.now},
     listingPrice : {
         type: new mongoose.Schema({
@@ -55,7 +64,7 @@ const schema = new mongoose.Schema({
     },
     manufacturer : {type : String, default : null, index: true },
     notes : {type : String, default : null},
-    opened : {type: String, enum: ['opened', 'sealed', 'damaged'], default: null},
+    packaging : {type: String, enum: ['opened', 'sealed', 'damaged', 'loose'], default: null},
     purchaseDate : {type : Date, default : null},
     purchasedFrom: {type: new mongoose.Schema({
         name: { type: String, required: true },
@@ -82,6 +91,7 @@ const schema = new mongoose.Schema({
         }, {_id: false}),
         default:null   
     },
+    quantityOwned : {type : Number, default : 1},
     rarityScore: {type: Number, default : null},
     rarityTier: {type: String, enum : ['not_calculated', 'common', 'uncommon', 'rare', 'ultra_rare', 'legendary', 'grail'], default : 'not_calculated'},
     rarityUpdatedAt: {type: Date, default : null},
