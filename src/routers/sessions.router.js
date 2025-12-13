@@ -95,13 +95,17 @@ async function onlineUserData(req, res, next){
         const userId = req.user;
         const user = await manager.readById(userId);
         const safeUser = {
-            id: user.id,
+            badges : user.badges,
+            bio : user.bio,
             email: user.email,
             firstName : user.firstName,
+            followersCount : user.followersCount,
+            id: user.id,
             lastName : user.lastName,
+            level: user.level,
             nickName : user.nickName,
             profilePicture : user.profilePicture,
-            role : user.role
+            role : user.role,
         }
         return res.status(200).json({error : null, data : safeUser})
     } catch (error) {

@@ -40,6 +40,13 @@ const schema = new mongoose.Schema({
         mainCurrency : {type: mongoose.Schema.Types.ObjectId, ref: 'currencies', default: null},
         profilePrivacy : {type : String, enum : ['public', 'friendsOnly', 'private'], default: 'public'}
     },
+    socialLinks : {
+        type: [{
+            platform : {type: String, enum : ['instagram', 'facebook', 'tiktok', 'x', 'youtube', 'other'], required : true},
+            url : {type: String, required: true},
+            label : {type : String}
+        }], default : null
+    },
     stats: {
         totalCars: { type: Number, default: 0 },
         totalCarsThisMonth : {type : Number, default: 0},
