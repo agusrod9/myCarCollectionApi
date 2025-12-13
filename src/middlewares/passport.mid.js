@@ -71,7 +71,7 @@ passport.use(
         const geoRes = await fetch(`https://api.ipinfo.io/lite/${ip}?token=d4153918ec8556`);
         const geo = await geoRes.json();
         if(geoRes.status===200){
-          country = geo.country;
+          country = geo.country_code;
         }
         req.body.password = createHash(password);
         let userData = req.body;
@@ -208,7 +208,7 @@ passport.use(
           const geoRes = await fetch(`https://api.ipinfo.io/lite/${ip}?token=d4153918ec8556`);
           const geo = await geoRes.json();
           if(geoRes.status===200){
-            country = geo.country;
+            country = geo.country_code;
           }
           user = await userManager.createUser({
             email,
