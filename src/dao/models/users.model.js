@@ -44,9 +44,10 @@ const schema = new mongoose.Schema({
     },
     socialLinks : {
         type: [{
-            platform : {type: String, enum : ['instagram', 'facebook', 'tiktok', 'x', 'youtube', 'other'], required : true},
+            platform : {type: String, enum : ['ig', 'fb', 'tk', 'x', 'yt', 'ws'], required : true},
             url : {type: String, required: true},
-            label : {type : String}
+            label : {type : String, required : true},
+            alias : {type: String, default: null}
         }], default : null
     },
     stats: {

@@ -97,18 +97,20 @@ async function onlineUserData(req, res, next){
         const safeUser = {
             badges : user.badges,
             bio : user.bio,
+            collectorSince : user.collectorSince,
+            country : user.country,
+            dateOfBirth : user.dateOfBirth,
             email: user.email,
             firstName : user.firstName,
             followersCount : user.followersCount,
+            gender : user.gender,
             id: user.id,
             lastName : user.lastName,
             level: user.level,
             nickName : user.nickName,
             profilePicture : user.profilePicture,
             role : user.role,
-            gender : user.gender,
-            dateOfBirth : user.dateOfBirth,
-            country : user.country
+            socialLinks : user.socialLinks
         }
         return res.status(200).json({error : null, data : safeUser})
     } catch (error) {
