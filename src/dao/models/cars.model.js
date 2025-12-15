@@ -62,6 +62,7 @@ const schema = new mongoose.Schema({
         }, {_id: false}),
         default:null   
     },
+    location: {type : String, default : null},
     manufacturer : {type : String, default : null, index: true },
     notes : {type : String, default : null},
     packaging : {type: String, enum: ['opened', 'sealed', 'damaged', 'loose'], default: null},
