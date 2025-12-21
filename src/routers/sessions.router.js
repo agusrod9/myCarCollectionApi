@@ -110,7 +110,8 @@ async function onlineUserData(req, res, next){
             nickName : user.nickName,
             profilePicture : user.profilePicture,
             role : user.role,
-            socialLinks : user.socialLinks
+            socialLinks : user.socialLinks,
+            stats: user.stats
         }
         return res.status(200).json({error : null, data : safeUser})
     } catch (error) {
