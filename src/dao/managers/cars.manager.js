@@ -88,6 +88,18 @@ export class carManager{
         }
     }
 
+    async readCarsAddedThisMonth(userId){
+        try {
+            const now = new Date();
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            return await this.model.countDocuments({
+                userId,
+                dateAdded: { $gte: startOfMonth }
+            });
+        } catch (error) {
+            throw error
+        }
+    }
     async readUserFavoriteCars(userId){
         try {
             const favorites = await this.model.find({userId, isFavorite : true})

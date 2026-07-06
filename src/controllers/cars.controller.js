@@ -11,8 +11,8 @@ export async function createCar(req, res){
 
 export async function readCars(req,res){
     try {
-        const { id, make, model, manuf, userId, onlyRecent, favorite } = req.query;
-        const params = {id, make, model, manuf, userId, onlyRecent, favorite};
+        const { id, make, model, manuf, userId, onlyRecent, favorite, thisMonth } = req.query;
+        const params = {id, make, model, manuf, userId, onlyRecent, favorite, thisMonth};
         const result = await carsService.readCars(params);
         return res.status(result.statusCode).json({error: result.error, data: result.data});
     } catch (error) {

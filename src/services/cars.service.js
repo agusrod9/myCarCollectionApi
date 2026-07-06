@@ -59,7 +59,7 @@ export async function createCar(body) {
 
 export async function readCars(params){
     try {
-        const {id, make, model, manuf, userId, onlyRecent, favorite} = params
+        const {id, make, model, manuf, userId, onlyRecent, favorite, thisMonth} = params
         if (id){
             const car = await manager.readCarById(id)
             if(car){
@@ -108,6 +108,15 @@ export async function readCars(params){
                     error : "NO CAR FOUND",
                     data : []
                 }
+            }
+        }
+
+        if (thisMonth === "true" && userId) {
+            const cars = await manager.readCarsAddedThisMonth(userId);
+            return {
+                statusCode : 200,
+                error: null,
+                data: cars
             }
         }
 

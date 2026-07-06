@@ -94,6 +94,7 @@ async function onlineUserData(req, res, next){
     try {
         const userId = req.user;
         const user = await manager.readById(userId);
+        const userCarsAddedThisMonth = await cManager.readCarsAddedThisMonth(userId);
         const safeUser = {
             badges : user.badges,
             bio : user.bio,
@@ -111,7 +112,8 @@ async function onlineUserData(req, res, next){
             profilePicture : user.profilePicture,
             role : user.role,
             socialLinks : user.socialLinks,
-            stats: user.stats
+            stats: user.stats,
+            carsAddedThisMonth: userCarsAddedThisMonth
         }
         return res.status(200).json({error : null, data : safeUser})
     } catch (error) {
